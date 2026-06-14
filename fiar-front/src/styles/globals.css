@@ -1,0 +1,135 @@
+:root {
+  /* Base */
+  --bg-color: #fafaf9;
+  --font-color: #1e293b;
+  --white-color: #FFFFFF;
+  --border-color: #e2e8f0;
+
+  /* Main brand colors — Olympo "Corriente" teal */
+  --primary-color: #0B8A8F;
+  --primary-hover: #14AEB5;
+  --primary-border: #0B8A8F;
+  --primary-text: #FFFFFF;
+
+  --warning-color: #f59e0b;
+  --warning-hover: #d97706;
+  --warning-border: #f59e0b;
+  --warning-text: #1e293b;
+
+  /* Secondary and others */
+  --secondary-color: #64748b;
+  --secondary-hover: #475569;
+  --secondary-border: #64748b;
+  --secondary-text: #FFFFFF;
+
+  --info-color: #e2e8f0;
+  --info-hover: #cbd5e1;
+  --info-border: #e2e8f0;
+  --info-text: #1e293b;
+
+  --success-color: #10b981;
+  --success-hover: #059669;
+  --success-border: #10b981;
+  --success-text: #FFFFFF;
+
+  --danger-color: #ef4444;
+  --danger-hover: #dc2626;
+  --danger-border: #ef4444;
+  --danger-text: #FFFFFF;
+
+  /* Links and outline */
+  --link-color: #0a827f;
+  --link-hover: #059669;
+  --link-border: #0a827f;
+  --link-text: #FFFFFF;
+
+  --outline-color: #e2e8f0;
+  --card-color: #FFFFFF;
+  --card-hover: #f8fafc;
+  --card-border: #e2e8f0;
+  --card-text: #1e293b;
+  --navbar-color: #FFFFFF;
+  --text-secondary: #64748b;
+  --text-muted: #94a3b8;
+  --card-title-color: #0a827f;
+}
+
+/* Global Styles */
+body {
+  margin: 0;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: var(--bg-color);
+  color: var(--font-color);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  line-height: 1.6;
+}
+
+/* Buttons */
+.btn {
+  border-radius: 10px;
+  font-weight: 600;
+  text-transform: none;
+  box-shadow: none;
+  border: 1px solid transparent;
+  transition: all 0.15s ease;
+}
+.btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+.btn-primary {
+  background-color: var(--primary-color);
+  border-color: var(--primary-border);
+  color: var(--primary-text);
+}
+.btn-primary:hover,
+.btn-primary:focus,
+.btn-primary:active {
+  background-color: var(--primary-hover);
+  border-color: var(--primary-hover);
+  color: var(--primary-text);
+}
+.btn-warning {
+  background-color: var(--warning-color);
+  border-color: var(--warning-border);
+  color: var(--warning-text);
+}
+.btn-warning:hover,
+.btn-warning:focus,
+.btn-warning:active {
+  background-color: var(--warning-hover);
+  border-color: var(--warning-hover);
+  color: var(--warning-text);
+}
+.btn-danger {
+  background-color: var(--danger-color);
+  border-color: var(--danger-border);
+  color: var(--danger-text);
+}
+.btn-danger:hover,
+.btn-danger:focus,
+.btn-danger:active {
+  background-color: var(--danger-hover);
+  border-color: var(--danger-hover);
+  color: var(--white-color);
+}
+
+/* Cards */
+.card {
+  border-radius: 14px;
+  border: 1px solid var(--card-border);
+  box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+}
+
+/* Modals */
+.modal-content {
+  border-radius: 16px;
+  border: none;
+  box-shadow: 0 16px 48px rgba(0,0,0,0.12);
+}
+
+/* Badge */
+.badge {
+  font-weight: 600;
+}

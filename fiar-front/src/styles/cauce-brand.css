@@ -1,0 +1,109 @@
+/**
+ * cauce-brand.css — bridges the existing Bootstrap 5 + Tailwind theme of fiar-front
+ * to the Olympo brand tokens.
+ *
+ * Self-contained: @olympo/ui is NOT a dependency of this app (it runs on npm with its
+ * own node_modules, separate from the pnpm workspace), so the Olympo tokens used below
+ * are declared locally instead of being imported from "@olympo/ui/styles.css".
+ *
+ * The module accent for "fiar" (#2FAE9B) is set by [data-module="fiar"] on the root
+ * container (see _app.tsx). Goal: buttons, links and focus rings adopt the Olympo
+ * "Corriente" teal / fiar accent without rewriting existing markup. Additive only —
+ * does not touch component-level CSS Modules.
+ */
+
+/* --- Olympo brand tokens (subset, values from @olympo/tokens) --- */
+:root {
+  --c-primary: #0B8A8F;          /* Corriente / primary-600 */
+  --c-primary-hover: #14AEB5;    /* primary-500 */
+  --c-accent: #FF5A2B;           /* Caudal / coral CTA */
+  --c-bg: #fafaf9;
+  --c-text: #1e293b;
+  --c-border: #e2e8f0;
+  --c-font-sans: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  --c-font-display: 'Sora', var(--c-font-sans);
+  --c-radius-md: 10px;
+
+  /* fiar module accent (teal verdoso) */
+  --c-accent-module: #2FAE9B;
+  --c-accent-hover: #259182;
+  --c-accent-module-tint: rgba(47, 174, 155, 0.25);
+  --c-on-accent: #ffffff;
+}
+
+/* --- Bootstrap theme variables → Olympo tokens --- */
+:root {
+  --bs-primary: var(--c-accent-module);
+  --bs-primary-rgb: 47, 174, 155; /* #2FAE9B (fiar accent) */
+  --bs-link-color: var(--c-primary);
+  --bs-link-hover-color: var(--c-primary-hover);
+  --bs-body-bg: var(--c-bg);
+  --bs-body-color: var(--c-text);
+  --bs-border-color: var(--c-border);
+  --bs-font-sans-serif: var(--c-font-sans);
+  --bs-border-radius: var(--c-radius-md);
+}
+
+/* --- Typography --- */
+body {
+  font-family: var(--c-font-sans);
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--c-font-display, var(--c-font-sans));
+  color: var(--c-text);
+}
+
+/* --- Links --- */
+a {
+  color: var(--c-primary);
+}
+a:hover {
+  color: var(--c-primary-hover);
+}
+
+/* --- Bootstrap primary buttons → fiar accent --- */
+.btn-primary {
+  --bs-btn-bg: var(--c-accent-module);
+  --bs-btn-border-color: var(--c-accent-module);
+  --bs-btn-hover-bg: var(--c-accent-hover, var(--c-primary-hover));
+  --bs-btn-hover-border-color: var(--c-accent-hover, var(--c-primary-hover));
+  --bs-btn-active-bg: var(--c-accent-hover, var(--c-primary-hover));
+  --bs-btn-active-border-color: var(--c-accent-hover, var(--c-primary-hover));
+  --bs-btn-disabled-bg: var(--c-accent-module);
+  --bs-btn-disabled-border-color: var(--c-accent-module);
+  --bs-btn-color: var(--c-on-accent, #fff);
+  --bs-btn-hover-color: var(--c-on-accent, #fff);
+}
+
+.btn-outline-primary {
+  --bs-btn-color: var(--c-accent-module);
+  --bs-btn-border-color: var(--c-accent-module);
+  --bs-btn-hover-bg: var(--c-accent-module);
+  --bs-btn-hover-border-color: var(--c-accent-module);
+  --bs-btn-active-bg: var(--c-accent-module);
+  --bs-btn-active-border-color: var(--c-accent-module);
+  --bs-btn-hover-color: var(--c-on-accent, #fff);
+}
+
+.btn-link {
+  --bs-btn-color: var(--c-primary);
+  --bs-btn-hover-color: var(--c-primary-hover);
+}
+
+/* --- Form focus rings adopt the module accent --- */
+.form-control:focus,
+.form-select:focus,
+.form-check-input:focus {
+  border-color: var(--c-accent-module);
+  box-shadow: 0 0 0 0.2rem var(--c-accent-module-tint);
+}
+.form-check-input:checked {
+  background-color: var(--c-accent-module);
+  border-color: var(--c-accent-module);
+}
+
+/* --- Tailwind utility bridges (Tailwind 3.4 coexists with Bootstrap) --- */
+.text-primary { color: var(--c-accent-module) !important; }
+.bg-primary { background-color: var(--c-accent-module) !important; }
+.border-primary { border-color: var(--c-accent-module) !important; }

@@ -1,0 +1,147 @@
+/* Filtros */
+.filters {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+/* Tarjeta de cliente */
+.client-card {
+  height: 200px;
+  border-radius: 12px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+  border: none;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+/* Estado (título) */
+.status {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #06D6A0;
+  margin-bottom: 12px;
+}
+
+/* Filas de datos */
+.data-row {
+  display: flex;
+  margin-bottom: 8px;
+  flex-wrap: wrap;
+}
+
+/* Etiqueta del dato */
+.data-label {
+  font-weight: 600;
+  color: #333;
+  width: 100px;
+}
+
+/* Valor del dato */
+.data-value {
+  color: #555;
+}
+
+/* Grupo de botones */
+.button-group {
+  display: flex;
+  gap: 8px;
+  margin-top: 0;
+  flex-wrap: wrap;
+}
+
+/* Botones dentro del grupo */
+.button-group .btn {
+  flex: 1;
+  box-shadow: none;
+  min-width: 150px; /* Para que los botones se ajusten en pantallas pequeñas */
+  display: flex;
+  align-items: center;
+  justify-content: center; /* Centrar los iconos */
+}
+
+/* Botón "Ver" (con icono) */
+.btnView {
+  background-color: transparent;
+  color: #007bff;
+  border: 1px solid #007bff;
+}
+
+.btnView:hover,
+.btnView:focus {
+  background-color: transparent;
+  color: #0056b3;
+  border: 1px solid #0056b3;
+}
+
+/* Botón "Actualizar" (con icono) */
+.btnUpdate {
+  background-color: transparent;
+  color: #FFD700;
+  border: 1px solid #FFD700;
+}
+
+.btnUpdate:hover,
+.btnUpdate:focus {
+  background-color: transparent;
+  color: #ccac00;
+  border: 1px solid #ccac00;
+}
+
+/* Botón "Eliminar" (con icono) */
+.btnDelete {
+  background-color: transparent;
+  color: #dc3545;
+  border: 1px solid #dc3545;
+}
+
+.btnDelete:hover,
+.btnDelete:focus {
+  background-color: transparent;
+  color: #a71d2a;
+  border: 1px solid #a71d2a;
+}
+
+/* Hacer que las tarjetas se ajusten en pantallas pequeñas */
+@media (max-width: 768px) {
+  .client-card {
+    height: auto;
+  }
+
+  .filters {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .button-group .btn {
+    min-width: 100%; /* Los botones ocupan todo el ancho en pantallas pequeñas */
+  }
+}
+
+/* Navbar redondeado */
+.roundedNavbar {
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+}
+
+/* Paginación */
+.paginationContainer {
+  display: flex;
+  justify-content: center;
+  margin-top: 1.5rem;
+  padding: 1rem;
+}
+
+@media (max-width: 576px) {
+  .roundedNavbar {
+    border-radius: 8px;
+  }
+
+  .paginationContainer {
+    padding: 0.5rem;
+    margin-top: 1rem;
+  }
+}

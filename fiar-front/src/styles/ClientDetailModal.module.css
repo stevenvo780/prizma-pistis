@@ -1,0 +1,96 @@
+/* ClientDetailModal.css */
+
+/* Modal */
+.client-details {
+    padding: 20px;
+    font-family: 'Arial', sans-serif;
+    color: #333;
+  }
+  
+  .client-details .client-info p {
+    font-size: 1rem;
+    margin: 8px 0;
+    line-height: 1.6;
+  }
+  
+  .client-details .client-info strong {
+    color: #06D6A0;
+  }
+  
+  .history-section {
+    margin-top: 20px;
+    font-size: 1rem;
+  }
+  
+  .history-section h5 {
+    font-weight: 600;
+    color: #06D6A0;
+    margin-bottom: 12px;
+  }
+  
+  .transaction-list {
+    margin-top: 10px;
+    background-color: #f9f9f9;
+    border-radius: 10px;
+    padding: 10px;
+  }
+  
+  .transaction-item {
+    border-bottom: 1px solid #ddd;
+    padding: 10px;
+    margin-bottom: 10px;
+    background-color: #fff;
+    border-radius: 8px;
+  }
+  
+  .transaction-item:last-child {
+    border-bottom: none;
+  }
+  
+  .transaction-item .transaction-info p {
+    margin: 5px 0;
+  }
+  
+  .transaction-item .transaction-info strong {
+    color: #333;
+  }
+  
+  .transaction-item .transaction-info p {
+    color: #555;
+  }
+  
+  /* Modal buttons */
+  .modal-footer .btn {
+    border-radius: 8px;
+    font-weight: 600;
+  }
+  
+  /* Button style */
+  .btn-secondary {
+    background-color: #06D6A0;
+    border-color: #06D6A0;
+    color: #fff;
+  }
+  
+  .btn-secondary:hover,
+  .btn-secondary:focus {
+    background-color: #05b86a;
+    border-color: #05b86a;
+  }
+  
+  .modal-header .close {
+    color: #06D6A0;
+  }
+
+.btnDelete {
+  background-color: transparent;
+  color: #dc3545;
+  border: 1px solid #dc3545;
+}
+
+.btnDelete:hover,
+.btnDelete:focus {
+  background-color: transparent;
+  color: #a71d2a;
+  border: 1px solid #a71d2a;
+}
