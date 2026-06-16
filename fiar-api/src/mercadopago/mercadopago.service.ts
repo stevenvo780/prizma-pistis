@@ -90,8 +90,8 @@ export class MercadoPagoService {
         description = `Suscripción Pistis - Plan ${data.planType} Mensual`;
       }
 
-      // external_reference codifica userId|planType|frequency
-      const externalReference = `${data.userId}|${data.planType}|${data.frequency}`;
+      // external_reference sigue la convención del Hub: pistis:plan:<userId>:<planType>:<frequency>
+      const externalReference = `pistis:plan:${data.userId}:${data.planType}:${data.frequency}`;
 
       const frontendUrl =
         process.env.APP_DOMAIN?.replace(/\/$/, '') || 'http://localhost:3001';
@@ -129,11 +129,11 @@ export class MercadoPagoService {
         : `${frontendUrl}/payment/success`;
       preApprovalBody.back_url = backUrl;
 
-      // notification_url para que MP envíe webhooks al backend
-      const apiDomain =
-        process.env.API_DOMAIN?.replace(/\/$/, '') ||
-        'https://fiar-api-212302024675.us-central1.run.app';
-      preApprovalBody.notification_url = `${apiDomain}/api/v1/mercadopago/webhook`;
+      // notification_url: apunta al Hub para que éste reenvíe los eventos a pistis
+      const hubWebhookUrl =
+        process.env.PRIZMA_HUB_WEBHOOK_URL ||
+        'https://prizma-nous-578238159459.us-central1.run.app/webhooks/mercadopago';
+      preApprovalBody.notification_url = hubWebhookUrl;
 
       const subscription = await this.preApprovalApi.create({
         body: preApprovalBody,
@@ -368,6 +368,42 @@ export class MercadoPagoService {
         message: `Error al consultar MercadoPago: ${error.message}`,
       };
     }
+  }
+
+  /**
+   * Activa el plan de un usuario desde el Hub (suscripcion.activada).
+   * Usado por PaymentsInboundService cuando el Hub reenvía el evento.
+   */
+  async activatePlanFromHub(
+    userId: string,
+    planType: PlanType,
+  ): Promise<void> {
+    let subscription = await this.subscriptionRepository.findOne({
+      where: { user: { id: userId } },
+    });
+
+    if (!subscription) {
+      const user = await this.userService.findOne(userId);
+      if (!user) {
+        this.logger.error(
+          `activatePlanFromHub: usuario ${userId} no encontrado`,
+        );
+        return;
+      }
+      subscription = new Subscription();
+      subscription.user = user;
+      subscription.startDate = new Date();
+    }
+
+    subscription.planType = planType;
+    subscription.startDate = new Date();
+    subscription.endDate = null;
+    subscription.mpSubscriptionStatus = 'authorized';
+    await this.subscriptionRepository.save(subscription);
+
+    this.logger.log(
+      `[Hub] Plan ${planType} activado para usuario ${userId} vía suscripcion.activada`,
+    );
   }
 
   /**
@@ -640,13 +676,29 @@ export class MercadoPagoService {
 
   /**
    * Parsea el external_reference para extraer los datos de la suscripción.
+   *
+   * Soporta dos formatos:
+   *   - Nuevo (Hub): `pistis:plan:<userId>:<planType>:<frequency>`
+   *   - Legacy:      `<userId>|<planType>|<frequency>`
    */
-  private parseExternalReference(ref: string): {
+  parseExternalReference(ref: string): {
     userId: string;
     planType: PlanType;
     frequency: PaymentFrequency;
   } | null {
     try {
+      // Formato Hub: pistis:plan:<userId>:<planType>:<frequency>
+      if (ref.startsWith('pistis:')) {
+        const parts = ref.split(':');
+        // parts = ['pistis', 'plan', userId, planType, frequency]
+        if (parts.length < 5) return null;
+        return {
+          userId: parts[2],
+          planType: parts[3] as PlanType,
+          frequency: parts[4] as PaymentFrequency,
+        };
+      }
+      // Formato legacy: userId|planType|frequency
       const parts = ref.split('|');
       if (parts.length < 3) return null;
       return {
