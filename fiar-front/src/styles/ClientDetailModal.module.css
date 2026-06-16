@@ -1,96 +1,101 @@
-/* ClientDetailModal.css */
+/* ClientDetailModal.module.css — migrated to prizma-ui tokens */
 
-/* Modal */
+/* Modal body */
 .client-details {
-    padding: 20px;
-    font-family: 'Arial', sans-serif;
-    color: #333;
-  }
-  
-  .client-details .client-info p {
-    font-size: 1rem;
-    margin: 8px 0;
-    line-height: 1.6;
-  }
-  
-  .client-details .client-info strong {
-    color: #06D6A0;
-  }
-  
-  .history-section {
-    margin-top: 20px;
-    font-size: 1rem;
-  }
-  
-  .history-section h5 {
-    font-weight: 600;
-    color: #06D6A0;
-    margin-bottom: 12px;
-  }
-  
-  .transaction-list {
-    margin-top: 10px;
-    background-color: #f9f9f9;
-    border-radius: 10px;
-    padding: 10px;
-  }
-  
-  .transaction-item {
-    border-bottom: 1px solid #ddd;
-    padding: 10px;
-    margin-bottom: 10px;
-    background-color: #fff;
-    border-radius: 8px;
-  }
-  
-  .transaction-item:last-child {
-    border-bottom: none;
-  }
-  
-  .transaction-item .transaction-info p {
-    margin: 5px 0;
-  }
-  
-  .transaction-item .transaction-info strong {
-    color: #333;
-  }
-  
-  .transaction-item .transaction-info p {
-    color: #555;
-  }
-  
-  /* Modal buttons */
-  .modal-footer .btn {
-    border-radius: 8px;
-    font-weight: 600;
-  }
-  
-  /* Button style */
-  .btn-secondary {
-    background-color: #06D6A0;
-    border-color: #06D6A0;
-    color: #fff;
-  }
-  
-  .btn-secondary:hover,
-  .btn-secondary:focus {
-    background-color: #05b86a;
-    border-color: #05b86a;
-  }
-  
-  .modal-header .close {
-    color: #06D6A0;
-  }
+  padding: var(--c-space-5);
+  font-family: var(--c-font-sans);
+  color: var(--c-text);
+}
 
+.client-details .client-info p {
+  font-size: var(--c-text-base);
+  margin: var(--c-space-2) 0;
+  line-height: 1.6;
+}
+
+.client-details .client-info strong {
+  color: var(--c-accent-module);
+}
+
+.history-section {
+  margin-top: var(--c-space-5);
+  font-size: var(--c-text-base);
+}
+
+.history-section h5 {
+  font-weight: var(--c-weight-semibold);
+  color: var(--c-accent-module);
+  margin-bottom: var(--c-space-3);
+}
+
+/* Transaction list — maps to <Card> surface inside a list */
+.transaction-list {
+  margin-top: var(--c-space-3);
+  background-color: var(--c-bg-subtle);
+  border-radius: var(--c-radius-lg);
+  padding: var(--c-space-3);
+}
+
+/* Transaction item — maps to individual <Card><CardBody> */
+.transaction-item {
+  border-bottom: 1px solid var(--c-border-strong);
+  padding: var(--c-space-3);
+  margin-bottom: var(--c-space-3);
+  background-color: var(--c-surface);
+  border-radius: var(--c-radius-md);
+}
+
+.transaction-item:last-child {
+  border-bottom: none;
+}
+
+.transaction-item .transaction-info p {
+  margin: var(--c-space-1) 0;
+  color: var(--c-text-muted);
+}
+
+.transaction-item .transaction-info strong {
+  color: var(--c-text);
+}
+
+/* Modal footer — <Button> components rendered by prizma-ui */
+.modal-footer .btn {
+  border-radius: var(--c-radius-md);
+  font-weight: var(--c-weight-semibold);
+}
+
+/* Secondary / accent button — maps to <Button variant="secondary"> */
+.btn-secondary {
+  background-color: var(--c-accent-module);
+  border-color: var(--c-accent-module);
+  color: var(--c-on-primary);
+}
+
+.btn-secondary:hover,
+.btn-secondary:focus {
+  background-color: var(--c-primary-hover);
+  border-color: var(--c-primary-hover);
+}
+
+.modal-header .close {
+  color: var(--c-accent-module);
+}
+
+/* Danger / delete button — maps to <Button variant="danger"> */
 .btnDelete {
   background-color: transparent;
-  color: #dc3545;
-  border: 1px solid #dc3545;
+  color: var(--c-danger);
+  border: 1px solid var(--c-danger);
+  border-radius: var(--c-radius-md);
+  font-weight: var(--c-weight-semibold);
+  transition: background-color var(--c-duration-base) var(--c-ease-standard),
+              color var(--c-duration-base) var(--c-ease-standard),
+              border-color var(--c-duration-base) var(--c-ease-standard);
 }
 
 .btnDelete:hover,
 .btnDelete:focus {
-  background-color: transparent;
-  color: #a71d2a;
-  border: 1px solid #a71d2a;
+  background-color: var(--c-danger-bg);
+  color: var(--c-danger-600, #D32619);
+  border-color: var(--c-danger-600, #D32619);
 }

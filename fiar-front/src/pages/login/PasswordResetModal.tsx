@@ -1,5 +1,5 @@
 import React, { useState, FormEvent } from 'react';
-import { Modal, Button, Form } from 'react-bootstrap';
+import { Modal, Button, Input } from 'prizma-ui';
 
 type PasswordResetModalProps = {
   show: boolean;
@@ -17,28 +17,23 @@ const PasswordResetModal: React.FC<PasswordResetModalProps> = ({ show, handleClo
   };
 
   return (
-    <Modal show={show} onHide={handleClose} centered>
-      <Modal.Header closeButton>
-        <Modal.Title>Recuperar Contraseña</Modal.Title>
-      </Modal.Header>
-      <Modal.Body>
-        <Form onSubmit={handleSubmit}>
-          <Form.Group controlId="formResetEmail">
-            <Form.Label>Correo Electrónico</Form.Label>
-            <Form.Control
-              type="email"
-              placeholder="Ingresa tu correo electrónico"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-            />
-          </Form.Group>
-          <br/>
-          <Button variant="primary" type="submit" style={{ width: "100%" }}>
-            Enviar correo de recuperación
-          </Button>
-        </Form>
-      </Modal.Body>
+    <Modal open={show} onClose={handleClose} title="Recuperar Contraseña">
+      <form onSubmit={handleSubmit}>
+        <div style={{ marginBottom: '0.75rem' }}>
+          <label htmlFor="reset-email" style={{ display: 'block', marginBottom: 4 }}>Correo Electrónico</label>
+          <Input
+            id="reset-email"
+            type="email"
+            placeholder="Ingresa tu correo electrónico"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+          />
+        </div>
+        <Button variant="primary" type="submit" block>
+          Enviar correo de recuperación
+        </Button>
+      </form>
     </Modal>
   );
 };

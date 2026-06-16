@@ -1,6 +1,6 @@
 import React from 'react';
 import Link from 'next/link';
-import { Container, Row, Col, Button, Badge } from 'react-bootstrap';
+import { Button, Badge } from 'prizma-ui';
 import {
   HiOutlineShieldCheck,
   HiOutlineRocketLaunch,
@@ -14,27 +14,17 @@ function HomeHeroButtons() {
   return (
     <div className="d-flex flex-wrap gap-3 mt-4">
       <Link href="/login" passHref>
-        <Button
-          variant="light"
-          size="lg"
-          className="fw-semibold px-4"
-          style={{ borderRadius: 12 }}
-        >
+        <Button variant="secondary" size="lg" className="fw-semibold px-4" style={{ borderRadius: 12 }}>
           Iniciar Sesión
         </Button>
       </Link>
       <Link href="/plans" passHref>
-        <Button
-          variant="outline-light"
-          size="lg"
-          className="fw-semibold px-4"
-          style={{ borderRadius: 12 }}
-        >
+        <Button variant="ghost" size="lg" className="fw-semibold px-4" style={{ borderRadius: 12 }}>
           Ver Planes
         </Button>
       </Link>
       <Button
-        variant="outline-light"
+        variant="ghost"
         size="lg"
         className="fw-semibold px-4"
         style={{ borderRadius: 12 }}
@@ -80,15 +70,10 @@ const Home = () => {
           padding: '4.5rem 0 3.5rem',
         }}
       >
-        <Container>
-          <Row className="align-items-center">
-            <Col lg={7} className="mb-4 mb-lg-0 text-white">
-              <Badge
-                bg="light"
-                text="dark"
-                className="mb-3 px-3 py-2"
-                style={{ fontSize: '0.8rem', borderRadius: 20, fontWeight: 600 }}
-              >
+        <div className="container">
+          <div className="row align-items-center">
+            <div className="col-lg-7 mb-4 mb-lg-0 text-white">
+              <Badge tone="neutral" className="mb-3 px-3 py-2" style={{ fontSize: '0.8rem', borderRadius: 20, fontWeight: 600 }}>
                 🚀 Sistema innovador para comercios
               </Badge>
               <h1 className="fw-bold mb-3" style={{ fontSize: 'clamp(2rem, 4vw, 3rem)', lineHeight: 1.15 }}>
@@ -98,33 +83,33 @@ const Home = () => {
                 Permite a comercios &quot;fiar&quot; dinero a clientes de confianza, con control total y cero complicaciones.
               </p>
               <HomeHeroButtons />
-            </Col>
-            <Col lg={5} className="text-center">
+            </div>
+            <div className="col-lg-5 text-center">
               <img
                 src="/img/girlcart.png"
                 alt="Persona con carrito de compras"
                 className="img-fluid"
                 style={{ maxHeight: 350, filter: 'drop-shadow(0 16px 40px rgba(0,0,0,0.2))' }}
               />
-            </Col>
-          </Row>
-        </Container>
+            </div>
+          </div>
+        </div>
       </section>
 
       {/* ¿Qué es? */}
       <section style={{ padding: '5rem 0' }}>
-        <Container>
-          <Row className="align-items-center g-5">
-            <Col lg={6}>
+        <div className="container">
+          <div className="row align-items-center g-5">
+            <div className="col-lg-6">
               <img
                 src="/img/student.png"
                 alt="Persona estudiando"
                 className="img-fluid"
                 style={{ borderRadius: 20, maxHeight: 420, boxShadow: '0 20px 60px rgba(10,130,127,0.12)' }}
               />
-            </Col>
-            <Col lg={6}>
-              <Badge bg="success" className="mb-3 px-3 py-2" style={{ borderRadius: 20, fontWeight: 600 }}>
+            </div>
+            <div className="col-lg-6">
+              <Badge tone="success" className="mb-3 px-3 py-2" style={{ borderRadius: 20, fontWeight: 600 }}>
                 Sistema Innovador
               </Badge>
               <h2 className="fw-bold mb-3" style={{ fontSize: '2rem' }}>¿Qué es nuestro sistema?</h2>
@@ -136,23 +121,23 @@ const Home = () => {
                 Un sistema moderno para &quot;fiar&quot; a clientes de confianza, con todas las
                 seguridades y controles que su negocio necesita.
               </p>
-            </Col>
-          </Row>
-        </Container>
+            </div>
+          </div>
+        </div>
       </section>
 
       {/* Beneficios */}
       <section style={{ padding: '4rem 0', background: '#f0fdfa' }}>
-        <Container>
+        <div className="container">
           <div className="text-center mb-5">
-            <Badge bg="success" className="mb-3 px-3 py-2" style={{ borderRadius: 20, fontWeight: 600 }}>
+            <Badge tone="success" className="mb-3 px-3 py-2" style={{ borderRadius: 20, fontWeight: 600 }}>
               Ventajas
             </Badge>
             <h2 className="fw-bold" style={{ fontSize: '2rem' }}>¿Por qué elegir nuestro sistema?</h2>
           </div>
-          <Row className="g-4 justify-content-center">
+          <div className="row g-4 justify-content-center">
             {benefits.map((b, i) => (
-              <Col md={4} key={i}>
+              <div className="col-md-4" key={i}>
                 <div
                   className="text-center h-100 p-4"
                   style={{
@@ -178,25 +163,25 @@ const Home = () => {
                   <h5 className="fw-bold mb-2">{b.title}</h5>
                   <p className="text-muted mb-0" style={{ fontSize: '0.9rem' }}>{b.desc}</p>
                 </div>
-              </Col>
+              </div>
             ))}
-          </Row>
-        </Container>
+          </div>
+        </div>
       </section>
 
       {/* Características */}
       <section style={{ padding: '4rem 0' }}>
-        <Container>
-          <Row className="g-4 align-items-center">
-            <Col lg={5} className="mb-4 mb-lg-0">
+        <div className="container">
+          <div className="row g-4 align-items-center">
+            <div className="col-lg-5 mb-4 mb-lg-0">
               <img
                 src="/img/dollar.png"
                 alt="Moneda en aumento"
                 className="img-fluid"
                 style={{ maxWidth: 400, filter: 'drop-shadow(0 12px 32px rgba(0,0,0,0.1))' }}
               />
-            </Col>
-            <Col lg={7}>
+            </div>
+            <div className="col-lg-7">
               <h2 className="fw-bold mb-4" style={{ fontSize: '1.8rem' }}>Todo lo que necesita su negocio</h2>
               {features.map((f, i) => (
                 <div key={i} className="d-flex align-items-start gap-3 mb-4">
@@ -218,9 +203,9 @@ const Home = () => {
                   </div>
                 </div>
               ))}
-            </Col>
-          </Row>
-        </Container>
+            </div>
+          </div>
+        </div>
       </section>
 
       {/* CTA */}
@@ -230,7 +215,7 @@ const Home = () => {
           padding: '4rem 0',
         }}
       >
-        <Container className="text-center text-white">
+        <div className="container text-center text-white">
           <h2 className="fw-bold mb-3" style={{ fontSize: '2rem' }}>
             ¿Listo para modernizar la forma de dar crédito?
           </h2>
@@ -239,12 +224,12 @@ const Home = () => {
           </p>
           <div className="d-flex justify-content-center gap-3">
             <Link href="/login" passHref>
-              <Button variant="light" size="lg" className="fw-semibold px-4" style={{ borderRadius: 12 }}>
+              <Button variant="secondary" size="lg" className="fw-semibold px-4" style={{ borderRadius: 12 }}>
                 Iniciar Sesión
               </Button>
             </Link>
             <Button
-              variant="outline-light"
+              variant="ghost"
               size="lg"
               className="fw-semibold px-4"
               style={{ borderRadius: 12 }}
@@ -253,7 +238,7 @@ const Home = () => {
               Contactar Ventas
             </Button>
           </div>
-        </Container>
+        </div>
       </section>
     </div>
   );

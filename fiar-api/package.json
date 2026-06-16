@@ -1,7 +1,7 @@
 {
-  "name": "fiar-api",
+  "name": "pistis-api",
   "version": "1.0.0",
-  "description": "Backend de FIAR para gestion de clientes, transacciones, autenticacion y pagos (Mercado Pago)",
+  "description": "Backend de Pistis para gestion de clientes, transacciones, autenticacion y pagos (Mercado Pago)",
   "author": {
     "name": "Steven Vallejo Ortiz",
     "email": "stevenvallejo780@gmail.com"
@@ -29,7 +29,7 @@
     "test:e2e": "jest --config ./test/jest-e2e.json"
   },
   "dependencies": {
-    "@olympo/contracts": "file:../../../packages/contracts",
+    "prizma-contracts": "^1.3.0",
     "@nestjs/axios": "^4.0.0",
     "@nestjs/common": "^10.0.0",
     "@nestjs/config": "^3.0.0",

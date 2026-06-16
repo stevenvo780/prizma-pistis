@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { Row, Col, Button, Card, Badge } from 'react-bootstrap';
+import { Button, Card, CardBody, Badge } from 'prizma-ui';
 import { Client } from '@utils/types';
 import { FaEye, FaEdit, FaTrashAlt, FaUser, FaIdCard, FaMoneyBillWave, FaWallet } from 'react-icons/fa';
 import styles from '@styles/Client.module.css';
@@ -20,18 +20,20 @@ const ClientList: FC<ClientListProps> = ({
   client,
   handleShowModal,
   updateClientSelect,
+  deleteClient,
 }) => (
   <>
-    <Row>
+    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '1rem' }}>
       {client?.map((client, idx) => (
-        <Col key={idx} xs={12} md={6} lg={4} xl={3} className="mb-4">
-          <Card className={styles['client-card']} style={{ borderRadius: '12px', boxShadow: '0 4px 12px rgba(0,0,0,0.05)', border: 'none', transition: 'transform 0.2s' }}
-            onMouseEnter={e => e.currentTarget.style.transform = 'translateY(-5px)'}
-            onMouseLeave={e => e.currentTarget.style.transform = 'translateY(0)'}
+        <div key={idx} style={{ flex: '1 1 240px', maxWidth: '300px' }}>
+          <Card
+            interactive
+            className={styles['client-card']}
+            style={{ borderRadius: '12px', transition: 'transform 0.2s' }}
           >
-            <Card.Body className="d-flex flex-column">
-              <div className="d-flex justify-content-between align-items-start mb-3">
-                <div className="d-flex align-items-center">
+            <CardBody style={{ display: 'flex', flexDirection: 'column' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '12px' }}>
+                <div style={{ display: 'flex', alignItems: 'center' }}>
                   <div style={{ width: '40px', height: '40px', borderRadius: '50%', backgroundColor: '#e9ecef', display: 'flex', alignItems: 'center', justifyContent: 'center', marginRight: '12px' }}>
                     <FaUser style={{ color: '#6c757d', fontSize: '1.2rem' }} />
                   </div>
@@ -42,18 +44,18 @@ const ClientList: FC<ClientListProps> = ({
                     </small>
                   </div>
                 </div>
-                {client.blocked && <Badge bg="danger">Bloqueado</Badge>}
+                {client.blocked && <Badge tone="danger">Bloqueado</Badge>}
               </div>
-              
+
               <div style={{ backgroundColor: '#f8f9fa', borderRadius: '8px', padding: '12px', marginBottom: '16px' }}>
-                <div className="d-flex justify-content-between mb-2">
-                  <span style={{ color: '#6c757d', fontSize: '0.9rem', display: 'flex', alignItems: 'center' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px' }}>
+                  <span style={{ color: '#595959', fontSize: '0.9rem', display: 'flex', alignItems: 'center' }}>
                     <FaMoneyBillWave style={{ marginRight: '6px' }} /> Límite:
                   </span>
                   <span style={{ fontWeight: 600, color: '#2c3e50' }}>{formatNumber(client.credit_limit || 0)}</span>
                 </div>
-                <div className="d-flex justify-content-between">
-                  <span style={{ color: '#6c757d', fontSize: '0.9rem', display: 'flex', alignItems: 'center' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                  <span style={{ color: '#595959', fontSize: '0.9rem', display: 'flex', alignItems: 'center' }}>
                     <FaWallet style={{ marginRight: '6px' }} /> Saldo:
                   </span>
                   <span style={{ fontWeight: 600, color: (client.current_balance || 0) < 0 ? '#dc3545' : '#198754' }}>
@@ -62,29 +64,38 @@ const ClientList: FC<ClientListProps> = ({
                 </div>
               </div>
 
-              <div className="mt-auto d-flex justify-content-between gap-2">
+              <div style={{ marginTop: 'auto', display: 'flex', justifyContent: 'space-between', gap: '8px' }}>
                 <Button
-                  variant="outline-primary"
-                  className="flex-grow-1 d-flex align-items-center justify-content-center"
+                  variant="ghost"
+                  style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', borderRadius: '8px' }}
                   onClick={() => handleShowModal(client)}
-                  style={{ borderRadius: '8px' }}
                 >
                   <FaEye style={{ marginRight: '6px' }} /> Ver
                 </Button>
                 <Button
-                  variant="outline-secondary"
-                  className="flex-grow-1 d-flex align-items-center justify-content-center"
+                  variant="secondary"
+                  style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', borderRadius: '8px' }}
                   onClick={() => updateClientSelect(client.id ?? 0)}
-                  style={{ borderRadius: '8px' }}
                 >
                   <FaEdit style={{ marginRight: '6px' }} /> Editar
                 </Button>
+                <Button
+                  variant="danger"
+                  style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', borderRadius: '8px' }}
+                  onClick={() => {
+                    if (window.confirm(`¿Eliminar al cliente ${client.name} ${client.lastname || ''}? Esta acción no se puede deshacer.`)) {
+                      deleteClient(client.id ?? 0);
+                    }
+                  }}
+                >
+                  <FaTrashAlt style={{ marginRight: '6px' }} /> Eliminar
+                </Button>
               </div>
-            </Card.Body>
+            </CardBody>
           </Card>
-        </Col>
+        </div>
       ))}
-    </Row>
+    </div>
   </>
 );
 

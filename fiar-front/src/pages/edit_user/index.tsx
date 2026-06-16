@@ -1,5 +1,6 @@
 import React, { useState, useEffect, ChangeEvent, FormEvent } from 'react';
-import { Container, Row, Col, Form, Button, Spinner, Alert } from 'react-bootstrap';
+import Head from 'next/head';
+import { Button, Spinner, Alert, Input, Checkbox } from 'prizma-ui';
 import useUser from '@store/user';
 import { withAuthSync } from '@utils/auth';
 import api from '@api/index';
@@ -130,105 +131,117 @@ const EditProfile: React.FC = () => {
 
   if (loading) {
     return (
-      <Container>
-        <Row>
-          <Col md={{ span: 6, offset: 3 }} className="text-center">
-            <Spinner animation="border" />
-          </Col>
-        </Row>
-      </Container>
+      <div className="container">
+        <div className="row">
+          <div className="col-md-6 offset-md-3 text-center">
+            <Spinner />
+          </div>
+        </div>
+      </div>
     );
   }
 
   return (
-    <Container>
-      <Row>
-        <Col md={{ span: 6, offset: 3 }}>
-          {error && <Alert variant="danger">{error}</Alert>}
-          {success && <Alert variant="success">{success}</Alert>}
+    <div className="container">
+      <Head><title>Editar Perfil — Pistis</title></Head>
+      <div className="row">
+        <div className="col-md-6 offset-md-3">
+          {error && <Alert tone="danger" className="mb-3">{error}</Alert>}
+          {success && <Alert tone="success" className="mb-3">{success}</Alert>}
           <h2>Editar Perfil</h2>
-          <Form onSubmit={handleSubmit}>
-            <Form.Group controlId="formEmail" className="mb-3">
-              <Form.Control
+          <form onSubmit={handleSubmit}>
+            <div className="mb-3">
+              <label htmlFor="edit-email" style={{ display: 'block', marginBottom: 4, fontWeight: 500 }}>Correo electrónico</label>
+              <Input
+                id="edit-email"
                 type="email"
                 name="email"
                 value={formData.email}
                 onChange={handleInputChange}
                 placeholder="Correo electrónico"
               />
-            </Form.Group>
-            <Form.Group controlId="formName" className="mb-3">
-              <Form.Control
+            </div>
+            <div className="mb-3">
+              <label htmlFor="edit-name" style={{ display: 'block', marginBottom: 4, fontWeight: 500 }}>Nombre</label>
+              <Input
+                id="edit-name"
                 type="text"
                 name="name"
                 value={formData.name}
                 onChange={handleInputChange}
                 placeholder="Nombre"
               />
-            </Form.Group>
-            <Form.Group controlId="formApiKey" className="mb-3">
-              <Form.Control
+            </div>
+            <div className="mb-3">
+              <label htmlFor="edit-apikey" style={{ display: 'block', marginBottom: 4, fontWeight: 500 }}>API Key</label>
+              <Input
+                id="edit-apikey"
                 type="text"
                 name="apiKey"
                 value={formData.apiKey}
                 onChange={handleInputChange}
                 placeholder="API Key"
               />
-            </Form.Group>
-            <Form.Group controlId="formPluginsSinergia" className="mb-3">
-              <Form.Check
-                type="checkbox"
-                label="Habilitar Sinergia"
+            </div>
+            <div className="mb-3">
+              <Checkbox
+                label="Habilitar Talanton"
                 name="enabled"
                 data-plugin="sinergia"
                 checked={plugins.sinergia?.enabled || false}
                 onChange={handlePluginChange}
               />
-              <Form.Control
+              <label htmlFor="sinergia-apikey" style={{ display: 'block', marginTop: 8, marginBottom: 4, fontWeight: 500 }}>API Key Talanton</label>
+              <Input
+                id="sinergia-apikey"
                 type="text"
                 name="apiKey"
                 data-plugin="sinergia"
                 value={plugins.sinergia?.apiKey || ''}
                 onChange={handlePluginChange}
-                placeholder="API Key Sinergia"
+                placeholder="API Key Talanton"
                 disabled={!plugins.sinergia?.enabled}
                 className="mt-2"
               />
-            </Form.Group>
+            </div>
             <Button variant="primary" type="submit" style={{ marginTop: '20px' }}>
               Actualizar
             </Button>
-          </Form>
-        </Col>
-        <Col md={{ span: 6, offset: 3 }}>
+          </form>
+        </div>
+        <div className="col-md-6 offset-md-3">
           <br />
-          <h2 >Cambiar Contraseña</h2>
-          <Form onSubmit={handleChangePassword}>
-            <Form.Group controlId="formCurrentPassword" className="mb-3">
-              <Form.Control
+          <h2>Cambiar Contraseña</h2>
+          <form onSubmit={handleChangePassword}>
+            <div className="mb-3">
+              <label htmlFor="current-password" style={{ display: 'block', marginBottom: 4, fontWeight: 500 }}>Contraseña actual</label>
+              <Input
+                id="current-password"
                 type="password"
                 name="currentPassword"
                 value={passwordData.currentPassword}
                 onChange={handlePasswordChange}
                 placeholder="Contraseña actual"
               />
-            </Form.Group>
-            <Form.Group controlId="formNewPassword" className="mb-3">
-              <Form.Control
+            </div>
+            <div className="mb-3">
+              <label htmlFor="new-password" style={{ display: 'block', marginBottom: 4, fontWeight: 500 }}>Nueva contraseña</label>
+              <Input
+                id="new-password"
                 type="password"
                 name="newPassword"
                 value={passwordData.newPassword}
                 onChange={handlePasswordChange}
                 placeholder="Nueva contraseña"
               />
-            </Form.Group>
+            </div>
             <Button variant="primary" type="submit" style={{ marginTop: '20px' }}>
               Cambiar Contraseña
             </Button>
-          </Form>
-        </Col>
-      </Row>
-    </Container>
+          </form>
+        </div>
+      </div>
+    </div>
   );
 };
 

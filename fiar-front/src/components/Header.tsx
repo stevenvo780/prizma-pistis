@@ -1,7 +1,15 @@
 import React, { useEffect } from 'react';
-import { Navbar, Nav, NavDropdown } from 'react-bootstrap';
+import {
+  Topbar,
+  Nav,
+  NavItem,
+  DropdownMenu,
+  DropdownItem,
+  DropdownSeparator,
+} from 'prizma-ui';
 import { useRouter } from 'next/router';
 import Image from 'next/image';
+import Link from 'next/link';
 import {
   HiOutlineHome,
   HiOutlineUserGroup,
@@ -12,12 +20,12 @@ import {
   HiOutlineUserCircle,
   HiOutlineChartBarSquare,
   HiOutlineBolt,
+  HiOutlineQuestionMarkCircle,
 } from 'react-icons/hi2';
 import { TbArrowsExchange } from 'react-icons/tb';
 import useUser from '@store/user';
 import styles from '@styles/Header.module.css';
 import { startTour } from './Tutorial';
-import { HiOutlineQuestionMarkCircle } from 'react-icons/hi2';
 
 const Header = () => {
   const router = useRouter();
@@ -32,96 +40,114 @@ const Header = () => {
   const isActive = (path: string) => router.pathname === path;
 
   return (
-    <Navbar expand="lg" className={styles.navbar}>
-      <Navbar.Brand href="/home" className={styles.brand}>
+    <Topbar className={styles.navbar}>
+      <Link href="/home" className={styles.brand}>
         <Image
-          src="/img/cauce-symbol.svg"
-          alt="Olympo"
+          src="/img/prizma-symbol.svg"
+          alt="Prizma"
           width={36}
           height={36}
           className={styles.logo}
           fetchPriority="high"
         />
-        <span className={styles.brandName}>Fiar</span>
-        <span className={styles.brandUmbrella}>by Olympo</span>
-      </Navbar.Brand>
-      <Navbar.Toggle aria-controls="main-nav" className={styles.toggler} />
-      <Navbar.Collapse id="main-nav" className="justify-content-end">
-        <Nav className={styles.navLinks}>
-          <Nav.Link
-            href="/dashboard"
-            data-tour="nav-dashboard"
-            className={`${styles.navItem} ${isActive('/dashboard') ? styles.navItemActive : ''}`}
-          >
-            <HiOutlineChartBarSquare size={19} />
-            <span>Dashboard</span>
-          </Nav.Link>
-          <Nav.Link
-            href="/fiar"
-            data-tour="nav-fiar"
-            className={`${styles.navItem} ${isActive('/fiar') ? styles.navItemActive : ''}`}
-            style={isActive('/fiar') ? {} : { color: '#FFC313', fontWeight: 700 }}
-          >
-            <HiOutlineBolt size={19} />
-            <span>Fiar rapido</span>
-          </Nav.Link>
-          <Nav.Link
-            href="/transacciones"
-            data-tour="nav-transacciones"
-            className={`${styles.navItem} ${isActive('/transacciones') ? styles.navItemActive : ''}`}
-          >
-            <TbArrowsExchange size={19} />
-            <span>Transacciones</span>
-          </Nav.Link>
-          <Nav.Link
-            href="/client"
-            data-tour="nav-clientes"
-            className={`${styles.navItem} ${isActive('/client') ? styles.navItemActive : ''}`}
-          >
-            <HiOutlineUserGroup size={19} />
-            <span>Clientes</span>
-          </Nav.Link>
-          <Nav.Link
-            href="/plans"
-            data-tour="nav-planes"
-            className={`${styles.navItem} ${isActive('/plans') ? styles.navItemActive : ''}`}
-          >
-            <HiOutlineCreditCard size={19} />
-            <span>Planes</span>
-          </Nav.Link>
+        <span className={styles.brandName}>Pistis</span>
+        <span className={styles.brandUmbrella}>by Prizma</span>
+      </Link>
 
-          <NavDropdown
-            title={
-              <span className={styles.avatarBtn}>
-                <HiOutlineUserCircle size={26} />
-              </span>
-            }
-            id="user-menu"
-            align={{ lg: 'end' }}
-            drop="down"
-            className={styles.userMenu}
+      <Nav className={styles.navLinks}>
+        <NavItem
+          href="/dashboard"
+          data-tour="nav-dashboard"
+          active={isActive('/dashboard')}
+          icon={<HiOutlineChartBarSquare size={19} />}
+          className={`${styles.navItem} ${isActive('/dashboard') ? styles.navItemActive : ''}`}
+        >
+          <span>Dashboard</span>
+        </NavItem>
+
+        <NavItem
+          href="/pistis"
+          data-tour="nav-pistis"
+          active={isActive('/pistis') || isActive('/fiar')}
+          icon={<HiOutlineBolt size={19} />}
+          className={`${styles.navItem} ${(isActive('/pistis') || isActive('/fiar')) ? styles.navItemActive : ''}`}
+          style={(isActive('/pistis') || isActive('/fiar')) ? {} : { color: '#FFC313', fontWeight: 700 }}
+        >
+          <span>Pistis rapido</span>
+        </NavItem>
+
+        <NavItem
+          href="/transacciones"
+          data-tour="nav-transacciones"
+          active={isActive('/transacciones')}
+          icon={<TbArrowsExchange size={19} />}
+          className={`${styles.navItem} ${isActive('/transacciones') ? styles.navItemActive : ''}`}
+        >
+          <span>Transacciones</span>
+        </NavItem>
+
+        <NavItem
+          href="/client"
+          data-tour="nav-clientes"
+          active={isActive('/client')}
+          icon={<HiOutlineUserGroup size={19} />}
+          className={`${styles.navItem} ${isActive('/client') ? styles.navItemActive : ''}`}
+        >
+          <span>Clientes</span>
+        </NavItem>
+
+        <NavItem
+          href="/plans"
+          data-tour="nav-planes"
+          active={isActive('/plans')}
+          icon={<HiOutlineCreditCard size={19} />}
+          className={`${styles.navItem} ${isActive('/plans') ? styles.navItemActive : ''}`}
+        >
+          <span>Planes</span>
+        </NavItem>
+
+        <DropdownMenu
+          align="end"
+          trigger={
+            <button type="button" className={styles.avatarBtn} aria-label="Menú de usuario">
+              <HiOutlineUserCircle size={26} />
+            </button>
+          }
+          className={styles.userMenu}
+        >
+          <DropdownItem
+            icon={<HiOutlineEnvelope size={17} />}
+            onSelect={() => router.push('/contact')}
+            className={styles.dropItem}
           >
-            <NavDropdown.Item href="/contact" className={styles.dropItem}>
-              <HiOutlineEnvelope size={17} />
-              <span>Contáctanos</span>
-            </NavDropdown.Item>
-            <NavDropdown.Item onClick={() => router.push('/edit_user')} className={styles.dropItem}>
-              <HiOutlinePencilSquare size={17} />
-              <span>Editar perfil</span>
-            </NavDropdown.Item>
-            <NavDropdown.Item onClick={startTour} className={styles.dropItem}>
-              <HiOutlineQuestionMarkCircle size={17} />
-              <span>Ver tour de la app</span>
-            </NavDropdown.Item>
-            <NavDropdown.Divider />
-            <NavDropdown.Item onClick={() => logout()} className={`${styles.dropItem} ${styles.dropItemDanger}`}>
-              <HiOutlineArrowRightOnRectangle size={17} />
-              <span>Cerrar sesión</span>
-            </NavDropdown.Item>
-          </NavDropdown>
-        </Nav>
-      </Navbar.Collapse>
-    </Navbar>
+            Contáctanos
+          </DropdownItem>
+          <DropdownItem
+            icon={<HiOutlinePencilSquare size={17} />}
+            onSelect={() => router.push('/edit_user')}
+            className={styles.dropItem}
+          >
+            Editar perfil
+          </DropdownItem>
+          <DropdownItem
+            icon={<HiOutlineQuestionMarkCircle size={17} />}
+            onSelect={startTour}
+            className={styles.dropItem}
+          >
+            Ver tour de la app
+          </DropdownItem>
+          <DropdownSeparator />
+          <DropdownItem
+            icon={<HiOutlineArrowRightOnRectangle size={17} />}
+            onSelect={() => logout()}
+            danger
+            className={`${styles.dropItem} ${styles.dropItemDanger}`}
+          >
+            Cerrar sesión
+          </DropdownItem>
+        </DropdownMenu>
+      </Nav>
+    </Topbar>
   );
 };
 

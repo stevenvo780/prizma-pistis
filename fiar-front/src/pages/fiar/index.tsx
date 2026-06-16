@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef, useMemo, useCallback } from 'react';
-import { Form, Button, Alert, Spinner } from 'react-bootstrap';
+import Head from 'next/head';
+import { Button, Alert, Spinner, Input } from 'prizma-ui';
 import { withAuthSync } from '@utils/auth';
 import { useRouter } from 'next/router';
 import {
@@ -125,11 +126,12 @@ const FiarPage: React.FC = () => {
 
   return (
     <div className={styles.quickActionPage}>
+      <Head><title>Pistis rápido — Pistis</title></Head>
       {/* Page title */}
       <div style={{ marginBottom: 24, paddingTop: 8 }}>
-        <h2 style={{ fontWeight: 700, color: '#2c3e50', marginBottom: 4, fontSize: '1.4rem' }}>
-          Fiar rapido
-        </h2>
+        <h1 style={{ fontWeight: 700, color: '#2c3e50', marginBottom: 4, fontSize: '1.4rem' }}>
+          Pistis rápido
+        </h1>
         <p style={{ color: '#6c757d', margin: 0, fontSize: '0.9rem' }}>
           Registra un prestamo o abono en segundos
         </p>
@@ -157,6 +159,7 @@ const FiarPage: React.FC = () => {
           </p>
           <div style={{ display: 'flex', gap: 12, justifyContent: 'center', flexWrap: 'wrap' }}>
             <Button
+              variant="primary"
               onClick={handleReset}
               style={{
                 backgroundColor: accentColor, border: 'none',
@@ -166,7 +169,7 @@ const FiarPage: React.FC = () => {
               Nueva operacion
             </Button>
             <Button
-              variant="outline-secondary"
+              variant="ghost"
               style={{ borderRadius: '10px', fontWeight: 600, padding: '10px 24px' }}
               onClick={() => router.push('/transacciones')}
             >
@@ -178,7 +181,17 @@ const FiarPage: React.FC = () => {
 
       {step !== 'done' && (
         <>
-          {error && <Alert variant="danger" onClose={() => setError(null)} dismissible>{error}</Alert>}
+          {error && (
+            <Alert tone="danger" style={{ marginBottom: 16 }}>
+              {error}
+              <button
+                onClick={() => setError(null)}
+                style={{ marginLeft: 8, background: 'none', border: 'none', cursor: 'pointer', fontWeight: 700 }}
+              >
+                ×
+              </button>
+            </Alert>
+          )}
 
           {/* Step indicator */}
           <div style={{ display: 'flex', gap: 6, marginBottom: 24 }}>
@@ -241,7 +254,7 @@ const FiarPage: React.FC = () => {
               <p className={styles.sectionTitle}>Selecciona el cliente</p>
               <div className={styles.searchWrapper}>
                 <HiOutlineSearch size={18} className={styles.searchIcon} />
-                <Form.Control
+                <Input
                   ref={searchRef}
                   type="text"
                   placeholder="Buscar por nombre o cedula..."
@@ -322,7 +335,7 @@ const FiarPage: React.FC = () => {
                 <p className={styles.sectionTitle}>Cuanto?</p>
                 <div className={styles.amountInputWrap}>
                   <span className={styles.amountPrefix}>$</span>
-                  <Form.Control
+                  <Input
                     ref={amountRef}
                     type="number"
                     min={1}
@@ -347,6 +360,7 @@ const FiarPage: React.FC = () => {
               </div>
 
               <Button
+                variant={isExpense ? 'danger' : 'primary'}
                 className={isExpense ? styles.submitBtnExpense : styles.submitBtnIncome}
                 disabled={!amount || Number(amount) <= 0}
                 onClick={() => setStep('confirm')}
@@ -418,12 +432,13 @@ const FiarPage: React.FC = () => {
               </div>
 
               <Button
+                variant={isExpense ? 'danger' : 'primary'}
                 className={isExpense ? styles.submitBtnExpense : styles.submitBtnIncome}
                 onClick={handleSubmit}
                 disabled={submitting}
               >
                 {submitting
-                  ? <Spinner size="sm" animation="border" />
+                  ? <Spinner size={18} />
                   : <><HiOutlineCheckCircle size={20} /> Confirmar {isExpense ? 'Prestamo' : 'Abono'}</>
                 }
               </Button>

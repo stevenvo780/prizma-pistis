@@ -1,36 +1,73 @@
-/* Register.module.css */
+/* Register.module.css — migrated to prizma-ui tokens */
+
+/* Outer container — maps to <Card> wrapper */
 .register-form-container {
   position: relative;
-  top: 20px;
+  top: var(--c-space-5);
   width: 100%;
   max-width: 80%;
-  padding: 20px;
+  padding: var(--c-space-5);
   margin: 0 auto;
-  box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.5);
-  border-radius: 5px;
+  box-shadow: var(--c-shadow-lg);
+  border-radius: var(--c-radius-md);
+  background: var(--c-surface);
+  border: 1px solid var(--c-border);
 }
 
+/* Form element */
 .register-form {
   width: 100%;
 }
 
 .register-form label {
-  margin-bottom: 10px;
+  margin-bottom: var(--c-space-3);
+  font-weight: var(--c-weight-medium);
+  color: var(--c-text-muted);
+  font-size: var(--c-text-sm);
 }
 
+/* Input fields — maps to <Input> from prizma-ui */
 .register-form .form-control {
-  margin-top: 5px;
-  padding: 10px;
-  border-radius: 5px;
-  border: 1px solid #ddd;
+  margin-top: var(--c-space-1);
+  padding: var(--c-space-3);
+  border-radius: var(--c-radius-md);
+  border: 1px solid var(--c-border-strong);
+  font-size: var(--c-text-base);
+  width: 100%;
+  transition: border-color var(--c-duration-base) var(--c-ease-standard),
+              box-shadow var(--c-duration-base) var(--c-ease-standard);
 }
 
+.register-form .form-control:focus {
+  border-color: var(--c-primary);
+  box-shadow: 0 0 0 3px var(--c-ring);
+  outline: none;
+}
+
+/* Submit button — maps to <Button variant="primary"> */
 .register-form .btn-primary {
-  padding: 10px 20px;
-  margin-top: 20px;
+  padding: var(--c-space-3) var(--c-space-5);
+  margin-top: var(--c-space-5);
+  background: var(--c-primary-grad);
+  color: var(--c-on-primary);
+  border: none;
+  border-radius: var(--c-radius-md);
+  font-weight: var(--c-weight-semibold);
+  cursor: pointer;
+  transition: opacity var(--c-duration-base) var(--c-ease-standard),
+              box-shadow var(--c-duration-base) var(--c-ease-standard);
 }
 
+.register-form .btn-primary:hover {
+  box-shadow: var(--c-shadow-glow);
+  opacity: 0.9;
+}
+
+/* Disabled state */
 .register-form .btn-primary:disabled {
-  background-color: #ccc;
+  background-color: var(--c-slate-200, #CBD5D7);
+  color: var(--c-text-subtle);
   cursor: not-allowed;
+  box-shadow: none;
+  opacity: 1;
 }

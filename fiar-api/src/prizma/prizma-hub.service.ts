@@ -5,12 +5,12 @@ import {
   validateEvent,
   type EventEnvelope,
   type PublishOptions,
-} from '@olympo/contracts';
+} from 'prizma-contracts';
 
 /**
- * Olympo HubCentral integration for Fiar (credit / cartera backend).
+ * Prizma HubCentral integration for Pistis (credit / cartera backend).
  *
- * Fiar is the SSOT of credit, debt and quota, so it is the OWNER (emitter) of
+ * Pistis is the SSOT of credit, debt and quota, so it is the OWNER (emitter) of
  * these events (see ARCHITECTURE.md §4 flow 4 and §5):
  *   - CREDIT_CHECK       (credit.check)     — a credit eligibility check ran.
  *   - CREDIT_APPROVED    (credit.approved)  — a credit line / quota was granted.
@@ -23,19 +23,19 @@ import {
  * helper here is therefore safe to `await` inline without try/catch.
  */
 @Injectable()
-export class OlympoHubService {
-  private readonly logger = new Logger(OlympoHubService.name);
+export class PrizmaHubService {
+  private readonly logger = new Logger(PrizmaHubService.name);
 
   private readonly client = new HubClient({
     source: 'fiar',
-    hubUrl: process.env.CAUCE_HUB_URL,
-    secret: process.env.CAUCE_HUB_SECRET,
+    hubUrl: process.env.NOUS_HUB_URL,
+    secret: process.env.NOUS_HUB_SECRET,
     // throwOnError stays false: never break the local credit/payment flow.
   });
 
   /** Whether the connector is enabled (opt-in via env, default on). */
   private get enabled(): boolean {
-    return process.env.CAUCE_HUB_ENABLED !== 'false';
+    return process.env.NOUS_HUB_ENABLED !== 'false';
   }
 
   /**
@@ -61,7 +61,7 @@ export class OlympoHubService {
     if (!probe.ok) {
       const reason = (probe as { error: string }).error;
       this.logger.warn(
-        `[cauce] skipping invalid "${eventType}" event: ${reason}`,
+        `[prizma] skipping invalid "${eventType}" event: ${reason}`,
       );
       return false;
     }
@@ -72,7 +72,7 @@ export class OlympoHubService {
       // Defensive: HubClient already swallows network errors, but never let an
       // unexpected throw bubble into the business transaction.
       this.logger.warn(
-        `[cauce] publish "${eventType}" failed (non-fatal): ${
+        `[prizma] publish "${eventType}" failed (non-fatal): ${
           (err as Error).message
         }`,
       );
@@ -80,7 +80,7 @@ export class OlympoHubService {
     }
   }
 
-  // --- Fiar-owned event helpers -------------------------------------------
+  // --- Pistis-owned event helpers -------------------------------------------
 
   /**
    * Flow 4 — a credit eligibility check was run for a customer.

@@ -17,8 +17,8 @@ async function bootstrap() {
   app.use(compression());
 
   const config = new DocumentBuilder()
-    .setTitle('FIAR API')
-    .setDescription('Backend de FIAR para gestion de clientes, transacciones, autenticacion y pagos (Mercado Pago)')
+    .setTitle('Pistis API')
+    .setDescription('Backend de Pistis para gestion de clientes, transacciones, autenticacion y pagos (Mercado Pago)')
     .setVersion('1.0')
     .addBearerAuth(
       { type: 'http', scheme: 'bearer', bearerFormat: 'JWT' },
@@ -28,13 +28,13 @@ async function bootstrap() {
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document);
 
-  // Olympo canonical health endpoint (matches @olympo/contracts SERVICES.fiar.healthPath).
+  // Prizma canonical health endpoint (matches prizma-contracts SERVICES.pistis.healthPath).
   // Served at the root path (no /api/v1 prefix) so HubCentral / the Portal can probe it.
   app
     .getHttpAdapter()
     .getInstance()
     .get('/health', (req, res) => {
-      res.status(200).json({ status: 'healthy', service: 'fiar' });
+      res.status(200).json({ status: 'healthy', service: 'pistis' });
     });
 
   const configService = app.get(ConfigService);

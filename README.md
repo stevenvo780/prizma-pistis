@@ -1,6 +1,8 @@
-# FIAR
+# Pistis (ex Fiar)
 
-Sistema de gestion de creditos del ecosistema Humanizar.
+Sistema de gestion de creditos de la suite Prizma.
+
+> **Antes**: `fiar` · **Clave tecnica nueva**: `pistis` (suite Prizma). Los directorios `fiar-front`/`fiar-api` y demas rutas conservan su nombre como shim.
 
 ## Componentes
 

@@ -1,150 +1,95 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import Joyride, { CallBackProps, STATUS, Step } from 'react-joyride';
+import React, { useState, useEffect } from 'react';
+import { PrizmaTour, TourStep } from 'prizma-ui';
 
-const TUTORIAL_KEY = 'fiar_tutorial_completed';
-export const TOUR_EVENT = 'fiar:start-tour';
+const RUN_KEY = 'pistis-front-v1';
+export const TOUR_EVENT = 'pistis:start-tour';
 
-const STEPS: Step[] = [
+const STEPS: TourStep[] = [
   {
-    target: '[data-tour="nav-dashboard"]',
-    title: 'Tu resumen general',
-    content: 'Aqui ves cuanto has prestado en total, cuanto te deben y tus clientes mas activos. Es tu punto de partida cada dia.',
-    disableBeacon: true,
-    placement: 'bottom',
+    // Sin target: pantalla de bienvenida centrada
+    title: 'Bienvenido a Pistis',
+    body: 'Pistis es tu sistema de fiado digital. En este tour de 5 pasos aprenderás a registrar préstamos, gestionar clientes y controlar tu cartera. ¡Empecemos!',
+    placement: 'center',
   },
   {
-    target: '[data-tour="nav-fiar"]',
-    title: 'Fiar rapido ⚡',
-    content: 'El camino mas corto para registrar un prestamo o un abono. Seleccionas la operacion, buscas el cliente, pones el monto y listo.',
-    disableBeacon: true,
-    placement: 'bottom',
-  },
-  {
-    target: '[data-tour="nav-transacciones"]',
-    title: 'Historial completo',
-    content: 'Todo el registro en un lugar: rojo = dinero que prestaste, verde = dinero que recibiste. Filtra, busca y exporta a Excel.',
-    disableBeacon: true,
+    target: '[data-tour="nav-pistis"]',
+    title: 'Pistis Rápido — registra un fiado en segundos',
+    body: 'Aquí empieza el flujo principal: selecciona la operación (Prestar o Abonar), busca el cliente y escribe el monto. Listo para cobrar o fiar en 3 toques.',
     placement: 'bottom',
   },
   {
     target: '[data-tour="nav-clientes"]',
-    title: 'Tus clientes',
-    content: 'Agrega las personas a quienes les fias. Balance rojo = te deben, verde = al dia o adelantado.',
-    disableBeacon: true,
+    title: 'Tus clientes — quién te debe y cuánto',
+    body: 'Agrega aquí a las personas a quienes les fias. Balance en rojo = te deben; verde = al día. Puedes editar límites de crédito y ver el historial de cada uno.',
     placement: 'bottom',
   },
   {
-    target: '[data-tour="nav-planes"]',
-    title: 'Ampliar limites',
-    content: 'El plan gratuito tiene limite de clientes. Aqui puedes escalar cuando tu negocio lo necesite.',
-    disableBeacon: true,
+    target: '[data-tour="nav-transacciones"]',
+    title: 'Historial completo de transacciones',
+    body: 'Cada préstamo y abono queda registrado aquí. Filtra por fecha o cliente, cambia el estado (aprobado / pendiente) y exporta a Excel para llevar cuentas.',
+    placement: 'bottom',
+  },
+  {
+    target: '[data-tour="metrics-grid"]',
+    title: 'Métricas de tu cartera de crédito',
+    body: 'De un vistazo ves cuánto tienes prestado, cuánto has recuperado y cuántos clientes están pendientes. Se actualiza en tiempo real con cada operación.',
+    placement: 'top',
+  },
+  {
+    target: '[data-tour="quick-actions"]',
+    title: 'Acciones rápidas desde el dashboard',
+    body: 'Desde aquí puedes crear una nueva transacción, agregar un cliente o exportar tu cartera a Excel sin salir del resumen. ¡Ya estás listo para usar Pistis!',
     placement: 'bottom',
   },
 ];
 
-const joyrideStyles = {
-  options: {
-    primaryColor: '#FFC313',
-    textColor: '#2c3e50',
-    backgroundColor: '#ffffff',
-    arrowColor: '#ffffff',
-    overlayColor: 'rgba(0,0,0,0.55)',
-    zIndex: 10000,
-    width: 320,
-  },
-  buttonNext: {
-    backgroundColor: '#FFC313',
-    color: '#111',
-    fontWeight: 700 as const,
-    borderRadius: '8px',
-    padding: '8px 18px',
-    fontSize: '0.9rem',
-    border: 'none',
-  },
-  buttonBack: {
-    color: '#6c757d',
-    fontWeight: 500 as const,
-    fontSize: '0.9rem',
-    marginRight: 8,
-  },
-  buttonSkip: {
-    color: '#adb5bd',
-    fontSize: '0.82rem',
-  },
-  tooltip: {
-    borderRadius: '12px',
-    padding: '20px 22px',
-    boxShadow: '0 12px 32px rgba(0,0,0,0.15)',
-  },
-  tooltipTitle: {
-    fontWeight: 700 as const,
-    fontSize: '1rem',
-    marginBottom: '6px',
-    color: '#1a1a2e',
-  },
-  tooltipContent: {
-    fontSize: '0.9rem',
-    lineHeight: 1.55,
-    color: '#495057',
-    paddingTop: 4,
-  },
-  spotlight: {
-    borderRadius: '10px',
-  },
-};
-
 const Tutorial: React.FC = () => {
-  const [run, setRun] = useState(false);
-
-  useEffect(() => {
-    const completed = localStorage.getItem(TUTORIAL_KEY);
-    if (!completed) {
-      const timer = setTimeout(() => setRun(true), 800);
-      return () => clearTimeout(timer);
-    }
-  }, []);
+  const [run, setRun] = useState<boolean | undefined>(undefined);
 
   // Permite relanzar el tour desde cualquier parte via window event
   useEffect(() => {
     const handler = () => {
-      localStorage.removeItem(TUTORIAL_KEY);
+      // Forzar re-run: marcar como no visto y arrancar
+      try {
+        localStorage.removeItem(`prizma-tour:${RUN_KEY}`);
+      } catch {
+        // ignore
+      }
       setRun(false);
-      setTimeout(() => setRun(true), 100);
+      // Dar un tick para que PrizmaTour detecte el cambio
+      requestAnimationFrame(() => setRun(true));
     };
     window.addEventListener(TOUR_EVENT, handler);
     return () => window.removeEventListener(TOUR_EVENT, handler);
   }, []);
 
-  const handleCallback = useCallback((data: CallBackProps) => {
-    const { status } = data;
-    if (status === STATUS.FINISHED || status === STATUS.SKIPPED) {
-      localStorage.setItem(TUTORIAL_KEY, 'true');
-      setRun(false);
-    }
-  }, []);
+  // run === undefined → dejar que autoStart decida (primera vez)
+  // run === true/false → modo controlado para relanzar
+  if (run === undefined) {
+    return (
+      <PrizmaTour
+        steps={STEPS}
+        runKey={RUN_KEY}
+        autoStart
+        onFinish={() => setRun(false)}
+        onSkip={() => setRun(false)}
+      />
+    );
+  }
 
   return (
-    <Joyride
+    <PrizmaTour
       steps={STEPS}
+      runKey={RUN_KEY}
       run={run}
-      continuous
-      showProgress
-      showSkipButton
-      scrollToFirstStep={false}
-      locale={{
-        back: 'Anterior',
-        close: 'Cerrar',
-        last: 'Entendido',
-        next: 'Siguiente',
-        skip: 'Saltar tour',
-      }}
-      styles={joyrideStyles}
-      callback={handleCallback}
+      onRunChange={setRun}
+      onFinish={() => setRun(false)}
+      onSkip={() => setRun(false)}
     />
   );
 };
 
 export default Tutorial;
 
-/** Lanza el tour desde cualquier parte: window.dispatchEvent(new Event('fiar:start-tour')) */
+/** Lanza el tour desde cualquier parte: window.dispatchEvent(new Event('pistis:start-tour')) */
 export const startTour = () => window.dispatchEvent(new Event(TOUR_EVENT));

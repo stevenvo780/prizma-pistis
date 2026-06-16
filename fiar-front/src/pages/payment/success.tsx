@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
-import { Container, Card, Button, Spinner } from "react-bootstrap";
+import Head from "next/head";
+import { Card, CardBody, Button, Spinner } from "prizma-ui";
 import { useRouter } from "next/router";
 import { HiOutlineCheckCircle, HiOutlineClock } from "react-icons/hi2";
 import useUser from "@store/user";
@@ -75,31 +76,32 @@ const PaymentSuccess: React.FC = () => {
   }, [loading]);
 
   return (
-    <Container
+    <div
       className="d-flex align-items-center justify-content-center"
       style={{ minHeight: "70vh" }}
     >
       <Card
-        className="text-center border-0 p-5"
+        className="text-center p-5"
         style={{ maxWidth: 520, borderRadius: 20, boxShadow: '0 8px 32px rgba(16,185,129,0.1)' }}
       >
-        <Card.Body>
+        <Head><title>Pago exitoso — Pistis</title></Head>
+        <CardBody>
           {loading ? (
-            <Spinner animation="border" variant="success" />
+            <Spinner label="Cargando pago" />
           ) : (
             <>
               <div className="d-inline-flex align-items-center justify-content-center mb-4" style={{ width: 80, height: 80, borderRadius: '50%', background: planActivated ? '#ecfdf5' : '#fefce8' }}>
                 {planActivated ? (
                   <HiOutlineCheckCircle size={48} className="text-success" />
                 ) : syncing ? (
-                  <Spinner animation="border" variant="warning" />
+                  <Spinner label="Sincronizando" />
                 ) : (
                   <HiOutlineClock size={48} className="text-warning" />
                 )}
               </div>
-              <h2 className="fw-bold mb-3">
+              <h1 className="fw-bold mb-3" style={{ fontSize: '1.5rem' }}>
                 {planActivated ? '¡Pago exitoso!' : syncing ? 'Activando tu plan...' : '¡Pago registrado!'}
-              </h2>
+              </h1>
               <p className="text-muted mb-4">
                 {planActivated
                   ? 'Tu suscripción ha sido activada correctamente. Ya puedes disfrutar de todas las funcionalidades premium.'
@@ -118,7 +120,7 @@ const PaymentSuccess: React.FC = () => {
                 </p>
               )}
               <Button
-                variant="success"
+                variant="primary"
                 size="lg"
                 className="fw-bold px-5"
                 onClick={() => router.push("/dashboard")}
@@ -128,9 +130,9 @@ const PaymentSuccess: React.FC = () => {
               </Button>
             </>
           )}
-        </Card.Body>
+        </CardBody>
       </Card>
-    </Container>
+    </div>
   );
 };
 

@@ -1,5 +1,6 @@
-import { useState, ChangeEvent, FC, useEffect } from 'react';
-import { Container, Row, Col, Form, Button, Dropdown } from 'react-bootstrap';
+import { useState, ChangeEvent, FC, useEffect, useRef } from 'react';
+import Head from 'next/head';
+import { Button, Input, Select, Pagination } from 'prizma-ui';
 import { withAuthSync } from '@utils/auth';
 import ClientList from './ClientList';
 import useClient from '@store/client';
@@ -7,23 +8,7 @@ import useUI from '@/store/ui';
 import { Client } from '@utils/types';
 import ClientDetailModal from './ClientDetailModal';
 import ClientFormModal from './ClientFormModal';
-import Pagination from 'rc-pagination';
-import { FaChevronLeft, FaChevronRight } from 'react-icons/fa';
-import 'rc-pagination/assets/index.css';
 import styles from '@styles/Client.module.css';
-
-const paginationLocale = {
-  items_per_page: '/ página',
-  jump_to: 'Ir a',
-  jump_to_confirm: 'confirmar',
-  page: '',
-  prev_page: 'Página anterior',
-  next_page: 'Página siguiente',
-  prev_5: '5 páginas anteriores',
-  next_5: '5 páginas siguientes',
-  prev_3: '3 páginas anteriores',
-  next_3: '3 páginas siguientes',
-};
 
 const ClientView: FC = () => {
   const { setLoading, addAlert } = useUI();
@@ -47,6 +32,12 @@ const ClientView: FC = () => {
   const [showModalCreate, setShowModalCreate] = useState(false);
   const [search, setSearch] = useState('');
   const [limit, setLimit] = useState(50);
+  const [accountFilter, setAccountFilter] = useState<string>('');
+  const [debtSort, setDebtSort] = useState<string>('');
+  const [showAccountMenu, setShowAccountMenu] = useState(false);
+  const [showDebtMenu, setShowDebtMenu] = useState(false);
+  const accountMenuRef = useRef<HTMLDivElement>(null);
+  const debtMenuRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     // Fetch initial data or when page/limit changes, but not search initially
@@ -180,10 +171,13 @@ const ClientView: FC = () => {
 
   return (
     <>
-      <Container className="container">
+      <Head><title>Clientes — Pistis</title></Head>
+      <div className="container">
         <div className={`mb-3 p-3 ${styles.roundedNavbar}`}>
           <div className="d-flex flex-wrap gap-2 align-items-center">
-            <Form.Control
+            <label htmlFor="client-search" className="visually-hidden">Buscar clientes</label>
+            <Input
+              id="client-search"
               type="text"
               placeholder="Buscar..."
               value={search}
@@ -203,27 +197,65 @@ const ClientView: FC = () => {
             <Button variant="secondary" onClick={handleDownloadExcel}>
               Descargar Excel
             </Button>
-            <Dropdown>
-              <Dropdown.Toggle variant="success" id="estado-de-cuenta">
-                Estado de cuenta
-              </Dropdown.Toggle>
-              <Dropdown.Menu>
-                <Dropdown.Item>En deuda</Dropdown.Item>
-                <Dropdown.Item>Al día</Dropdown.Item>
-                <Dropdown.Item>Suspendidos</Dropdown.Item>
-                <Dropdown.Item>Todos</Dropdown.Item>
-              </Dropdown.Menu>
-            </Dropdown>
-            <Dropdown>
-              <Dropdown.Toggle variant="success" id="deudas-pendientes">
-                Deudas pendientes
-              </Dropdown.Toggle>
-              <Dropdown.Menu>
-                <Dropdown.Item>Deuda (mayor → menor)</Dropdown.Item>
-                <Dropdown.Item>Deuda (menor → mayor)</Dropdown.Item>
-              </Dropdown.Menu>
-            </Dropdown>
-            <Form.Select
+            <div ref={accountMenuRef} style={{ position: 'relative' }}>
+              <Button
+                variant="secondary"
+                type="button"
+                aria-haspopup="true"
+                aria-expanded={showAccountMenu}
+                onClick={() => { setShowAccountMenu(v => !v); setShowDebtMenu(false); }}
+              >
+                {accountFilter || 'Estado de cuenta'} ▾
+              </Button>
+              {showAccountMenu && (
+                <ul
+                  role="menu"
+                  style={{ position: 'absolute', top: '100%', left: 0, zIndex: 200, background: '#fff', border: '1px solid #dee2e6', borderRadius: 6, padding: '4px 0', listStyle: 'none', margin: 0, minWidth: 160 }}
+                >
+                  {['Todos', 'En deuda', 'Al día', 'Suspendidos'].map(opt => (
+                    <li key={opt} role="none">
+                      <button
+                        role="menuitem"
+                        style={{ display: 'block', width: '100%', padding: '6px 16px', background: 'none', border: 'none', textAlign: 'left', cursor: 'pointer' }}
+                        onClick={() => { setAccountFilter(opt === 'Todos' ? '' : opt); setShowAccountMenu(false); fetchClient(1, limit, search); }}
+                      >
+                        {opt}
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </div>
+            <div ref={debtMenuRef} style={{ position: 'relative' }}>
+              <Button
+                variant="secondary"
+                type="button"
+                aria-haspopup="true"
+                aria-expanded={showDebtMenu}
+                onClick={() => { setShowDebtMenu(v => !v); setShowAccountMenu(false); }}
+              >
+                {debtSort || 'Deudas pendientes'} ▾
+              </Button>
+              {showDebtMenu && (
+                <ul
+                  role="menu"
+                  style={{ position: 'absolute', top: '100%', left: 0, zIndex: 200, background: '#fff', border: '1px solid #dee2e6', borderRadius: 6, padding: '4px 0', listStyle: 'none', margin: 0, minWidth: 200 }}
+                >
+                  {['Deuda (mayor → menor)', 'Deuda (menor → mayor)'].map(opt => (
+                    <li key={opt} role="none">
+                      <button
+                        role="menuitem"
+                        style={{ display: 'block', width: '100%', padding: '6px 16px', background: 'none', border: 'none', textAlign: 'left', cursor: 'pointer' }}
+                        onClick={() => { setDebtSort(opt); setShowDebtMenu(false); }}
+                      >
+                        {opt}
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </div>
+            <Select
               value={limit}
               onChange={handleLimitChange}
               style={{ width: '100px' }}
@@ -231,7 +263,7 @@ const ClientView: FC = () => {
               <option value={10}>10</option>
               <option value={20}>20</option>
               <option value={50}>50</option>
-            </Form.Select>
+            </Select>
           </div>
         </div>
         <hr />
@@ -243,26 +275,13 @@ const ClientView: FC = () => {
         />
         <div className={styles.paginationContainer}>
           <Pagination
-            current={page}
-            total={lastPage * limit}
-            pageSize={limit}
+            page={page}
+            pageCount={lastPage}
             onChange={handlePageChange}
-            locale={paginationLocale}
-            prevIcon={<FaChevronLeft />}
-            nextIcon={<FaChevronRight />}
             style={{ display: 'flex', justifyContent: 'center', marginTop: '20px' }}
-            itemRender={(current, type, element) => {
-              if (type === 'prev') {
-                return <FaChevronLeft style={{ color: '#FFC313' }} />;
-              }
-              if (type === 'next') {
-                return <FaChevronRight style={{ color: '#FFC313' }} />;
-              }
-              return element;
-            }}
           />
         </div>
-      </Container>
+      </div>
       <ClientDetailModal
         show={showModalDetail}
         onHide={handleCloseModalDetail}
@@ -270,17 +289,17 @@ const ClientView: FC = () => {
       />
       <ClientFormModal
         show={showModalCreate}
-        onHide={() => { // Use onHide for closing via backdrop or X button
+        onHide={() => {
             setShowModalCreate(false);
             resetForm();
         }}
         isUpdating={isUpdating}
-        client={clientSelected} // Pass the state variable directly
+        client={clientSelected}
         labels={labels}
-        handleInputChange={handleInputChange} // Pass the handler
+        handleInputChange={handleInputChange}
         handleSelectChange={handleSelectChange}
-        handleSave={createOrUpdateClient} // Pass the save handler
-        handleCancel={() => { // Explicit cancel button action
+        handleSave={createOrUpdateClient}
+        handleCancel={() => {
           setShowModalCreate(false);
           resetForm();
         }}
@@ -290,4 +309,3 @@ const ClientView: FC = () => {
 };
 
 export default withAuthSync(ClientView);
-

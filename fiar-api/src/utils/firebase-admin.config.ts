@@ -13,17 +13,23 @@ if (!admin.apps.length) {
       credential: admin.credential.cert(serviceAccount),
       databaseURL: process.env.FIREBASE_DATABASE_URL,
     });
-  } else {
+  } else if (
+    process.env.FIREBASE_PROJECT_ID &&
+    process.env.FIREBASE_CLIENT_EMAIL &&
+    process.env.FIREBASE_PRIVATE_KEY
+  ) {
     admin.initializeApp({
       credential: admin.credential.cert({
         projectId: process.env.FIREBASE_PROJECT_ID,
         clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
-        privateKey: process.env.FIREBASE_PRIVATE_KEY
-          ? process.env.FIREBASE_PRIVATE_KEY.replace(/\\n/g, '\n')
-          : undefined,
+        privateKey: process.env.FIREBASE_PRIVATE_KEY.replace(/\\n/g, '\n'),
       }),
       databaseURL: process.env.FIREBASE_DATABASE_URL,
     });
+  } else {
+    // Firebase credentials not configured — auth features will be unavailable.
+    // initializeApp is skipped to avoid crashing the process at startup.
+    console.warn('[firebase] FIREBASE_PROJECT_ID / FIREBASE_CLIENT_EMAIL / FIREBASE_PRIVATE_KEY not set — Firebase Auth disabled.');
   }
 }
 

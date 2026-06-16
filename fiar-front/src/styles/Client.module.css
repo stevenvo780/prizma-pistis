@@ -52,8 +52,8 @@
   flex-wrap: wrap;
 }
 
-/* Botones dentro del grupo */
-.button-group .btn {
+/* Botones dentro del grupo — prizma-ui Button */
+.button-group .cui-btn {
   flex: 1;
   box-shadow: none;
   min-width: 150px; /* Para que los botones se ajusten en pantallas pequeñas */
@@ -62,46 +62,46 @@
   justify-content: center; /* Centrar los iconos */
 }
 
-/* Botón "Ver" (con icono) */
+/* Botón "Ver" → variant="ghost" con color primario */
 .btnView {
   background-color: transparent;
-  color: #007bff;
-  border: 1px solid #007bff;
+  color: var(--primary-color);
+  border: 1px solid var(--primary-color);
 }
 
-.btnView:hover,
-.btnView:focus {
+.btnView:not(:disabled):hover,
+.btnView:not(:disabled):focus {
   background-color: transparent;
-  color: #0056b3;
-  border: 1px solid #0056b3;
+  color: var(--primary-hover);
+  border: 1px solid var(--primary-hover);
 }
 
-/* Botón "Actualizar" (con icono) */
+/* Botón "Actualizar" → variant="ghost" con color warning */
 .btnUpdate {
   background-color: transparent;
-  color: #FFD700;
-  border: 1px solid #FFD700;
+  color: var(--warning-color);
+  border: 1px solid var(--warning-color);
 }
 
-.btnUpdate:hover,
-.btnUpdate:focus {
+.btnUpdate:not(:disabled):hover,
+.btnUpdate:not(:disabled):focus {
   background-color: transparent;
-  color: #ccac00;
-  border: 1px solid #ccac00;
+  color: var(--warning-hover);
+  border: 1px solid var(--warning-hover);
 }
 
-/* Botón "Eliminar" (con icono) */
+/* Botón "Eliminar" → variant="danger" ghost */
 .btnDelete {
   background-color: transparent;
-  color: #dc3545;
-  border: 1px solid #dc3545;
+  color: var(--danger-color);
+  border: 1px solid var(--danger-color);
 }
 
-.btnDelete:hover,
-.btnDelete:focus {
+.btnDelete:not(:disabled):hover,
+.btnDelete:not(:disabled):focus {
   background-color: transparent;
-  color: #a71d2a;
-  border: 1px solid #a71d2a;
+  color: var(--danger-hover);
+  border: 1px solid var(--danger-hover);
 }
 
 /* Hacer que las tarjetas se ajusten en pantallas pequeñas */
@@ -115,7 +115,7 @@
     align-items: flex-start;
   }
 
-  .button-group .btn {
+  .button-group .cui-btn {
     min-width: 100%; /* Los botones ocupan todo el ancho en pantallas pequeñas */
   }
 }

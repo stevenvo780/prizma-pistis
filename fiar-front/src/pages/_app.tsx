@@ -1,7 +1,8 @@
-import 'bootstrap/dist/css/bootstrap.min.css';
+import 'prizma-ui/styles.css';
 import '@styles/globals.css';
-import '@styles/cauce-brand.css';
+import '@styles/prizma-brand.css';
 import React, { useEffect } from 'react';
+import { ThemeProvider, PrizmaRoot } from 'prizma-ui';
 import Layout from '../components/Layout';
 import Tutorial from '../components/Tutorial';
 import { Provider } from 'react-redux';
@@ -35,17 +36,19 @@ function RedirectResultHandler() {
 
 function MyApp({ Component, pageProps }: { Component: React.ComponentType<any>, pageProps: any }) {
   return (
-    <Provider store={store}>
-      <PersistGate loading={null} persistor={persistor}>
-        <div data-module="fiar">
-          <RedirectResultHandler />
-          <Tutorial />
-          <Layout>
-            <Component {...pageProps} />
-          </Layout>
-        </div>
-      </PersistGate>
-    </Provider>
+    <ThemeProvider>
+      <PrizmaRoot module="pistis">
+        <Provider store={store}>
+          <PersistGate loading={null} persistor={persistor}>
+            <RedirectResultHandler />
+            <Tutorial />
+            <Layout>
+              <Component {...pageProps} />
+            </Layout>
+          </PersistGate>
+        </Provider>
+      </PrizmaRoot>
+    </ThemeProvider>
   );
 }
 

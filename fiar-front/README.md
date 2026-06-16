@@ -1,6 +1,6 @@
-# FIAR Frontend
+# Pistis Frontend
 
-Frontend web de FIAR para operacion comercial y de cartera.
+Frontend web de Pistis para operacion comercial y de cartera.
 
 ## Stack
 
@@ -13,7 +13,7 @@ Frontend web de FIAR para operacion comercial y de cartera.
 
 - Node.js >= 18
 - npm >= 9
-- FIAR API disponible
+- Pistis API disponible
 
 ## Configuracion
 
@@ -51,7 +51,7 @@ npm run start
 
 ## Docker
 
-Desde `Fiar/` se orquesta junto con API y Postgres:
+Desde `Pistis/` se orquesta junto con API y Postgres:
 
 ```bash
 docker compose up --build

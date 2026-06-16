@@ -1,0 +1,38 @@
+.gcloudignore
+.git
+.gitignore
+
+# Compiled output (buildpacks builds in the cloud)
+/dist
+/node_modules
+
+# Logs
+logs
+*.log
+npm-debug.log*
+pnpm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# OS
+.DS_Store
+
+# Tests
+/coverage
+/.nyc_output
+
+# IDEs
+/.idea
+.vscode/*
+!.vscode/settings.json
+
+# Secrets / sensitive (exclude actual firebase SA - env vars used instead)
+.env
+.env.*
+!.env.example
+firebase-service-account.json
+*-service-account*.json
+
+# Vendor package node_modules (will be installed during build)
+/vendor-prizma-contracts/node_modules
+/vendor-olympo-contracts/node_modules

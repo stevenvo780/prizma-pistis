@@ -1,5 +1,5 @@
 
-# --- olympo push safety (secrets & build artifacts) ---
+# --- prizma push safety (secrets & build artifacts) ---
 node_modules/
 dist/
 .next/

@@ -1,18 +1,18 @@
 /**
- * cauce-brand.css — bridges the existing Bootstrap 5 + Tailwind theme of fiar-front
- * to the Olympo brand tokens.
+ * prizma-brand.css — bridges the existing Bootstrap 5 + Tailwind theme of pistis-front
+ * to the Prizma brand tokens.
  *
- * Self-contained: @olympo/ui is NOT a dependency of this app (it runs on npm with its
- * own node_modules, separate from the pnpm workspace), so the Olympo tokens used below
- * are declared locally instead of being imported from "@olympo/ui/styles.css".
+ * Self-contained: prizma-ui is NOT a dependency of this app (it runs on npm with its
+ * own node_modules, separate from the pnpm workspace), so the Prizma tokens used below
+ * are declared locally instead of being imported from "prizma-ui/styles.css".
  *
- * The module accent for "fiar" (#2FAE9B) is set by [data-module="fiar"] on the root
- * container (see _app.tsx). Goal: buttons, links and focus rings adopt the Olympo
- * "Corriente" teal / fiar accent without rewriting existing markup. Additive only —
+ * The module accent for "pistis" (#2FAE9B) is set by [data-module="pistis"] on the root
+ * container (see _app.tsx). Goal: buttons, links and focus rings adopt the Prizma
+ * "Corriente" teal / pistis accent without rewriting existing markup. Additive only —
  * does not touch component-level CSS Modules.
  */
 
-/* --- Olympo brand tokens (subset, values from @olympo/tokens) --- */
+/* --- Prizma brand tokens (subset, values from prizma-tokens) --- */
 :root {
   --c-primary: #0B8A8F;          /* Corriente / primary-600 */
   --c-primary-hover: #14AEB5;    /* primary-500 */
@@ -24,17 +24,17 @@
   --c-font-display: 'Sora', var(--c-font-sans);
   --c-radius-md: 10px;
 
-  /* fiar module accent (teal verdoso) */
+  /* pistis module accent (teal verdoso) */
   --c-accent-module: #2FAE9B;
   --c-accent-hover: #259182;
   --c-accent-module-tint: rgba(47, 174, 155, 0.25);
   --c-on-accent: #ffffff;
 }
 
-/* --- Bootstrap theme variables → Olympo tokens --- */
+/* --- Bootstrap theme variables → Prizma tokens --- */
 :root {
   --bs-primary: var(--c-accent-module);
-  --bs-primary-rgb: 47, 174, 155; /* #2FAE9B (fiar accent) */
+  --bs-primary-rgb: 47, 174, 155; /* #2FAE9B (pistis accent) */
   --bs-link-color: var(--c-primary);
   --bs-link-hover-color: var(--c-primary-hover);
   --bs-body-bg: var(--c-bg);
@@ -62,7 +62,7 @@ a:hover {
   color: var(--c-primary-hover);
 }
 
-/* --- Bootstrap primary buttons → fiar accent --- */
+/* --- Bootstrap primary buttons → pistis accent --- */
 .btn-primary {
   --bs-btn-bg: var(--c-accent-module);
   --bs-btn-border-color: var(--c-accent-module);

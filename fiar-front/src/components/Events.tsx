@@ -1,8 +1,16 @@
 import React from 'react';
-import { Alert } from 'react-bootstrap';
-import RingLoader from 'react-spinners/RingLoader';
+import { Alert, LoadingOverlay } from 'prizma-ui';
+import type { AlertTone } from 'prizma-ui';
 import useUI from '@store/ui';
 import styles from "@styles/AlertComponent.module.css";
+
+/** Maps the store's alert type string to prizma-ui AlertTone. */
+function toAlertTone(type: string): AlertTone {
+  if (type === 'success') return 'success';
+  if (type === 'warning') return 'warning';
+  if (type === 'danger' || type === 'error') return 'danger';
+  return 'info';
+}
 
 const Events: React.FC = () => {
   const { alerts, loading, removeAlert } = useUI();
@@ -11,29 +19,19 @@ const Events: React.FC = () => {
     removeAlert(index);
   };
 
-  const loaderOverride: any = {
-    position: "fixed",
-    top: "50%",
-    left: "50%",
-    transform: "translate(-50%, -50%)",
-    zIndex: 9999
-  };
-
   return (
     <>
-      {loading && (
-        <RingLoader
-          color={'#0a827f'}
-          loading={loading}
-          cssOverride={loaderOverride}
-          size={100}
-          aria-label="Cargando"
-          data-testid="loader"
-        />
-      )}
-      <div className={styles.alertContainer}>
+      <LoadingOverlay show={loading} label="Cargando" />
+      <div className={styles.alertContainer} role="status" aria-live="polite" aria-atomic="false">
         {alerts.map((alert, index) => (
-          <Alert key={index} variant={alert.type} onClose={() => handleClose(index)} dismissible className={styles.alert}>
+          <Alert
+            key={index}
+            tone={toAlertTone(alert.type)}
+            className={styles.alert}
+            onClick={() => handleClose(index)}
+            style={{ cursor: 'pointer' }}
+            aria-label="Cerrar alerta"
+          >
             {alert.message}
           </Alert>
         ))}

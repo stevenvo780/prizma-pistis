@@ -1,27 +1,13 @@
 import { useState, ChangeEvent, FC, useEffect } from 'react';
-import { Container, Form, Button } from 'react-bootstrap';
-import { FaPlus, FaChevronLeft, FaChevronRight, FaSearch, FaSortAmountDown, FaFilter, FaFileExcel, FaTimes } from 'react-icons/fa';
+import Head from 'next/head';
+import { Button, Input, Select, Badge, Field, Pagination } from 'prizma-ui';
+import { FaPlus, FaSearch, FaSortAmountDown, FaFilter, FaFileExcel, FaTimes } from 'react-icons/fa';
 import { withAuthSync } from '@utils/auth';
 import TransactionList from './TransactionList';
 import useTransaction from '@store/transactions';
 import useUI from '@/store/ui';
-import Pagination from 'rc-pagination';
-import 'rc-pagination/assets/index.css';
 import styles from '@styles/Transactions.module.css';
 import TransactionFormModal from './TransactionFormModal';
-
-const paginationLocale = {
-  items_per_page: '/ página',
-  jump_to: 'Ir a',
-  jump_to_confirm: 'confirmar',
-  page: '',
-  prev_page: 'Página anterior',
-  next_page: 'Página siguiente',
-  prev_5: '5 páginas anteriores',
-  next_5: '5 páginas siguientes',
-  prev_3: '3 páginas anteriores',
-  next_3: '3 páginas siguientes',
-};
 
 const Transactions: FC = () => {
   const { setLoading, addAlert } = useUI();
@@ -114,11 +100,14 @@ const Transactions: FC = () => {
     setCurrentPage(1);
   };
 
+  const advancedFilterCount = [minAmount, maxAmount, startDate, endDate].filter(Boolean).length;
+
   return (
     <>
+      <Head><title>Transacciones — Pistis</title></Head>
       {/* Botón flotante para crear transacción */}
       <Button
-        variant="primary"
+        variant="accent"
         onClick={() => { setSelectedClient({}); setShowTransactionModal(true); }}
         style={{
           position: 'fixed',
@@ -141,214 +130,164 @@ const Transactions: FC = () => {
       >
         <FaPlus />
       </Button>
-      <Container fluid className="px-3" style={{ paddingBottom: 100 }}>
+
+      <div style={{ padding: '0 12px', paddingBottom: 100 }}>
         {/* Panel de Filtros Mejorado */}
         <div className={`${styles.filtersPanel} mb-4`}>
           {/* Filtros Principales */}
-          <div className="row g-3 mb-3">
-            <div className="col-12 col-md-6 col-lg-4">
-              <Form.Group>
-                <Form.Label className={styles.filterLabel}>
-                  <FaSearch className="me-1" />
-                  Buscar Cliente
-                </Form.Label>
-                <Form.Control
-                  type="text"
-                  placeholder="Nombre del cliente..."
-                  value={search}
-                  onChange={handleSearchChange}
-                  className={styles.filterInput}
-                />
-              </Form.Group>
-            </div>
-            
-            <div className="col-6 col-md-3 col-lg-2">
-              <Form.Group>
-                <Form.Label className={styles.filterLabel}>
-                  <FaSortAmountDown className="me-1" />
-                  Ordenar por
-                </Form.Label>
-                <Form.Select
-                  value={order}
-                  onChange={e => setOrder(e.target.value as 'reciente' | 'antiguo')}
-                  className={styles.filterInput}
-                >
-                  <option value="reciente">Más reciente</option>
-                  <option value="antiguo">Más antiguo</option>
-                </Form.Select>
-              </Form.Group>
-            </div>
-            
-            <div className="col-6 col-md-3 col-lg-2">
-              <Form.Group>
-                <Form.Label className={styles.filterLabel}>
-                  <FaFilter className="me-1" />
-                  Estado
-                </Form.Label>
-                <Form.Select
-                  value={statusFilter}
-                  onChange={e => setStatusFilter(e.target.value as 'todos' | 'aprobado' | 'no_aprobado')}
-                  className={styles.filterInput}
-                >
-                  <option value="todos">Todos</option>
-                  <option value="aprobado">Aprobado</option>
-                  <option value="no_aprobado">No Aprobado</option>
-                </Form.Select>
-              </Form.Group>
-            </div>
-            
-            <div className="col-6 col-md-3 col-lg-2">
-              <Form.Group>
-                <Form.Label>Por página</Form.Label>
-                <Form.Select
-                  value={limit}
-                  onChange={handleLimitChange}
-                  className={styles.filterInput}
-                >
-                  {[10, 20, 50, 100].map(n => (
-                    <option key={n} value={n}>{n}</option>
-                  ))}
-                </Form.Select>
-              </Form.Group>
-            </div>
-            
-            <div className="col-6 col-md-3 col-lg-2">
-              <Form.Group>
-                <Form.Label className={styles.filterLabel}>
-                  <FaFileExcel className="me-1" />
-                  Exportar
-                </Form.Label>
-                <Button 
-                  variant="success" 
-                  onClick={handleDownloadExcel} 
-                  className={`w-100 ${styles.exportBtn}`}
-                >
-                  <FaFileExcel className="me-1" />
-                  Excel
-                </Button>
-              </Form.Group>
-            </div>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(160px, 1fr))', gap: 12, marginBottom: 12 }}>
+            <Field label={<><FaSearch style={{ marginRight: 4 }} />Buscar Cliente</>}>
+              <Input
+                type="text"
+                placeholder="Nombre del cliente..."
+                value={search}
+                onChange={handleSearchChange}
+                className={styles.filterInput}
+              />
+            </Field>
+
+            <Field label={<><FaSortAmountDown style={{ marginRight: 4 }} />Ordenar por</>}>
+              <Select
+                value={order}
+                onChange={e => setOrder((e.target as HTMLSelectElement).value as 'reciente' | 'antiguo')}
+                className={styles.filterInput}
+              >
+                <option value="reciente">Más reciente</option>
+                <option value="antiguo">Más antiguo</option>
+              </Select>
+            </Field>
+
+            <Field label={<><FaFilter style={{ marginRight: 4 }} />Estado</>}>
+              <Select
+                value={statusFilter}
+                onChange={e => setStatusFilter((e.target as HTMLSelectElement).value as 'todos' | 'aprobado' | 'no_aprobado')}
+                className={styles.filterInput}
+              >
+                <option value="todos">Todos</option>
+                <option value="aprobado">Aprobado</option>
+                <option value="no_aprobado">No Aprobado</option>
+              </Select>
+            </Field>
+
+            <Field label="Por página">
+              <Select
+                value={limit}
+                onChange={handleLimitChange}
+                className={styles.filterInput}
+              >
+                {[10, 20, 50, 100].map(n => (
+                  <option key={n} value={n}>{n}</option>
+                ))}
+              </Select>
+            </Field>
+
+            <Field label={<><FaFileExcel style={{ marginRight: 4 }} />Exportar</>}>
+              <Button
+                variant="secondary"
+                onClick={handleDownloadExcel}
+                block
+                className={styles.exportBtn}
+                leftIcon={<FaFileExcel />}
+              >
+                Excel
+              </Button>
+            </Field>
           </div>
-          
+
           {/* Toggle para Filtros Avanzados */}
-          <div className={`${styles.advancedFiltersToggle} d-flex justify-content-between align-items-center`}>
-            <Button 
-              variant="link"
+          <div className={`${styles.advancedFiltersToggle}`} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <Button
+              variant="ghost"
               onClick={() => setShowAdvancedFilters(!showAdvancedFilters)}
-              className={`p-0 ${styles.toggleBtn}`}
+              className={styles.toggleBtn}
+              leftIcon={<FaFilter />}
             >
-              <FaFilter className={`me-2`} />
-              <small className="fw-bold text-primary">
-                FILTROS AVANZADOS 
-                {(minAmount || maxAmount || startDate || endDate) && (
-                  <span className={`badge bg-primary ms-2 ${styles.filterBadge}`}>
-                    {[minAmount, maxAmount, startDate, endDate].filter(Boolean).length}
-                  </span>
+              <small style={{ fontWeight: 'bold' }}>
+                FILTROS AVANZADOS{' '}
+                {advancedFilterCount > 0 && (
+                  <Badge tone="primary" style={{ marginLeft: 8 }}>{advancedFilterCount}</Badge>
                 )}
               </small>
             </Button>
-            
-            <Button 
-              variant="outline-secondary" 
-              size="sm" 
+
+            <Button
+              variant="ghost"
+              size="sm"
               onClick={clearAllFilters}
               className={styles.clearFiltersBtn}
+              leftIcon={<FaTimes />}
             >
-              <FaTimes className="me-1" />
               Limpiar Filtros
             </Button>
           </div>
-          
+
           {/* Filtros Avanzados - Colapsable */}
           {showAdvancedFilters && (
             <div className={styles.advancedFilters}>
-              <div className="row g-3">
-                <div className="col-6 col-md-3">
-                  <Form.Group>
-                    <Form.Label>Monto mínimo</Form.Label>
-                    <Form.Control
-                      type="number"
-                      min={0}
-                      value={minAmount}
-                      onChange={e => setMinAmount(e.target.value)}
-                      placeholder="0"
-                    />
-                  </Form.Group>
-                </div>
-                
-                <div className="col-6 col-md-3">
-                  <Form.Group>
-                    <Form.Label>Monto máximo</Form.Label>
-                    <Form.Control
-                      type="number"
-                      min={0}
-                      value={maxAmount}
-                      onChange={e => setMaxAmount(e.target.value)}
-                      placeholder="0"
-                    />
-                  </Form.Group>
-                </div>
-                
-                <div className="col-6 col-md-3">
-                  <Form.Group>
-                    <Form.Label>Fecha inicio</Form.Label>
-                    <Form.Control
-                      type="date"
-                      value={startDate}
-                      onChange={e => setStartDate(e.target.value)}
-                    />
-                  </Form.Group>
-                </div>
-                
-                <div className="col-6 col-md-3">
-                  <Form.Group>
-                    <Form.Label>Fecha fin</Form.Label>
-                    <Form.Control
-                      type="date"
-                      value={endDate}
-                      onChange={e => setEndDate(e.target.value)}
-                    />
-                  </Form.Group>
-                </div>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))', gap: 12 }}>
+                <Field label="Monto mínimo">
+                  <Input
+                    type="number"
+                    min={0}
+                    value={minAmount}
+                    onChange={e => setMinAmount(e.target.value)}
+                    placeholder="0"
+                  />
+                </Field>
+
+                <Field label="Monto máximo">
+                  <Input
+                    type="number"
+                    min={0}
+                    value={maxAmount}
+                    onChange={e => setMaxAmount(e.target.value)}
+                    placeholder="0"
+                  />
+                </Field>
+
+                <Field label="Fecha inicio">
+                  <Input
+                    type="date"
+                    value={startDate}
+                    onChange={e => setStartDate(e.target.value)}
+                  />
+                </Field>
+
+                <Field label="Fecha fin">
+                  <Input
+                    type="date"
+                    value={endDate}
+                    onChange={e => setEndDate(e.target.value)}
+                  />
+                </Field>
               </div>
             </div>
           )}
         </div>
+
         <TransactionList
           transactions={transactions}
           onStatusChange={handleChangeTransactionStatus}
         />
+
         <div className={styles.paginationContainer}>
           <Pagination
-            current={currentPage}
-            total={lastPage * limit}
-            pageSize={limit}
+            page={currentPage}
+            pageCount={lastPage}
             onChange={handlePageChange}
-            locale={paginationLocale}
-            prevIcon={<FaChevronLeft />}
-            nextIcon={<FaChevronRight />}
             style={{ display: 'flex', justifyContent: 'center', marginTop: '20px' }}
-            itemRender={(current, type, element) => {
-              if (type === 'prev') {
-                return <FaChevronLeft style={{ color: '#FFC313' }} />;
-              }
-              if (type === 'next') {
-                return <FaChevronRight style={{ color: '#FFC313' }} />;
-              }
-              return element;
-            }}
           />
         </div>
+
         <TransactionFormModal
           show={showTransactionModal}
           onHide={() => setShowTransactionModal(false)}
           clientId={selectedClient.id}
           clientName={selectedClient.name}
         />
-      </Container>
+      </div>
     </>
   );
 };
 
 export default withAuthSync(Transactions);
-

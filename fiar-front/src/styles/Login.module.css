@@ -1,3 +1,6 @@
+/* Login.module.css — migrated to prizma-ui tokens */
+
+/* Full-viewport wrapper */
 .loginContainer {
   position: fixed;
   top: 0;
@@ -7,72 +10,76 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: var(--bg-color);
+  background-color: var(--c-bg);
   overflow: hidden;
   min-height: 100vh;
-  padding: 20px;
+  padding: var(--c-space-5);
 }
 
+/* Login card — maps to <Card> */
 .card {
-  border-radius: 15px;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-  padding: 15px;
+  border-radius: var(--c-radius-xl);
+  box-shadow: var(--c-shadow-md);
+  padding: var(--c-space-4);
   width: 100%;
   max-width: 450px;
   max-height: 90vh;
   overflow-y: auto;
   margin: 0 auto;
-  background: var(--white-color);
+  background: var(--c-surface);
   display: flex;
   flex-direction: column;
   justify-content: center;
-  min-height: auto;
   height: auto;
-  max-height: 90vh;
-  border: 1px solid var(--border-color);
+  border: 1px solid var(--c-border);
 }
 
+/* Form input — maps to <Input> */
 .formControl {
   height: 50px;
-  font-size: 1.1rem;
-  border-radius: 8px;
-  border: 1.5px solid var(--border-color);
-  padding: 12px 15px;
+  font-size: var(--c-text-base);
+  border-radius: var(--c-radius-md);
+  border: 1.5px solid var(--c-border-strong);
+  padding: var(--c-space-3) var(--c-space-4);
   width: 100%;
-  font-size: 1rem;
-  margin-top: 5px;
+  margin-top: var(--c-space-1);
+  transition: border-color var(--c-duration-base) var(--c-ease-standard),
+              box-shadow var(--c-duration-base) var(--c-ease-standard);
 }
 
 .formControl:focus {
-  border-color: var(--primary-color);
-  box-shadow: 0 0 0 0.2rem rgba(88, 163, 153, 0.25);
+  border-color: var(--c-primary);
+  box-shadow: 0 0 0 3px var(--c-ring);
+  outline: none;
 }
 
+/* Forgot password link */
 .forgotPasswordLink {
   display: block;
   text-align: center;
-  margin-top: 20px;
-  color: var(--link-color) !important;
+  margin-top: var(--c-space-5);
+  color: var(--c-primary) !important;
   text-decoration: none;
-  font-weight: 500;
+  font-weight: var(--c-weight-medium);
 }
 
 .forgotPasswordLink:hover {
-  color: var(--link-hover) !important;
+  color: var(--c-primary-hover) !important;
   text-decoration: underline;
 }
 
+/* Modal / page background tint */
 .modalBackground {
-  background-color: #F4F4F5;
+  background-color: var(--c-bg-subtle);
 }
 
 .full-width {
   width: 100%;
 }
 
-/* Ajuste para el logo */
+/* Logo container */
 .logoContainer {
-  margin: 10px auto 20px;
+  margin: var(--c-space-3) auto var(--c-space-5);
   max-width: 150px;
 }
 
@@ -83,8 +90,9 @@
     padding-bottom: 0;
     min-height: 100vh;
   }
+
   .card {
-    padding: 1.5rem;
+    padding: var(--c-space-6);
     width: 100%;
     max-width: 98vw;
     max-height: 98vh;

@@ -5,7 +5,7 @@
   --white-color: #FFFFFF;
   --border-color: #e2e8f0;
 
-  /* Main brand colors — Olympo "Corriente" teal */
+  /* Main brand colors — Prizma "Corriente" teal */
   --primary-color: #0B8A8F;
   --primary-hover: #14AEB5;
   --primary-border: #0B8A8F;
@@ -65,71 +65,56 @@ body {
   line-height: 1.6;
 }
 
-/* Buttons */
-.btn {
+/* prizma-ui token overrides */
+.cui-btn {
   border-radius: 10px;
   font-weight: 600;
-  text-transform: none;
-  box-shadow: none;
-  border: 1px solid transparent;
   transition: all 0.15s ease;
 }
-.btn:hover {
+.cui-btn:not(:disabled):hover {
   transform: translateY(-1px);
   box-shadow: 0 2px 8px rgba(0,0,0,0.08);
 }
-.btn-primary {
+.cui-btn--primary {
   background-color: var(--primary-color);
   border-color: var(--primary-border);
   color: var(--primary-text);
 }
-.btn-primary:hover,
-.btn-primary:focus,
-.btn-primary:active {
+.cui-btn--primary:not(:disabled):hover,
+.cui-btn--primary:not(:disabled):focus,
+.cui-btn--primary:not(:disabled):active {
   background-color: var(--primary-hover);
   border-color: var(--primary-hover);
   color: var(--primary-text);
 }
-.btn-warning {
-  background-color: var(--warning-color);
-  border-color: var(--warning-border);
-  color: var(--warning-text);
-}
-.btn-warning:hover,
-.btn-warning:focus,
-.btn-warning:active {
-  background-color: var(--warning-hover);
-  border-color: var(--warning-hover);
-  color: var(--warning-text);
-}
-.btn-danger {
+.cui-btn--danger {
   background-color: var(--danger-color);
   border-color: var(--danger-border);
   color: var(--danger-text);
 }
-.btn-danger:hover,
-.btn-danger:focus,
-.btn-danger:active {
+.cui-btn--danger:not(:disabled):hover,
+.cui-btn--danger:not(:disabled):focus,
+.cui-btn--danger:not(:disabled):active {
   background-color: var(--danger-hover);
   border-color: var(--danger-hover);
   color: var(--white-color);
 }
 
-/* Cards */
-.card {
+/* prizma-ui Card */
+.cui-card {
   border-radius: 14px;
   border: 1px solid var(--card-border);
   box-shadow: 0 1px 4px rgba(0,0,0,0.04);
 }
 
-/* Modals */
-.modal-content {
+/* prizma-ui Modal */
+.cui-modal {
   border-radius: 16px;
   border: none;
   box-shadow: 0 16px 48px rgba(0,0,0,0.12);
 }
 
-/* Badge */
-.badge {
+/* prizma-ui Badge */
+.cui-badge {
   font-weight: 600;
 }

@@ -1,5 +1,5 @@
 import { FC, ChangeEvent } from 'react';
-import { Modal, Button, Form } from 'react-bootstrap';
+import { Modal, Button } from 'prizma-ui';
 import { Client } from '@utils/types';
 import ClientForm from './ClientForm';
 
@@ -27,27 +27,28 @@ const ClientFormModal: FC<ClientFormModalProps> = ({
   handleCancel
 }) => {
   return (
-    <Modal show={show} onHide={onHide} size="lg">
-      <Modal.Header closeButton>
-        <Modal.Title>{isUpdating ? 'Actualizar Cliente' : 'Crear Cliente'}</Modal.Title>
-      </Modal.Header>
-      <Modal.Body>
-        <ClientForm
-          client={client}
-          labels={labels}
-          handleInputChange={handleInputChange}
-          handleSelectChange={handleSelectChange}
-          onSave={handleSave} // Nuevo prop
-        />
-      </Modal.Body>
-      <Modal.Footer>
-        <Button style={{ margin: 10 }} variant="success" onClick={handleSave} className="btn btn-success">
-          {isUpdating ? 'Actualizar' : 'Crear'}
-        </Button>
-        <Button variant="secondary" onClick={handleCancel} className="btn btn-danger">
+    <Modal
+      open={show}
+      onClose={onHide}
+      title={isUpdating ? 'Actualizar Cliente' : 'Crear Cliente'}
+      footer={
+        <>
+          <Button variant="primary" onClick={handleSave}>
+            {isUpdating ? 'Actualizar' : 'Crear'}
+          </Button>
+          <Button variant="danger" onClick={handleCancel}>
             Cancelar
-        </Button>
-      </Modal.Footer>
+          </Button>
+        </>
+      }
+    >
+      <ClientForm
+        client={client}
+        labels={labels}
+        handleInputChange={handleInputChange}
+        handleSelectChange={handleSelectChange}
+        onSave={handleSave}
+      />
     </Modal>
   );
 };

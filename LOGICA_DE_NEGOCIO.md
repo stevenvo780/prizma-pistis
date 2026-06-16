@@ -380,4 +380,4 @@ Todos los flujos fueron probados en navegador (Playwright) tanto en desktop (128
 
 ---
 
-*Documento generado y verificado — Proyecto FIAR by Humanizar*
+*Documento generado y verificado — Proyecto FIAR by Steven Vallejo*

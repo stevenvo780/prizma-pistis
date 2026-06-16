@@ -1,6 +1,6 @@
-# FIAR API
+# Pistis API
 
-Backend de FIAR para gestion de clientes, transacciones, autenticacion y pagos (Mercado Pago).
+Backend de Pistis para gestion de clientes, transacciones, autenticacion y pagos (Mercado Pago).
 
 ## Stack
 
@@ -48,9 +48,9 @@ Rutas base:
 - Swagger: `http://localhost:8080/api`
 - Health: `http://localhost:8080/health`
 
-## Docker (stack FIAR completo)
+## Docker (stack Pistis completo)
 
-Desde `Fiar/`:
+Desde `Pistis/`:
 
 ```bash
 docker compose up --build
@@ -73,4 +73,4 @@ npm run lint
 
 ## Notas
 
-- Para contexto de ecosistema y despliegue corporativo, ver `HumanizarDocs/documentacion/07ProyectosTecnologia/FIAR.md`.
+- Para contexto de ecosistema y despliegue corporativo, ver la documentacion interna de Prizma en el repositorio de arquitectura.

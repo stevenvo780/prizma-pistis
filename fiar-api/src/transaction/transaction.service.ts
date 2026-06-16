@@ -12,7 +12,7 @@ import { Client } from '../client/entities/client.entity';
 import { CreateTransactionDto } from './dto/create-transaction.dto';
 import { UpdateTransactionDto } from './dto/update-transaction.dto';
 import { ClientService } from '../client/client.service';
-import { OlympoHubService } from '../cauce/hub.service';
+import { PrizmaHubService } from '../prizma/prizma-hub.service';
 
 @Injectable()
 export class TransactionService {
@@ -22,11 +22,11 @@ export class TransactionService {
     @InjectRepository(Client)
     private readonly clientRepository: Repository<Client>,
     private readonly clientService: ClientService,
-    private readonly cauceHub: OlympoHubService,
+    private readonly prizmaHub: PrizmaHubService,
   ) {}
 
-  /** Maps a Fiar Client to the Olympo CustomerRef shape. */
-  private toOlympoCustomer(client: Client) {
+  /** Maps a Pistis Client to the Prizma CustomerRef shape. */
+  private toPrizmaCustomer(client: Client) {
     return {
       id: String(client.id),
       name: [client.name, client.lastname].filter(Boolean).join(' ') || undefined,
@@ -123,19 +123,19 @@ export class TransactionService {
         data.operation,
       );
 
-      // Olympo: Fiar owns credit/debt (flow 4). An approved `income` transaction
+      // Prizma: Pistis owns credit/debt (flow 4). An approved `income` transaction
       // is a payment received against the customer's debt → payment.received.
       // Fault-tolerant: never breaks the local transaction flow.
       if (data.operation === 'income') {
-        await this.cauceHub.paymentReceived({
+        await this.prizmaHub.paymentReceived({
           paymentId: savedTransaction.id,
           creditId: String(client.id),
           amount: Number(savedTransaction.amount),
         });
       }
-      // TODO(cauce): si más adelante se modela una línea/cupo de crédito como
+      // TODO(prizma): si más adelante se modela una línea/cupo de crédito como
       // entidad propia, emitir CREDIT_APPROVED al otorgarla y CREDIT_CHECK al
-      // validar un `expense` contra el cupo (helpers ya disponibles en OlympoHubService).
+      // validar un `expense` contra el cupo (helpers ya disponibles en PrizmaHubService).
     }
 
     return savedTransaction;

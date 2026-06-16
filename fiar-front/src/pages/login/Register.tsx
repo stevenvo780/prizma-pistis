@@ -1,5 +1,5 @@
 import React, { useState, FormEvent } from 'react';
-import { Form, Button, Modal } from 'react-bootstrap';
+import { Modal, Button, Input } from 'prizma-ui';
 import useUser from '@store/user';
 import useUI from '@store/ui';
 import styles from "@styles/Register.module.css";
@@ -50,67 +50,73 @@ const Register: React.FC<RegisterProps> = ({ show, handleClose }) => {
   };
 
   return (
-    <Modal show={show} onHide={handleClose}>
-      <Modal.Header closeButton>
-        <Modal.Title className="w-100 text-center">Regístrate</Modal.Title>
-      </Modal.Header>
-      <Modal.Body>
-        <Form onSubmit={handleSubmit} className={styles['register-form']}>
-          <Form.Group controlId="formBasicEmail" className="mb-3">
-            <Form.Control 
-              type="email" 
-              value={email} 
-              onChange={(e) => setEmail(e.target.value)} 
-              placeholder="Correo electronico" 
-              required 
-            />
-          </Form.Group>
-          <Form.Group controlId="formBasicPassword" className="mb-3">
-            <Form.Control 
-              type="password" 
-              value={password} 
-              onChange={(e) => setPassword(e.target.value)} 
-              placeholder="Contraseña" 
-              required 
-            />
-          </Form.Group>
-          <Form.Group controlId="formBasicConfirmPassword" className="mb-3">
-            <Form.Control 
-              type="password" 
-              value={confirmPassword} 
-              onChange={(e) => setConfirmPassword(e.target.value)} 
-              placeholder="Confirmar contraseña" 
-              required 
-            />
-          </Form.Group>
-          <Form.Group controlId="formBasicCompanyName" className="mb-3">
-            <Form.Control 
-              type="text" 
-              value={companyName} 
-              onChange={(e) => setCompanyName(e.target.value)} 
-              placeholder="Nombre de la empresa" 
-              required 
-            />
-          </Form.Group>
-          <Form.Group controlId="formBasicCompanyNumber" className="mb-3">
-            <Form.Control 
-              type="text" 
-              value={companyNumber} 
-              onChange={(e) => setCompanyNumber(e.target.value)} 
-              placeholder="Número de empresa" 
-              required 
-            />
-          </Form.Group>
-          <Button 
-            variant="success" 
-            type="submit" 
-            disabled={isLoading} 
-            className="w-100 mt-3"
-          >
-            {isLoading ? 'Cargando...' : 'Regístrate'}
-          </Button>
-        </Form>
-      </Modal.Body>
+    <Modal open={show} onClose={handleClose} title="Regístrate">
+      <form onSubmit={handleSubmit} className={styles['register-form']}>
+        <div className="mb-3">
+          <label htmlFor="reg-email" style={{ display: 'block', marginBottom: 4, fontWeight: 500 }}>Correo electrónico</label>
+          <Input
+            id="reg-email"
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            placeholder="Correo electrónico"
+            required
+          />
+        </div>
+        <div className="mb-3">
+          <label htmlFor="reg-password" style={{ display: 'block', marginBottom: 4, fontWeight: 500 }}>Contraseña</label>
+          <Input
+            id="reg-password"
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            placeholder="Contraseña"
+            required
+          />
+        </div>
+        <div className="mb-3">
+          <label htmlFor="reg-confirm-password" style={{ display: 'block', marginBottom: 4, fontWeight: 500 }}>Confirmar contraseña</label>
+          <Input
+            id="reg-confirm-password"
+            type="password"
+            value={confirmPassword}
+            onChange={(e) => setConfirmPassword(e.target.value)}
+            placeholder="Confirmar contraseña"
+            required
+          />
+        </div>
+        <div className="mb-3">
+          <label htmlFor="reg-company-name" style={{ display: 'block', marginBottom: 4, fontWeight: 500 }}>Nombre de la empresa</label>
+          <Input
+            id="reg-company-name"
+            type="text"
+            value={companyName}
+            onChange={(e) => setCompanyName(e.target.value)}
+            placeholder="Nombre de la empresa"
+            required
+          />
+        </div>
+        <div className="mb-3">
+          <label htmlFor="reg-company-number" style={{ display: 'block', marginBottom: 4, fontWeight: 500 }}>Número de empresa</label>
+          <Input
+            id="reg-company-number"
+            type="text"
+            value={companyNumber}
+            onChange={(e) => setCompanyNumber(e.target.value)}
+            placeholder="Número de empresa"
+            required
+          />
+        </div>
+        <Button
+          variant="primary"
+          type="submit"
+          loading={isLoading}
+          block
+          style={{ marginTop: '0.75rem' }}
+        >
+          {isLoading ? 'Cargando...' : 'Regístrate'}
+        </Button>
+      </form>
     </Modal>
   );
 };

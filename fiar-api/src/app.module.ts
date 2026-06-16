@@ -17,13 +17,13 @@ import { ProfileModule } from './profile/profile.module';
 import { ClientModule } from './client/client.module';
 import { UserModule } from './user/user.module';
 import { MercadoPagoModule } from './mercadopago/mercadopago.module';
-import { OlympoModule } from './cauce/cauce.module';
+import { PrizmaModule } from './prizma/prizma.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot(),
     TypeOrmModule.forRoot(typeOrmConfig),
-    OlympoModule,
+    PrizmaModule,
     AuthModule,
     ProfileModule,
     ClientModule,

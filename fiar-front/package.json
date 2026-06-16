@@ -1,5 +1,5 @@
 {
-  "name": "fiar",
+  "name": "pistis",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -9,8 +9,6 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@olympo/brand": "file:../../../packages/brand",
-    "@olympo/ui": "file:../../../packages/ui",
     "@reduxjs/toolkit": "^2.2.5",
     "@types/js-cookie": "^3.0.6",
     "@types/node": "20.14.2",
@@ -31,6 +29,9 @@
     "js-cookie": "^3.0.5",
     "next": "13.5.6",
     "next-cookies": "^2.0.3",
+    "prizma-brand": "^1.2.0",
+    "prizma-tokens": "^1.2.0",
+    "prizma-ui": "^1.2.0",
     "postcss": "8.4.38",
     "rc-pagination": "^4.1.0",
     "react": "18.3.1",

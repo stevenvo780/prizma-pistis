@@ -138,13 +138,20 @@ const useUser = () => {
     }
   };
 
-  const fetchUser = async (): Promise<ApiUser> => {
+  const fetchUser = async (): Promise<ApiUser | null> => {
     setLoading(true);
     try {
       const response = await api.users.getUser();
       userActions.setUser(dispatch, response.data);
       return response.data;
-    } catch (error) {
+    } catch (error: any) {
+      const status = error?.response?.status;
+      if (status === 404) {
+        // Usuario recién registrado — el perfil aún no existe en el backend.
+        // No mostrar alerta de error; el dashboard funciona con datos en blanco.
+        console.warn('fetchUser: perfil de usuario no encontrado (404). Usuario nuevo.');
+        return null;
+      }
       console.error('Error fetching user:', error);
       addAlert({ type: 'danger', message: 'Error al obtener la información del usuario' });
       throw error;

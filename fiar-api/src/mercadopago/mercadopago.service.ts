@@ -81,13 +81,13 @@ export class MercadoPagoService {
         frequencyValue = 12;
         frequencyType = 'months';
         transactionAmount = Math.round(planPrice * 12 * 0.8);
-        description = `Suscripción FIAR - Plan ${data.planType} Anual`;
+        description = `Suscripción Pistis - Plan ${data.planType} Anual`;
       } else {
         // Cobro mensual
         frequencyValue = 1;
         frequencyType = 'months';
         transactionAmount = planPrice;
-        description = `Suscripción FIAR - Plan ${data.planType} Mensual`;
+        description = `Suscripción Pistis - Plan ${data.planType} Mensual`;
       }
 
       // external_reference codifica userId|planType|frequency

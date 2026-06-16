@@ -1,5 +1,6 @@
 import React, { useState, FormEvent } from 'react';
-import { Card, Form, Button, Container } from 'react-bootstrap';
+import Head from 'next/head';
+import { Card, CardBody, Button, Input, InputGroup, InputAddon } from 'prizma-ui';
 import Image from 'next/image';
 import { FcGoogle } from 'react-icons/fc';
 import { HiOutlineEnvelope, HiOutlineLockClosed, HiOutlineArrowRightOnRectangle, HiOutlineUserPlus } from 'react-icons/hi2';
@@ -40,100 +41,103 @@ const Login = () => {
 
   return (
     <>
-      <Container className={styles.loginContainer} fluid>
+      <Head><title>Iniciar sesión — Pistis</title></Head>
+      <div className={styles.loginContainer}>
         <Card className={styles.card}>
           <div className={`${styles.logoContainer} text-center`}>
-            <Image fetchPriority="high" src={logo} alt="Logo" width={120} height={120} style={{ objectFit: 'contain' }}/>
+            <Image fetchPriority="high" src={logo} alt="Logo" width={120} height={120} style={{ objectFit: 'contain' }} />
           </div>
-          <h5 className="text-center fw-bold mb-1" style={{ color: '#095169' }}>Bienvenido a Fiar</h5>
+          <h5 className="text-center fw-bold mb-1" style={{ color: '#095169' }}>Bienvenido a Pistis</h5>
           <p className="text-center text-muted mb-3" style={{ fontSize: '0.85rem' }}>Inicia sesión para continuar</p>
-          <Card.Body className="pt-0">
-            <Form onSubmit={handleSubmit}>
-              <Form.Group controlId="formBasicEmail" className="mb-3">
-                <Form.Label className="fw-medium" style={{ fontSize: '0.9rem' }}>Correo electrónico</Form.Label>
-                <div className="position-relative">
-                  <HiOutlineEnvelope
-                    size={18}
-                    className="position-absolute text-muted"
-                    style={{ left: 12, top: '50%', transform: 'translateY(-50%)' }}
-                  />
-                  <Form.Control
+          <CardBody style={{ paddingTop: 0 }}>
+            <form onSubmit={handleSubmit}>
+              <div className="mb-3">
+                <label htmlFor="login-email" className="fw-medium" style={{ fontSize: '0.9rem', display: 'block', marginBottom: 4 }}>
+                  Correo electrónico
+                </label>
+                <InputGroup>
+                  <InputAddon>
+                    <HiOutlineEnvelope size={18} />
+                  </InputAddon>
+                  <Input
+                    id="login-email"
                     placeholder="correo@ejemplo.com"
                     type="email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     required
                     className={styles.formControl}
-                    style={{ paddingLeft: 38 }}
                   />
-                </div>
-              </Form.Group>
-              
-              <Form.Group controlId="formBasicPassword" className="mb-3">
-                <Form.Label className="fw-medium" style={{ fontSize: '0.9rem' }}>Contraseña</Form.Label>
-                <div className="position-relative">
-                  <HiOutlineLockClosed
-                    size={18}
-                    className="position-absolute text-muted"
-                    style={{ left: 12, top: '50%', transform: 'translateY(-50%)' }}
-                  />
-                  <Form.Control
+                </InputGroup>
+              </div>
+
+              <div className="mb-3">
+                <label htmlFor="login-password" className="fw-medium" style={{ fontSize: '0.9rem', display: 'block', marginBottom: 4 }}>
+                  Contraseña
+                </label>
+                <InputGroup>
+                  <InputAddon>
+                    <HiOutlineLockClosed size={18} />
+                  </InputAddon>
+                  <Input
+                    id="login-password"
                     placeholder="••••••••"
                     type="password"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     required
                     className={styles.formControl}
-                    style={{ paddingLeft: 38 }}
                   />
-                </div>
-              </Form.Group>
-              
+                </InputGroup>
+              </div>
+
               <Button
-                variant="success"
-                className="w-100 mb-3 fw-semibold d-flex align-items-center justify-content-center gap-2"
+                variant="primary"
+                block
+                loading={isLoading}
+                leftIcon={<HiOutlineArrowRightOnRectangle size={19} />}
                 type="submit"
-                disabled={isLoading}
-                style={{ height: 46, borderRadius: 10 }}
+                style={{ height: 46, borderRadius: 10, marginBottom: '0.75rem' }}
               >
-                <HiOutlineArrowRightOnRectangle size={19} />
                 {isLoading ? 'Cargando...' : 'Iniciar sesión'}
               </Button>
-              
+
               <Button
-                variant="light"
-                className="w-100 mb-3 d-flex align-items-center justify-content-center fw-medium"
+                variant="secondary"
+                block
                 onClick={() => handleLoginWithProvider('google')}
-                style={{ height: 46, borderRadius: 10, border: '1px solid #e0e0e0' }}
+                leftIcon={<FcGoogle size={20} />}
+                style={{ height: 46, borderRadius: 10, border: '1px solid #e0e0e0', marginBottom: '0.75rem' }}
               >
-                <FcGoogle size={20} className="me-2" />
-                <span>Continuar con Google</span>
+                Continuar con Google
               </Button>
-              
+
               <Button
-                variant="link"
+                variant="ghost"
+                block
+                type="button"
                 onClick={() => setShowPasswordResetModal(true)}
-                className={`w-100 ${styles.forgotPasswordLink}`}
+                className={styles.forgotPasswordLink}
                 style={{ fontSize: '0.85rem' }}
               >
                 ¿Olvidaste tu contraseña?
               </Button>
-              
+
               <hr style={{ borderColor: '#f0f0f0' }} />
-              
+
               <Button
-                variant="outline-secondary"
-                className="w-100 d-flex align-items-center justify-content-center gap-2 fw-medium"
+                variant="secondary"
+                block
+                leftIcon={<HiOutlineUserPlus size={18} />}
                 onClick={handleRegister}
                 style={{ height: 44, borderRadius: 10 }}
               >
-                <HiOutlineUserPlus size={18} />
                 Registrarse
               </Button>
-            </Form>
-          </Card.Body>
+            </form>
+          </CardBody>
         </Card>
-      </Container>
+      </div>
       <Register show={showRegisterModal} handleClose={() => setShowRegisterModal(false)} />
       <PasswordResetModal
         show={showPasswordResetModal}

@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useMemo, useRef } from 'react';
-import { Container } from 'react-bootstrap';
+import Head from 'next/head';
+import { Badge, Skeleton } from 'prizma-ui';
 import { withAuthSync } from '@utils/auth';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
@@ -122,38 +123,39 @@ const Dashboard = () => {
     const planType = (user as any)?.subscription?.planType || 'FREE';
     switch (planType) {
       case 'BASIC':
-        return <span className={`${styles.planBadge} ${styles.normal}`}>⭐ Basic</span>;
+        return <Badge tone="info"><span aria-hidden="true">⭐</span> Basic</Badge>;
       case 'PRO':
-        return <span className={`${styles.planBadge} ${styles.special}`}>🚀 Pro</span>;
+        return <Badge tone="primary"><span aria-hidden="true">🚀</span> Pro</Badge>;
       case 'ENTERPRISE':
-        return <span className={`${styles.planBadge} ${styles.special}`}>💎 Enterprise</span>;
+        return <Badge tone="success"><span aria-hidden="true">💎</span> Enterprise</Badge>;
       default:
-        return <span className={`${styles.planBadge} ${styles.free}`}>Free</span>;
+        return <Badge tone="neutral">Free</Badge>;
     }
   };
 
   if (loading) {
     return (
-      <Container className={styles.dashboardContainer}>
+      <div className={styles.dashboardContainer}>
         <div className={styles.greeting}>
-          <div className={styles.skeletonLine} style={{ width: '40%', height: '1.75rem' }} />
-          <div className={styles.skeletonLine} style={{ width: '25%' }} />
+          <Skeleton width="40%" height="1.75rem" style={{ marginBottom: 8 }} />
+          <Skeleton width="25%" />
         </div>
         <div className={styles.metricsGrid}>
           {[1, 2, 3, 4].map((i) => (
-            <div key={i} className={styles.skeletonCard} />
+            <Skeleton key={i} height={96} block />
           ))}
         </div>
-      </Container>
+      </div>
     );
   }
 
   return (
-    <Container className={styles.dashboardContainer}>
+    <div className={styles.dashboardContainer}>
+      <Head><title>Dashboard — Pistis</title></Head>
       {/* Greeting */}
       <div className={styles.greeting}>
         <h1 className={styles.greetingTitle}>
-          {greetingText}, {greetingName} 👋
+          {greetingText}, {greetingName} <span aria-hidden="true">👋</span>
         </h1>
         <p className={styles.greetingSubtitle}>
           Aquí tienes un resumen de tu negocio · {roleBadge()}
@@ -161,14 +163,14 @@ const Dashboard = () => {
       </div>
 
       {/* Quick actions */}
-      <div className={styles.actionsGrid}>
-        <Link href="/transacciones" className={styles.actionBtn}>
+      <div className={styles.actionsGrid} data-tour="quick-actions">
+        <Link href="/transacciones" className={styles.actionBtn} data-tour="action-nueva-tx">
           <div className={styles.actionIcon}>
             <HiOutlinePlusCircle size={18} />
           </div>
           Nueva Transacción
         </Link>
-        <Link href="/client" className={styles.actionBtn}>
+        <Link href="/client" className={styles.actionBtn} data-tour="action-nuevo-cliente">
           <div className={styles.actionIcon}>
             <TbUserPlus size={18} />
           </div>
@@ -189,7 +191,7 @@ const Dashboard = () => {
       </div>
 
       {/* Metrics */}
-      <div className={styles.metricsGrid}>
+      <div className={styles.metricsGrid} data-tour="metrics-grid">
         <div className={styles.metricCard}>
           <div className={`${styles.metricIconWrap} ${styles.teal}`}>
             <TbArrowsExchange size={20} />
@@ -260,7 +262,7 @@ const Dashboard = () => {
       {/* Sections: Recent Transactions + Top Clients */}
       <div className={styles.sectionsRow}>
         {/* Recent Transactions */}
-        <div className={styles.sectionCard}>
+        <div className={styles.sectionCard} data-tour="recent-transactions">
           <div className={styles.sectionHeader}>
             <h3 className={styles.sectionTitle}>
               <TbArrowsExchange size={18} /> Transacciones Recientes
@@ -291,9 +293,12 @@ const Dashboard = () => {
                   </div>
                   <div className={styles.txRight}>
                     <span className={styles.txAmount}>{formatCurrency(Number(tx.amount) || 0)}</span>
-                    <span className={`${styles.txBadge} ${styles[tx.status]}`}>
+                    <Badge
+                      tone={tx.status === 'approved' ? 'success' : tx.status === 'pending' ? 'warning' : 'danger'}
+                      className={styles.txBadge}
+                    >
                       {statusLabel[tx.status] || tx.status}
-                    </span>
+                    </Badge>
                   </div>
                 </div>
               ))
@@ -335,7 +340,7 @@ const Dashboard = () => {
           </div>
         </div>
       </div>
-    </Container>
+    </div>
   );
 };
 
