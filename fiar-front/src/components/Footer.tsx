@@ -24,7 +24,7 @@ const Footer = () => (
           <h6 className="fw-bold text-white mb-2">Contacto</h6>
           <Row gap="0.5rem" style={{ fontSize: '0.85rem', marginBottom: '0.25rem' }}>
             <HiOutlineEnvelope size={16} />
-            <a href="mailto:contacto@humanizar.co" className="text-white text-decoration-none">contacto@humanizar.co</a>
+            <a href="mailto:stevenvallejo780@gmail.com" className="text-white text-decoration-none">stevenvallejo780@gmail.com</a>
           </Row>
           <Row gap="0.5rem" style={{ fontSize: '0.85rem' }}>
             <HiOutlineGlobeAlt size={16} />
