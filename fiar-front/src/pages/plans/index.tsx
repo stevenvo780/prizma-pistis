@@ -45,7 +45,7 @@ const PlansPage: React.FC = () => {
           size="lg"
           leftIcon={<HiOutlinePlayCircle size={24} />}
           style={{ borderRadius: 12, boxShadow: '0 2px 12px rgba(10,130,127,0.2)', fontWeight: 700 }}
-          onClick={() => window.open('https://www.humanizar.co/', '_blank')}
+          onClick={() => window.open('https://prisma-enterprice.cloud', '_blank')}
         >
           Solicita una Demo
         </Button>

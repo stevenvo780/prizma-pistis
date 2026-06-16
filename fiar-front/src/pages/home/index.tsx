@@ -28,7 +28,7 @@ function HomeHeroButtons() {
         size="lg"
         className="fw-semibold px-4"
         style={{ borderRadius: 12 }}
-        onClick={() => window.open('https://www.humanizar.co/', '_blank')}
+        onClick={() => window.open('https://prisma-enterprice.cloud', '_blank')}
       >
         Saber Más
       </Button>
@@ -233,7 +233,7 @@ const Home = () => {
               size="lg"
               className="fw-semibold px-4"
               style={{ borderRadius: 12 }}
-              onClick={() => window.open('https://www.humanizar.co/', '_blank')}
+              onClick={() => window.open('https://prisma-enterprice.cloud', '_blank')}
             >
               Contactar Ventas
             </Button>
