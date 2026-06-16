@@ -52,4 +52,7 @@ function MyApp({ Component, pageProps }: { Component: React.ComponentType<any>, 
   );
 }
 
+// Disable automatic static optimization — all pages are SSR (auth/redux-persist require browser context).
+MyApp.getInitialProps = async () => ({ pageProps: {} });
+
 export default MyApp;
