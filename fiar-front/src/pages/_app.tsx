@@ -1,3 +1,4 @@
+import 'prizma-tokens/prizma.css';
 import 'prizma-ui/styles.css';
 import '@styles/globals.css';
 import '@styles/prizma-brand.css';

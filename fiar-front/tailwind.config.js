@@ -1,5 +1,8 @@
 /** @type {import('tailwindcss').Config} */
+const prizmaTailwindPreset = require('prizma-tailwind-preset');
+
 module.exports = {
+  presets: [prizmaTailwindPreset],
   content: [
     './src/pages/**/*.{js,ts,jsx,tsx,mdx}',
     './src/components/**/*.{js,ts,jsx,tsx,mdx}',
