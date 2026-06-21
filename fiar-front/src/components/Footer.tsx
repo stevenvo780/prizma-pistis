@@ -17,7 +17,7 @@ const Footer = () => (
         <div>
           <h6 className="fw-bold text-white mb-2" style={{ letterSpacing: '0.03em' }}>Pistis</h6>
           <p className="mb-0" style={{ fontSize: '0.85rem', lineHeight: 1.6 }}>
-            Sistema de créditos sin interés para comercios. Moderniza la forma de fiar a tus clientes de confianza.
+            Sistema de créditos sin interés para comercios. Moderniza la forma de pistis a tus clientes de confianza.
           </p>
         </div>
         <div>
@@ -34,7 +34,7 @@ const Footer = () => (
         <div style={{ textAlign: 'end' }}>
           <h6 className="fw-bold text-white mb-2">Síguenos</h6>
           <Row gap="1rem" style={{ justifyContent: 'flex-end' }}>
-            <a href="https://www.instagram.com/humanizar.co/" target="_blank" rel="noreferrer" className="text-white" aria-label="Instagram">
+            <a href="https://www.instagram.com/prizma.co/" target="_blank" rel="noreferrer" className="text-white" aria-label="Instagram">
               <TbBrandInstagram size={22} />
             </a>
             <a href="https://prizma.app/" target="_blank" rel="noreferrer" className="text-white" aria-label="Web">

@@ -7,8 +7,8 @@ steps:
       - '-t'
       - 'us-central1-docker.pkg.dev/udea-filosofia/cloud-run-source-deploy/prizma-pistis:$COMMIT_SHA'
       - '-f'
-      - 'fiar-api/Dockerfile'
-      - 'fiar-api'
+      - 'pistis-api/Dockerfile'
+      - 'pistis-api'
 
   - name: 'gcr.io/cloud-builders/docker'
     id: Push

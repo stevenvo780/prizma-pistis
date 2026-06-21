@@ -1,7 +1,7 @@
-# FIAR — Lógica de Negocio
+# PISTIS — Lógica de Negocio
 
 > **Sistema de Créditos sin Interés para Comercios**  
-> Permite a comercios "fiar" dinero a clientes de confianza con control total sobre límites de crédito, transacciones y suscripciones premium.
+> Permite a comercios "pistis" dinero a clientes de confianza con control total sobre límites de crédito, transacciones y suscripciones premium.
 
 ---
 
@@ -9,9 +9,9 @@
 
 | Capa | Tecnología | URL |
 |------|-----------|-----|
-| **Frontend** | Next.js 13 + React 18 + Redux Toolkit + React Bootstrap | `localhost:3001` / `fiar-front.vercel.app` |
+| **Frontend** | Next.js 13 + React 18 + Redux Toolkit + React Bootstrap | `localhost:3001` / `pistis-front.vercel.app` |
 | **Backend API** | NestJS 10 + TypeORM + PostgreSQL + Firebase Admin | `localhost:8080/api/v1` / Cloud Run |
-| **Autenticación** | Firebase Auth (email/password + Google) | `fiar-3a207.firebaseapp.com` |
+| **Autenticación** | Firebase Auth (email/password + Google) | `prizma-pistis-prod.firebaseapp.com` |
 | **Pagos** | Mercado Pago PreApproval (suscripciones recurrentes) | `api.mercadopago.com` |
 | **Base de datos** | PostgreSQL (Neon en prod, Docker local) | Puerto 5432 |
 
@@ -180,7 +180,7 @@ PUT /transactions/:id
 3. Frontend → Backend: POST /mercadopago/subscribe
    { planType: "BASIC", frequency: "MONTHLY"|"ANNUALLY" }
 4. Backend crea una Suscripción Recurrente (PreApproval) en Mercado Pago con:
-   - reason: "Suscripción FIAR - Plan BASIC Mensual/Anual"
+   - reason: "Suscripción PISTIS - Plan BASIC Mensual/Anual"
    - external_reference: "userId|planType|frequency"
    - payer_email: email del usuario
    - auto_recurring: { frequency, frequency_type, transaction_amount, currency_id: "COP" }
@@ -278,15 +278,15 @@ PUT /transactions/:id
 
 | # | Bug | Archivo | Fix |
 |---|-----|---------|-----|
-| 1 | **Registro fallaba**: El frontend enviaba datos al backend sin crear primero el usuario en Firebase | `fiar-front/src/store/user/index.tsx` | Se modificó `registerUser` para crear usuario en Firebase primero, obtener token, luego llamar al backend |
-| 2 | **`GET /user` devolvía 403**: `fetchUser()` llamaba a `GET /user` (listado admin) en vez de `GET /user/me/data` | `fiar-front/src/api/users.ts` | Cambiar endpoint a `/user/me/data` |
-| 3 | **FirebaseAuthGuard dejaba `req.user = null`**: Cuando se creaba un usuario nuevo, asignaba el usuario y luego sobreescribía con `null` | `fiar-api/src/auth/firebase-auth.guard.ts` | Agregar `else` para que solo asigne cuando el usuario ya existe |
-| 4 | **Rol incorrecto al registrar**: Usuarios se creaban como `CUSTOMER` en vez de `BUSINESS_OWNER`, lo que impedía crear transacciones | `fiar-api/src/auth/auth.controller.ts` | Cambiar default de `CUSTOMER` a `BUSINESS_OWNER` |
-| 5 | **API Key de Firebase incorrecta**: La key extraída del bundle tenía `_` en vez de `z` | `fiar-front/.env.local` | Obtener la key correcta via `gcloud services api-keys get-key-string` |
-| 6 | **addTransaction no relanzaba errores**: El store atrapaba el error pero no lo relanzaba, por lo que el modal mostraba "éxito" incluso cuando el backend retornaba 400 (créditos insuficientes) | `fiar-front/src/store/transactions/index.tsx` | Agregar `throw err` en el catch de `addTransaction` |
-| 7 | **Mensajes de error genéricos en clientes**: Todos los errores del CRUD de clientes mostraban "Ocurrió un error, consulta a soporte" en vez del mensaje real del backend | `fiar-front/src/store/client/index.tsx` | Extraer `error.response.data.message` en los catch de `createClient`, `updateClient`, `deleteClient` |
-| 8 | **Editar perfil enviaba campo `plugins` inválido**: `handleSubmit` enviaba `{ ...formData, plugins }` al backend, pero `User` no tiene campo `plugins`, causando un 500 Internal Server Error | `fiar-front/src/pages/edit_user/index.tsx` | Enviar solo campos válidos: `{ email, name, apiKey }` |
-| 9 | **Transacciones no aparecían en lista sin recargar**: El reducer de transacciones no tenía cases para `ADD_TRANSACTION`, `UPDATE_TRANSACTION` ni `DELETE_TRANSACTION`, por lo que nuevas transacciones no se reflejaban en la UI sin refrescar la página | `fiar-front/src/store/transactions/reducer.ts` | Agregar los 3 cases faltantes al reducer |
+| 1 | **Registro fallaba**: El frontend enviaba datos al backend sin crear primero el usuario en Firebase | `pistis-front/src/store/user/index.tsx` | Se modificó `registerUser` para crear usuario en Firebase primero, obtener token, luego llamar al backend |
+| 2 | **`GET /user` devolvía 403**: `fetchUser()` llamaba a `GET /user` (listado admin) en vez de `GET /user/me/data` | `pistis-front/src/api/users.ts` | Cambiar endpoint a `/user/me/data` |
+| 3 | **FirebaseAuthGuard dejaba `req.user = null`**: Cuando se creaba un usuario nuevo, asignaba el usuario y luego sobreescribía con `null` | `pistis-api/src/auth/firebase-auth.guard.ts` | Agregar `else` para que solo asigne cuando el usuario ya existe |
+| 4 | **Rol incorrecto al registrar**: Usuarios se creaban como `CUSTOMER` en vez de `BUSINESS_OWNER`, lo que impedía crear transacciones | `pistis-api/src/auth/auth.controller.ts` | Cambiar default de `CUSTOMER` a `BUSINESS_OWNER` |
+| 5 | **API Key de Firebase incorrecta**: La key extraída del bundle tenía `_` en vez de `z` | `pistis-front/.env.local` | Obtener la key correcta via `gcloud services api-keys get-key-string` |
+| 6 | **addTransaction no relanzaba errores**: El store atrapaba el error pero no lo relanzaba, por lo que el modal mostraba "éxito" incluso cuando el backend retornaba 400 (créditos insuficientes) | `pistis-front/src/store/transactions/index.tsx` | Agregar `throw err` en el catch de `addTransaction` |
+| 7 | **Mensajes de error genéricos en clientes**: Todos los errores del CRUD de clientes mostraban "Ocurrió un error, consulta a soporte" en vez del mensaje real del backend | `pistis-front/src/store/client/index.tsx` | Extraer `error.response.data.message` en los catch de `createClient`, `updateClient`, `deleteClient` |
+| 8 | **Editar perfil enviaba campo `plugins` inválido**: `handleSubmit` enviaba `{ ...formData, plugins }` al backend, pero `User` no tiene campo `plugins`, causando un 500 Internal Server Error | `pistis-front/src/pages/edit_user/index.tsx` | Enviar solo campos válidos: `{ email, name, apiKey }` |
+| 9 | **Transacciones no aparecían en lista sin recargar**: El reducer de transacciones no tenía cases para `ADD_TRANSACTION`, `UPDATE_TRANSACTION` ni `DELETE_TRANSACTION`, por lo que nuevas transacciones no se reflejaban en la UI sin refrescar la página | `pistis-front/src/store/transactions/reducer.ts` | Agregar los 3 cases faltantes al reducer |
 
 ---
 
@@ -294,7 +294,7 @@ PUT /transactions/:id
 
 | # | Problema | Archivo(s) | Fix |
 |---|---------|-----------|-----|
-| R1 | **Toolbar de clientes se rompía en móvil**: Los botones de acción (Nuevo, Excel, Estado, Deudas) usaban `Navbar.Collapse` que colapsaba en mobile | `fiar-front/src/pages/client/index.tsx` + `Client.module.css` | Reemplazar con flex-wrap div responsive |
+| R1 | **Toolbar de clientes se rompía en móvil**: Los botones de acción (Nuevo, Excel, Estado, Deudas) usaban `Navbar.Collapse` que colapsaba en mobile | `pistis-front/src/pages/client/index.tsx` + `Client.module.css` | Reemplazar con flex-wrap div responsive |
 | R2 | **Paginación en inglés**: rc-pagination mostraba "items" y "page" en inglés | Páginas client y transacciones | Agregar `paginationLocale` con textos en español |
 | R3 | **FAB solapaba última tarjeta**: El botón flotante "+" en transacciones tapaba la última transacción | `Transactions.module.css` | Agregar `paddingBottom: 100px` al contenedor |
 | R4 | **Footer descentrado**: Copyright no estaba centrado | `Footer.tsx` | Agregar `text-center` |
@@ -306,7 +306,7 @@ PUT /transactions/:id
 
 ## 7. Variables de Entorno
 
-### Backend (`fiar-api/.env`)
+### Backend (`pistis-api/.env`)
 ```env
 DB_HOST, DB_PORT, DB_USERNAME, DB_PASSWORD, DB_NAME  # PostgreSQL
 DB_SYNCHRONIZE=true                                    # Auto-sync schema (solo dev)
@@ -319,7 +319,7 @@ PORT                          # Default: 8080
 NODE_ENV                      # PROD habilita SSL
 ```
 
-### Frontend (`fiar-front/.env.local`)
+### Frontend (`pistis-front/.env.local`)
 ```env
 NEXT_PUBLIC_API               # URL del backend (http://localhost:8080/api/v1)
 NEXT_PUBLIC_FIREBASE_*        # Config de Firebase (6 variables)
@@ -332,10 +332,10 @@ NEXT_PUBLIC_MP_PUBLIC_KEY     # Llave pública de Mercado Pago
 
 | Servicio | Plataforma | URL |
 |----------|-----------|-----|
-| Frontend | **Vercel** | `https://fiar-front.vercel.app` |
-| Backend | **Google Cloud Run** | `https://fiar-api-212302024675.us-central1.run.app` |
+| Frontend | **Vercel** | `https://pistis-front.vercel.app` |
+| Backend | **Google Cloud Run** | `https://pistis-api-212302024675.us-central1.run.app` |
 | Base de datos | **Neon** (PostgreSQL serverless) | `ep-plain-sky-a52y0tgz-pooler.us-east-2.aws.neon.tech` |
-| Auth | **Firebase** | Proyecto `fiar-3a207` |
+| Auth | **Firebase** | Proyecto `prizma-pistis-prod` |
 
 ---
 
@@ -380,4 +380,4 @@ Todos los flujos fueron probados en navegador (Playwright) tanto en desktop (128
 
 ---
 
-*Documento generado y verificado — Proyecto FIAR by Steven Vallejo*
+*Documento generado y verificado — Proyecto PISTIS by Steven Vallejo*

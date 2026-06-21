@@ -68,10 +68,10 @@ const Header = () => {
         <NavItem
           href="/pistis"
           data-tour="nav-pistis"
-          active={isActive('/pistis') || isActive('/fiar')}
+          active={isActive('/pistis')}
           icon={<HiOutlineBolt size={19} />}
-          className={`${styles.navItem} ${(isActive('/pistis') || isActive('/fiar')) ? styles.navItemActive : ''}`}
-          style={(isActive('/pistis') || isActive('/fiar')) ? {} : { color: '#FFC313', fontWeight: 700 }}
+          className={`${styles.navItem} ${isActive('/pistis') ? styles.navItemActive : ''}`}
+          style={isActive('/pistis') ? {} : { color: '#FFC313', fontWeight: 700 }}
         >
           <span>Pistis rapido</span>
         </NavItem>

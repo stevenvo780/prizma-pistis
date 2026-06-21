@@ -3,7 +3,8 @@ import {
   IsNumber,
   IsNotEmpty,
   IsOptional,
-  IsUUID,
+  IsIn,
+  Min,
   ValidateNested,
 } from 'class-validator';
 import { Type } from 'class-transformer';
@@ -12,10 +13,10 @@ import { CreateClientDto } from '../../client/dto/create-client.dto';
 
 export class CreateTransactionDto {
   @IsOptional()
-  @IsUUID()
+  @IsString()
   @ApiProperty({
-    description: 'ID del cliente asociado',
-    example: 'c0a8012e-1d93-11ee-be56-0242ac120002',
+    description: 'ID numérico del cliente asociado (PK de Client)',
+    example: '42',
     required: false,
   })
   clientId?: string;
@@ -31,6 +32,7 @@ export class CreateTransactionDto {
   clientData?: CreateClientDto;
 
   @IsNumber()
+  @Min(0)
   @IsNotEmpty()
   @ApiProperty({ description: 'Monto de la transacción', example: 100000.0 })
   amount: number;
@@ -43,7 +45,7 @@ export class CreateTransactionDto {
   })
   status: string;
 
-  @IsString()
+  @IsIn(['income', 'expense'])
   @IsNotEmpty()
   @ApiProperty({
     description: 'Tipo de operación de la transacción',

@@ -5,7 +5,7 @@ import { PrizmaHubService } from './prizma-hub.service';
  * Prizma ecosystem integration module.
  *
  * Global so any feature module can inject {@link PrizmaHubService} to publish
- * Pistis-owned events (credit.*, payment.received) to HubCentral without
+ * Pistis-owned events (credit.*, payment.received) to Nous without
  * re-importing this module.
  */
 @Global()

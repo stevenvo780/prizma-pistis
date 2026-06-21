@@ -19,7 +19,13 @@ export enum PlanType {
 
 export const PLAN_DETAILS: Record<
   PlanType,
-  { price: number; monthlyOrderLimit: number; clientsLimit: number; name: string; sku: string }
+  {
+    price: number;
+    monthlyOrderLimit: number;
+    clientsLimit: number;
+    name: string;
+    sku: string;
+  }
 > = {
   [PlanType.FREE]: {
     price: 0,

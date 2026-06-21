@@ -4,6 +4,7 @@ import {
   IsBoolean,
   IsNumber,
   IsNotEmpty,
+  Min,
 } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
@@ -28,6 +29,7 @@ export class CreateClientDto {
 
   @IsOptional()
   @IsNumber()
+  @Min(0)
   @ApiProperty({
     description: 'Límite de crédito disponible',
     example: 100000.0,
@@ -36,6 +38,7 @@ export class CreateClientDto {
 
   @IsOptional()
   @IsNumber()
+  @Min(0)
   @ApiProperty({
     description:
       'Saldo inicial del cliente (por defecto será igual al límite de crédito)',

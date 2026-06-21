@@ -28,7 +28,7 @@ function HomeHeroButtons() {
         size="lg"
         className="fw-semibold px-4"
         style={{ borderRadius: 12 }}
-        onClick={() => window.open('https://prisma-enterprice.cloud', '_blank')}
+        onClick={() => window.open('https://prisma-enterprise.cloud', '_blank')}
       >
         Saber Más
       </Button>
@@ -80,7 +80,7 @@ const Home = () => {
                 Sistema de Créditos<br />sin Interés
               </h1>
               <p className="lead mb-0" style={{ fontSize: '1.15rem', opacity: 0.9, maxWidth: 520 }}>
-                Permite a comercios &quot;fiar&quot; dinero a clientes de confianza, con control total y cero complicaciones.
+                Permite a comercios &quot;pistis&quot; dinero a clientes de confianza, con control total y cero complicaciones.
               </p>
               <HomeHeroButtons />
             </div>
@@ -118,7 +118,7 @@ const Home = () => {
                 integrar crédito sin intereses en su POS o software de e-commerce.
               </p>
               <p className="text-muted mb-0" style={{ lineHeight: 1.7 }}>
-                Un sistema moderno para &quot;fiar&quot; a clientes de confianza, con todas las
+                Un sistema moderno para &quot;pistis&quot; a clientes de confianza, con todas las
                 seguridades y controles que su negocio necesita.
               </p>
             </div>
@@ -233,7 +233,7 @@ const Home = () => {
               size="lg"
               className="fw-semibold px-4"
               style={{ borderRadius: 12 }}
-              onClick={() => window.open('https://prisma-enterprice.cloud', '_blank')}
+              onClick={() => window.open('https://prisma-enterprise.cloud', '_blank')}
             >
               Contactar Ventas
             </Button>

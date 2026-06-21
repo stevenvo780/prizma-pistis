@@ -14,7 +14,7 @@ const STEPS: TourStep[] = [
   {
     target: '[data-tour="nav-pistis"]',
     title: 'Pistis Rápido — registra un fiado en segundos',
-    body: 'Aquí empieza el flujo principal: selecciona la operación (Prestar o Abonar), busca el cliente y escribe el monto. Listo para cobrar o fiar en 3 toques.',
+    body: 'Aquí empieza el flujo principal: selecciona la operación (Prestar o Abonar), busca el cliente y escribe el monto. Listo para cobrar o pistis en 3 toques.',
     placement: 'bottom',
   },
   {

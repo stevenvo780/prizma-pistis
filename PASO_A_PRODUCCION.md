@@ -1,4 +1,4 @@
-# 🚀 PASO A PRODUCCIÓN — MercadoPago en FIAR
+# 🚀 PASO A PRODUCCIÓN — MercadoPago en PISTIS
 
 > **Estado actual del sistema: SANDBOX (Pruebas)**
 > Última actualización: 25/Feb/2026
@@ -10,8 +10,8 @@
 Cuando el QA termine las pruebas y todo esté OK, ejecuta este comando en tu terminal:
 
 ```bash
-gcloud run services update fiar-api \
-  --region=us-central1 --project=fiar-3a207 \
+gcloud run services update pistis-api \
+  --region=us-central1 --project=prizma-pistis-prod \
   --update-env-vars="MP_ACCESS_TOKEN=APP_USR-2493532165828355-021623-9a7ab897978e0d2014545b4aac218a88-3206528554,MP_SANDBOX_MODE=false" \
   --remove-env-vars="MP_TEST_PAYER_EMAIL"
 ```
@@ -24,8 +24,8 @@ Los cambios aplican en ~30 segundos.
 ## 🔁 Volver a SANDBOX (si necesitas más pruebas después)
 
 ```bash
-gcloud run services update fiar-api \
-  --region=us-central1 --project=fiar-3a207 \
+gcloud run services update pistis-api \
+  --region=us-central1 --project=prizma-pistis-prod \
   --update-env-vars="MP_ACCESS_TOKEN=TEST-2493532165828355-021623-1ce1e258f8e13070152f496ee9475c6e-3206528554,MP_SANDBOX_MODE=true,MP_TEST_PAYER_EMAIL=test_user_3549839656740443625@testuser.com"
 ```
 
@@ -80,9 +80,9 @@ Antes de ejecutar el paso a producción, asegúrate de:
 | Documento | CC 12345678 |
 
 ### Infraestructura
-- **Backend:** Cloud Run — `fiar-api-212302024675.us-central1.run.app`
-- **Frontend:** Vercel — `fiar.humanizar.cloud`
-- **GCP Project:** `fiar-3a207`
+- **Backend:** Cloud Run — `pistis-api-212302024675.us-central1.run.app`
+- **Frontend:** Vercel — `pistis.prizma.cloud`
+- **GCP Project:** `prizma-pistis-prod`
 - **Región:** `us-central1`
 
 ---
@@ -95,26 +95,26 @@ Antes de ejecutar el paso a producción, asegúrate de:
 
 **Opción A** — Desde la URL de retorno (el QA la ve en el navegador después de pagar):
 ```
-https://fiar.humanizar.cloud/plans?preapproval_id=XXXXXXXXX
+https://pistis.prizma.cloud/plans?preapproval_id=XXXXXXXXX
 ```
 El `preapproval_id` es el SUBSCRIPTION_ID.
 
 **Opción B** — Desde logs de Cloud Run:
 ```bash
-gcloud logging read "resource.type=cloud_run_revision AND resource.labels.service_name=fiar-api AND textPayload:subscription" \
-  --project=fiar-3a207 --limit=10 --format="value(textPayload)"
+gcloud logging read "resource.type=cloud_run_revision AND resource.labels.service_name=pistis-api AND textPayload:subscription" \
+  --project=prizma-pistis-prod --limit=10 --format="value(textPayload)"
 ```
 
 ### Simular activación (plan se activa a BASIC)
 ```bash
-curl -X POST "https://fiar-api-212302024675.us-central1.run.app/api/v1/mercadopago/webhook" \
+curl -X POST "https://pistis-api-212302024675.us-central1.run.app/api/v1/mercadopago/webhook" \
   -H "Content-Type: application/json" \
   -d '{"id":99999,"live_mode":false,"type":"subscription_preapproval","date_created":"2026-01-01T00:00:00.000-04:00","user_id":3206528554,"api_version":"v1","action":"updated","data":{"id":"PONER_AQUI_EL_SUBSCRIPTION_ID"}}'
 ```
 
 ### Simular cancelación (plan vuelve a FREE)
 ```bash
-curl -X POST "https://fiar-api-212302024675.us-central1.run.app/api/v1/mercadopago/webhook" \
+curl -X POST "https://pistis-api-212302024675.us-central1.run.app/api/v1/mercadopago/webhook" \
   -H "Content-Type: application/json" \
   -d '{"id":99998,"live_mode":false,"type":"subscription_preapproval","date_created":"2026-01-01T00:00:00.000-04:00","user_id":3206528554,"api_version":"v1","action":"updated","data":{"id":"PONER_AQUI_EL_SUBSCRIPTION_ID"}}'
 ```

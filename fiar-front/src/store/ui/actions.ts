@@ -15,6 +15,10 @@ const actions = {
   removeAlert: (dispatch: Dispatch<any>, index: number) => {
     dispatch({ type: 'REMOVE_ALERT', payload: index });
   },
+
+  setDataReady: (dispatch: Dispatch<any>, dataReady: boolean) => {
+    dispatch({ type: 'SET_DATA_READY', payload: dataReady });
+  },
 };
 
 export default actions;

@@ -61,9 +61,16 @@ export class PaymentsInboundController {
         // Un atacante no recibirá info útil; el Hub sí sabe que falló la firma.
         return { ok: false, reason: 'invalid_signature' };
       }
+    } else if (process.env.NODE_ENV === 'production') {
+      // Fail-closed en producción: sin secreto no se puede verificar la firma,
+      // por lo que no se acredita ningún pago/suscripción sin validar.
+      this.logger.error(
+        'NOUS_HUB_SECRET no configurado en producción — webhook payments rechazado (fail-closed)',
+      );
+      return { ok: false, reason: 'hub_secret_not_configured' };
     } else {
       this.logger.warn(
-        'NOUS_HUB_SECRET no configurado — webhook procesado SIN verificar firma (modo degradado)',
+        'NOUS_HUB_SECRET no configurado — webhook procesado SIN verificar firma (solo no-producción)',
       );
     }
 

@@ -123,6 +123,41 @@ describe('MercadoPagoService.parseExternalReference', () => {
   it('retorna null para string vacío', () => {
     expect(parseRef('')).toBeNull();
   });
+
+  // ── Validación estricta de enums (2026-06-20) ────────────────────────
+  it('rechaza planType inválido en formato Hub', () => {
+    expect(parseRef('pistis:plan:user-1:INVALID_PLAN:MONTHLY')).toBeNull();
+  });
+
+  it('rechaza frequency inválida en formato Hub', () => {
+    expect(parseRef('pistis:plan:user-1:BASIC:INVALID_FREQ')).toBeNull();
+  });
+
+  it('rechaza planType inválido en formato legacy', () => {
+    expect(parseRef('user-1|NONEXISTENT|MONTHLY')).toBeNull();
+  });
+
+  it('rechaza frequency inválida en formato legacy', () => {
+    expect(parseRef('user-1|BASIC|QUARTERLY')).toBeNull();
+  });
+
+  it('acepta todos los planTypes válidos', () => {
+    const validPlans = ['FREE', 'BASIC', 'PRO', 'ENTERPRISE'];
+    validPlans.forEach((plan) => {
+      const result = parseRef(`pistis:plan:user-1:${plan}:MONTHLY`);
+      expect(result).not.toBeNull();
+      expect(result?.planType).toBe(plan);
+    });
+  });
+
+  it('acepta todas las frequencies válidas', () => {
+    const validFreqs = ['MONTHLY', 'ANNUALLY'];
+    validFreqs.forEach((freq) => {
+      const result = parseRef(`pistis:plan:user-1:BASIC:${freq}`);
+      expect(result).not.toBeNull();
+      expect(result?.frequency).toBe(freq);
+    });
+  });
 });
 
 // ── 3. PaymentsInboundController — verificación y ruteo ─────────────────────

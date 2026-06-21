@@ -1,5 +1,5 @@
 /**
- * One-shot schema synchronize script for fiar DB.
+ * One-shot schema synchronize script for pistis DB.
  * Uses compiled dist entities with TypeORM synchronize:true.
  */
 'use strict';
@@ -37,9 +37,9 @@ const ds = new DataSource({
   type: 'postgres',
   host: process.env.DB_HOST || '35.222.129.2',
   port: parseInt(process.env.DB_PORT || '5432'),
-  username: process.env.DB_USERNAME || 'prizma',
+  username: process.env.DB_USERNAME || 'pistisuser',
   password: PW,
-  database: process.env.DB_NAME || 'fiar',
+  database: process.env.DB_NAME || 'pistis',
   entities: [User, Subscription, Profile, Client, Transaction, PaymentSource],
   synchronize: true,
   ssl: false,

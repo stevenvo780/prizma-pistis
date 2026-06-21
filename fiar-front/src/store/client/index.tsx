@@ -14,10 +14,16 @@ const useClient = () => {
   const dispatch = useDispatch();
   const { setLoading, addAlert } = useUI();
 
-  const fetchClient = async (page: number = 1, limit: number = 50, search: string = '') => {
+  const fetchClient = async (
+    page: number = 1,
+    limit: number = 50,
+    search: string = '',
+    accountFilter?: string,
+    debtSort?: string
+  ) => {
     setLoading(true);
     try {
-      const response = await api.client.getClientAPI(page, limit, search);
+      const response = await api.client.getClientAPI(page, limit, search, accountFilter, debtSort);
       clientActions.setClient(dispatch, response.data.data);
       clientActions.setTotalPages(dispatch, response.data.total);
       clientActions.setPage(dispatch, response.data.page);
@@ -149,14 +155,30 @@ const useClient = () => {
 
   const downloadTemplate = () => {
     setLoading(true);
-    const fileUrl = 'https://firebasestorage.googleapis.com/v0/b/emergent-enterprises.appspot.com/o/assets%2FEMW%2FFormato_Clientes_EMW.xlsx?alt=media&token=46665951-953e-43c8-aa8b-23ef2065a076';
-    const a = document.createElement('a');
-    a.href = fileUrl;
-    a.download = 'file-name.xlsx';
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    setLoading(false);
+    try {
+      // Use template URL from environment variable
+      const templateUrl = process.env.NEXT_PUBLIC_TEMPLATE_URL
+        || process.env.NEXT_PUBLIC_FIAR_TEMPLATE_URL;
+
+      if (!templateUrl) {
+        addAlert({ type: 'warning', message: 'URL de plantilla no configurada. Contacte a soporte.' });
+        setLoading(false);
+        return;
+      }
+
+      const a = document.createElement('a');
+      a.href = templateUrl;
+      a.download = 'Formato_Clientes_Pistis.xlsx';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      addAlert({ type: 'success', message: 'Plantilla descargada correctamente.' });
+    } catch (error) {
+      console.error('Error al descargar plantilla:', error);
+      addAlert({ type: 'danger', message: 'Error al descargar la plantilla. Intenta de nuevo.' });
+    } finally {
+      setLoading(false);
+    }
   };
 
   const downloadExcel = async () => {

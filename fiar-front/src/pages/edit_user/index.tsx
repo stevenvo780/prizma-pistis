@@ -22,7 +22,7 @@ const EditProfile: React.FC = () => {
 
   const [apiUser, setApiUser] = useState<any>(null);
   const [plugins, setPlugins] = useState<any>({
-    sinergia: { enabled: false, apiKey: '' },
+    talanton: { enabled: false, apiKey: '' },
   });
 
   // Llama a fetchUser si hay token y no hay usuario cargado
@@ -76,7 +76,7 @@ const EditProfile: React.FC = () => {
         apiKey: u.apiKey ?? u.api_key ?? '',
       });
       setPlugins(u.profile?.plugins || {
-        sinergia: { enabled: false, apiKey: '' },
+        talanton: { enabled: false, apiKey: '' },
       });
     }
   }, [apiUser, user]);
@@ -187,20 +187,20 @@ const EditProfile: React.FC = () => {
               <Checkbox
                 label="Habilitar Talanton"
                 name="enabled"
-                data-plugin="sinergia"
-                checked={plugins.sinergia?.enabled || false}
+                data-plugin="talanton"
+                checked={plugins.talanton?.enabled || false}
                 onChange={handlePluginChange}
               />
-              <label htmlFor="sinergia-apikey" style={{ display: 'block', marginTop: 8, marginBottom: 4, fontWeight: 500 }}>API Key Talanton</label>
+              <label htmlFor="talanton-apikey" style={{ display: 'block', marginTop: 8, marginBottom: 4, fontWeight: 500 }}>API Key Talanton</label>
               <Input
-                id="sinergia-apikey"
+                id="talanton-apikey"
                 type="text"
                 name="apiKey"
-                data-plugin="sinergia"
-                value={plugins.sinergia?.apiKey || ''}
+                data-plugin="talanton"
+                value={plugins.talanton?.apiKey || ''}
                 onChange={handlePluginChange}
                 placeholder="API Key Talanton"
-                disabled={!plugins.sinergia?.enabled}
+                disabled={!plugins.talanton?.enabled}
                 className="mt-2"
               />
             </div>

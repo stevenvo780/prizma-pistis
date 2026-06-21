@@ -11,6 +11,7 @@ import {
   Logger,
   Param,
 } from '@nestjs/common';
+import crypto from 'crypto';
 import { MercadoPagoService } from './mercadopago.service';
 import { FirebaseAuthGuard } from '@/auth/firebase-auth.guard';
 import { RequestWithUser } from '@/auth/types';
@@ -77,11 +78,17 @@ export class MercadoPagoController {
 
   /**
    * GET /mercadopago/payment-status/:paymentId
-   * Consulta el estado de un pago individual.
+   * Consulta el estado de un pago individual del usuario autenticado.
+   * Requiere auth y valida que el pago pertenezca al usuario (vía
+   * external_reference) para no filtrar planType/frequency de terceros.
    */
   @Get('payment-status/:paymentId')
-  async getPaymentStatus(@Param('paymentId') paymentId: string) {
-    return this.mercadoPagoService.getPaymentStatus(paymentId);
+  @UseGuards(FirebaseAuthGuard)
+  async getPaymentStatus(
+    @Param('paymentId') paymentId: string,
+    @Req() req: RequestWithUser,
+  ) {
+    return this.mercadoPagoService.getPaymentStatus(paymentId, req.user.id);
   }
 
   /**
@@ -128,12 +135,100 @@ export class MercadoPagoController {
   }
 
   /**
+   * Verifica la firma `x-signature` del webhook de Mercado Pago (esquema ts+v1).
+   *
+   * MP firma el manifest `id:<data.id>;request-id:<x-request-id>;ts:<ts>;`
+   * con HMAC-SHA256 usando MP_WEBHOOK_SECRET. La comparación es time-safe.
+   *
+   * Fail-closed:
+   *   - Si MP_WEBHOOK_SECRET está configurado → firma obligatoria y válida.
+   *   - Si NO está configurado y NODE_ENV === 'production' → se rechaza (no se
+   *     procesa) para no acreditar pagos sin verificar.
+   *   - Si NO está configurado fuera de producción → se permite (modo dev) con
+   *     advertencia.
+   */
+  private verifyMpSignature(req: Request): boolean {
+    const secret = process.env.MP_WEBHOOK_SECRET;
+
+    if (!secret) {
+      if (process.env.NODE_ENV === 'production') {
+        this.logger.error(
+          'MP_WEBHOOK_SECRET no configurado en producción — webhook MP rechazado (fail-closed)',
+        );
+        return false;
+      }
+      this.logger.warn(
+        'MP_WEBHOOK_SECRET no configurado — verificación de firma omitida (solo dev)',
+      );
+      return true;
+    }
+
+    const signatureHeader = req.headers['x-signature'] as string | undefined;
+    const requestId = req.headers['x-request-id'] as string | undefined;
+    if (!signatureHeader) {
+      this.logger.warn('Webhook MP sin header x-signature — rechazado');
+      return false;
+    }
+
+    // x-signature: "ts=<unix>,v1=<hmac-hex>"
+    const parts = signatureHeader
+      .split(',')
+      .reduce<Record<string, string>>((acc, part) => {
+        const [k, v] = part.split('=');
+        if (k && v) acc[k.trim()] = v.trim();
+        return acc;
+      }, {});
+    const ts = parts['ts'];
+    const v1 = parts['v1'];
+    if (!ts || !v1) {
+      this.logger.warn('Webhook MP con x-signature malformado — rechazado');
+      return false;
+    }
+
+    // data.id puede venir por query (?data.id=) o en el body.
+    const dataId =
+      (req.query['data.id'] as string | undefined) ??
+      (req.body?.data?.id != null ? String(req.body.data.id) : undefined);
+
+    // Manifest según docs MP. request-id es opcional (se omite si no llega).
+    let manifest = '';
+    if (dataId) manifest += `id:${dataId};`;
+    if (requestId) manifest += `request-id:${requestId};`;
+    manifest += `ts:${ts};`;
+
+    const expected = crypto
+      .createHmac('sha256', secret)
+      .update(manifest)
+      .digest('hex');
+
+    const a = Buffer.from(expected);
+    const b = Buffer.from(v1);
+    if (a.length !== b.length) {
+      this.logger.warn('Webhook MP con firma inválida (longitud) — rechazado');
+      return false;
+    }
+    const valid = crypto.timingSafeEqual(a, b);
+    if (!valid) {
+      this.logger.warn('Webhook MP con firma inválida — rechazado');
+    }
+    return valid;
+  }
+
+  /**
    * POST /mercadopago/webhook
    * Recibe notificaciones de Mercado Pago (pagos y suscripciones).
    */
   @Post('webhook')
   async handleWebhook(@Req() req: Request, @Res() res: Response) {
     try {
+      // Fail-closed: validar firma antes de procesar cualquier evento.
+      if (!this.verifyMpSignature(req)) {
+        // 200 para que MP no reintente indefinidamente un evento no autorizado.
+        return res
+          .status(200)
+          .json({ success: false, reason: 'invalid_signature' });
+      }
+
       const payload = req.body;
       this.logger.log('Webhook MP recibido:', JSON.stringify(payload));
 

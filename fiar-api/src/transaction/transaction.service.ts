@@ -5,12 +5,13 @@ import {
   BadRequestException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Repository, DataSource } from 'typeorm';
 import { Transaction } from './entities/transaction.entity';
 import { User } from '../user/entities/user.entity';
 import { Client } from '../client/entities/client.entity';
 import { CreateTransactionDto } from './dto/create-transaction.dto';
 import { UpdateTransactionDto } from './dto/update-transaction.dto';
+import { CreateClientDto } from '../client/dto/create-client.dto';
 import { ClientService } from '../client/client.service';
 import { PrizmaHubService } from '../prizma/prizma-hub.service';
 
@@ -23,13 +24,15 @@ export class TransactionService {
     private readonly clientRepository: Repository<Client>,
     private readonly clientService: ClientService,
     private readonly prizmaHub: PrizmaHubService,
+    private readonly dataSource: DataSource,
   ) {}
 
   /** Maps a Pistis Client to the Prizma CustomerRef shape. */
   private toPrizmaCustomer(client: Client) {
     return {
       id: String(client.id),
-      name: [client.name, client.lastname].filter(Boolean).join(' ') || undefined,
+      name:
+        [client.name, client.lastname].filter(Boolean).join(' ') || undefined,
       phone: client.phone || undefined,
       email: client.email || undefined,
     };
@@ -68,13 +71,14 @@ export class TransactionService {
       if (existing) {
         client = existing;
       } else {
-        client = this.clientRepository.create({
-          ...data.clientData,
-          current_balance: 100000,
-          credit_limit: 100000,
+        // Reutilizamos ClientService.create para aplicar el límite de clientes
+        // por plan y la validación de documento duplicado. El cupo de crédito
+        // se toma de clientData (no se fuerza un 100000 arbitrario sin scoring);
+        // create() ya hace fallback de current_balance a credit_limit o 0.
+        client = await this.clientService.create(
+          data.clientData as CreateClientDto,
           user,
-        });
-        client = await this.clientRepository.save(client);
+        );
       }
     } else {
       throw new BadRequestException(
@@ -105,27 +109,50 @@ export class TransactionService {
       }
     }
 
-    const transaction = this.transactionRepository.create({
-      ...data,
-      owner: user,
-      client,
-    });
+    // ATOMICIDAD: Envolver transaction.save + updateCredits en una transacción DB
+    // para garantizar que ambas operaciones ocurran o ninguna (FAIL-CLOSED).
+    const queryRunner = this.dataSource.createQueryRunner();
+    await queryRunner.connect();
+    await queryRunner.startTransaction();
 
-    const savedTransaction = await this.transactionRepository.save(transaction);
+    let savedTransaction: Transaction;
+    try {
+      const transaction = this.transactionRepository.create({
+        ...data,
+        owner: user,
+        client,
+      });
 
+      // Guardar la transacción dentro de la transacción DB
+      savedTransaction = await queryRunner.manager.save(transaction);
+
+      if (
+        savedTransaction.status === 'approved' ||
+        savedTransaction.status === 'completed'
+      ) {
+        // Actualizar créditos dentro de la misma transacción DB
+        // Delegamos a clientService pero usando el queryRunner
+        await this.clientService.updateCreditsWithQueryRunner(
+          queryRunner,
+          client.id,
+          data.amount,
+          data.operation,
+        );
+      }
+
+      await queryRunner.commitTransaction();
+    } catch (error) {
+      await queryRunner.rollbackTransaction();
+      throw error;
+    } finally {
+      await queryRunner.release();
+    }
+
+    // Post-transaction: Prizma Hub notification (fault-tolerant, no rollback)
     if (
       savedTransaction.status === 'approved' ||
       savedTransaction.status === 'completed'
     ) {
-      await this.clientService.updateCredits(
-        client.id,
-        data.amount,
-        data.operation,
-      );
-
-      // Prizma: Pistis owns credit/debt (flow 4). An approved `income` transaction
-      // is a payment received against the customer's debt → payment.received.
-      // Fault-tolerant: never breaks the local transaction flow.
       if (data.operation === 'income') {
         await this.prizmaHub.paymentReceived({
           paymentId: savedTransaction.id,
@@ -133,9 +160,6 @@ export class TransactionService {
           amount: Number(savedTransaction.amount),
         });
       }
-      // TODO(prizma): si más adelante se modela una línea/cupo de crédito como
-      // entidad propia, emitir CREDIT_APPROVED al otorgarla y CREDIT_CHECK al
-      // validar un `expense` contra el cupo (helpers ya disponibles en PrizmaHubService).
     }
 
     return savedTransaction;

@@ -102,7 +102,7 @@ export class PaymentsInboundService {
     ref: ParsedRef,
     payload: HubPaymentPayload,
   ): Promise<{ ok: boolean; handled: string }> {
-    const paymentId = payload.mpPaymentId ?? String(payload.mpPaymentId ?? '');
+    const paymentId = payload.mpPaymentId ? String(payload.mpPaymentId) : '';
 
     if (!paymentId) {
       this.logger.warn(

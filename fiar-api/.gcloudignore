@@ -35,4 +35,3 @@ firebase-service-account.json
 
 # Vendor package node_modules (will be installed during build)
 /vendor-prizma-contracts/node_modules
-/vendor-olympo-contracts/node_modules

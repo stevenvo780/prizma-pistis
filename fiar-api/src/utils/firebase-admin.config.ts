@@ -8,7 +8,9 @@ if (!admin.apps.length) {
   const serviceAccountPath = process.env.GOOGLE_APPLICATION_CREDENTIALS;
 
   if (serviceAccountPath && fs.existsSync(serviceAccountPath)) {
-    const serviceAccount = JSON.parse(fs.readFileSync(serviceAccountPath, 'utf8'));
+    const serviceAccount = JSON.parse(
+      fs.readFileSync(serviceAccountPath, 'utf8'),
+    );
     admin.initializeApp({
       credential: admin.credential.cert(serviceAccount),
       databaseURL: process.env.FIREBASE_DATABASE_URL,
@@ -29,7 +31,9 @@ if (!admin.apps.length) {
   } else {
     // Firebase credentials not configured — auth features will be unavailable.
     // initializeApp is skipped to avoid crashing the process at startup.
-    console.warn('[firebase] FIREBASE_PROJECT_ID / FIREBASE_CLIENT_EMAIL / FIREBASE_PRIVATE_KEY not set — Firebase Auth disabled.');
+    console.warn(
+      '[firebase] FIREBASE_PROJECT_ID / FIREBASE_CLIENT_EMAIL / FIREBASE_PRIVATE_KEY not set — Firebase Auth disabled.',
+    );
   }
 }
 

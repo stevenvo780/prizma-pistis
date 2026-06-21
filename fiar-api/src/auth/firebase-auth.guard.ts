@@ -37,7 +37,9 @@ export class FirebaseAuthGuard implements CanActivate {
         newUser.id = decodedToken.uid;
         newUser.email = decodedToken.email;
         newUser.name = decodedToken.name;
-        newUser.role = UserRole.SUPER_ADMIN;
+        // Auto-provisioning de cuentas debe usar el rol de menor privilegio.
+        // SUPER_ADMIN se asigna SOLO manualmente; nunca en el alta automática.
+        newUser.role = UserRole.CUSTOMER;
         const responseUser = await this.userRepository.save(newUser);
         request['user'] = responseUser;
       } else {

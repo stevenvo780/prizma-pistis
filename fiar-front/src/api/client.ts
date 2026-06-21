@@ -2,8 +2,23 @@ import axios from '@utils/axios';
 import { AxiosResponse } from 'axios';
 import { Client } from '@utils/types';
 
-export const getClientAPI = (page: number = 1, limit: number = 50, search: string = ''): Promise<AxiosResponse<{ data: Client[], total: number, page: number, last_page: number }>> => {
-  const url = search ? `/clients?page=${page}&limit=${limit}&search=${search}` : `/clients?page=${page}&limit=${limit}`;
+export const getClientAPI = (
+  page: number = 1,
+  limit: number = 50,
+  search: string = '',
+  accountFilter?: string,
+  debtSort?: string
+): Promise<AxiosResponse<{ data: Client[], total: number, page: number, last_page: number }>> => {
+  let url = `/clients?page=${page}&limit=${limit}`;
+  if (search) {
+    url += `&search=${search}`;
+  }
+  if (accountFilter) {
+    url += `&accountFilter=${accountFilter}`;
+  }
+  if (debtSort) {
+    url += `&debtSort=${debtSort}`;
+  }
   return axios.get(url);
 };
 

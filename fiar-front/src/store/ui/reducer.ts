@@ -1,11 +1,13 @@
 interface UIState {
   loading: boolean;
   alerts: { type: string, message: string }[];
+  dataReady: boolean;
 }
 
 const initialState: UIState = {
   loading: false,
   alerts: [],
+  dataReady: false,
 };
 
 const reducer = (state = initialState, action: any): UIState => {
@@ -24,6 +26,15 @@ const reducer = (state = initialState, action: any): UIState => {
       return {
         ...state,
         alerts: state.alerts.filter((_, index) => index !== action.payload),
+      };
+    case 'SET_DATA_READY':
+      return {
+        ...state,
+        dataReady: action.payload,
+      };
+    case 'RESET_STORE':
+      return {
+        ...initialState,
       };
     default:
       return state;

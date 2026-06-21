@@ -2,6 +2,7 @@ import { BadRequestException } from '@nestjs/common';
 import { TransactionService } from './transaction.service';
 import { Repository } from 'typeorm';
 import { ClientService } from '../client/client.service';
+import { PrizmaHubService } from '../prizma/prizma-hub.service';
 import { Transaction } from './entities/transaction.entity';
 import { Client } from '../client/entities/client.entity';
 import { User } from '../user/entities/user.entity';
@@ -11,12 +12,14 @@ describe('TransactionService', () => {
   let txRepo: Partial<Repository<Transaction>>;
   let clientRepo: Partial<Repository<Client>>;
   let clientService: Partial<ClientService>;
+  let prizmaHub: Partial<PrizmaHubService>;
 
   beforeEach(() => {
     txRepo = { create: jest.fn(), save: jest.fn() } as any;
     clientRepo = { findOne: jest.fn(), create: jest.fn(), save: jest.fn() } as any;
     clientService = { updateCredits: jest.fn(), checkSufficientCredits: jest.fn(), getBalance: jest.fn() } as any;
-    service = new TransactionService(txRepo as any, clientRepo as any, clientService as any);
+    prizmaHub = {} as any;
+    service = new TransactionService(txRepo as any, clientRepo as any, clientService as any, prizmaHub as any);
   });
 
   it('throws when operation invalid', async () => {

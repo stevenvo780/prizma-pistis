@@ -3,6 +3,7 @@ import {
   Inject,
   forwardRef,
   BadRequestException,
+  ForbiddenException,
   Logger,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -17,7 +18,7 @@ import {
   Subscription,
 } from '../user/entities/subscription.entity';
 import { UserService } from '../user/user.service';
-import { encrypt } from '@/utils/encrypt';
+import { hashDeterministic } from '@/utils/encrypt';
 import {
   MPPreferenceResponse,
   MPWebhookPayload,
@@ -68,7 +69,15 @@ export class MercadoPagoService {
     }
 
     try {
-      const planPrice = PLAN_DETAILS[data.planType].price;
+      const plan = PLAN_DETAILS[data.planType];
+      if (!plan || plan.price <= 0) {
+        throw new BadRequestException({
+          message: 'Plan inválido o no suscribible',
+          details: `El plan "${data.planType}" no existe o no es suscribible`,
+          code: 'MP_INVALID_PLAN',
+        });
+      }
+      const planPrice = plan.price;
       const isAnnual = data.frequency === 'ANNUALLY';
 
       let frequencyValue: number;
@@ -125,7 +134,7 @@ export class MercadoPagoService {
       const isLocalhost =
         frontendUrl.includes('localhost') || frontendUrl.includes('127.0.0.1');
       const backUrl = isLocalhost
-        ? 'https://fiar-front.vercel.app/payment/success'
+        ? 'https://pistis-front.vercel.app/payment/success'
         : `${frontendUrl}/payment/success`;
       preApprovalBody.back_url = backUrl;
 
@@ -154,10 +163,16 @@ export class MercadoPagoService {
       return {
         id: subscription.id,
         init_point: subscription.init_point,
-        sandbox_init_point: (subscription as any).sandbox_init_point || subscription.init_point,
+        sandbox_init_point:
+          (subscription as any).sandbox_init_point || subscription.init_point,
         isSandbox,
       };
     } catch (error) {
+      // Propagar tal cual los errores de validación que ya generamos
+      // (p.ej. plan inválido) sin re-envolverlos en un mensaje genérico.
+      if (error instanceof BadRequestException) {
+        throw error;
+      }
       const errorMsg =
         error.message || error.cause?.toString() || 'Error desconocido';
       this.logger.error(
@@ -305,7 +320,10 @@ export class MercadoPagoService {
       subscription.mpSubscriptionStatus = mpSub.status;
 
       // Si la suscripción está autorizada y el plan local NO está activo → activar
-      if (mpSub.status === 'authorized' && subscription.planType === PlanType.FREE) {
+      if (
+        mpSub.status === 'authorized' &&
+        subscription.planType === PlanType.FREE
+      ) {
         const refData = mpSub.external_reference
           ? this.parseExternalReference(mpSub.external_reference)
           : null;
@@ -329,7 +347,10 @@ export class MercadoPagoService {
       }
 
       // Si la suscripción fue cancelada → bajar a FREE
-      if (mpSub.status === 'cancelled' && subscription.planType !== PlanType.FREE) {
+      if (
+        mpSub.status === 'cancelled' &&
+        subscription.planType !== PlanType.FREE
+      ) {
         subscription.planType = PlanType.FREE;
         subscription.endDate = new Date();
         subscription.mpSubscriptionId = null;
@@ -374,10 +395,7 @@ export class MercadoPagoService {
    * Activa el plan de un usuario desde el Hub (suscripcion.activada).
    * Usado por PaymentsInboundService cuando el Hub reenvía el evento.
    */
-  async activatePlanFromHub(
-    userId: string,
-    planType: PlanType,
-  ): Promise<void> {
+  async activatePlanFromHub(userId: string, planType: PlanType): Promise<void> {
     let subscription = await this.subscriptionRepository.findOne({
       where: { user: { id: userId } },
     });
@@ -637,13 +655,20 @@ export class MercadoPagoService {
       return;
     }
 
-    // Verificar idempotencia
-    const encryptedPaymentId = encrypt(paymentId, process.env.ENCRYPTION_KEY);
+    // Idempotencia: usamos un hash DETERMINISTA del paymentId como clave de
+    // búsqueda. encrypt() usa IV aleatorio → produce un ciphertext distinto
+    // por llamada, por lo que NUNCA encontraría el registro previo y cada
+    // reentrega del webhook (MP reintenta ante 5xx/timeout) duplicaba la
+    // confirmación. hashDeterministic() devuelve siempre el mismo valor.
+    const idempotencyKey = hashDeterministic(
+      paymentId,
+      process.env.ENCRYPTION_KEY,
+    );
     const existingSource = await this.paymentSourceRepository.findOne({
-      where: { sourceId: encryptedPaymentId },
+      where: { sourceId: idempotencyKey },
     });
 
-    if (existingSource && existingSource.active) {
+    if (existingSource) {
       this.logger.log(
         `Pago ${paymentId} ya fue procesado (idempotencia). Ignorando.`,
       );
@@ -652,8 +677,8 @@ export class MercadoPagoService {
 
     const nextCharge = this.calculateNextChargeDate(refData.frequency);
 
-    const paymentSource = existingSource || new PaymentSource();
-    paymentSource.sourceId = encryptedPaymentId;
+    const paymentSource = new PaymentSource();
+    paymentSource.sourceId = idempotencyKey;
     paymentSource.user = user;
     paymentSource.planType = refData.planType;
     paymentSource.frequency = refData.frequency;
@@ -680,6 +705,11 @@ export class MercadoPagoService {
    * Soporta dos formatos:
    *   - Nuevo (Hub): `pistis:plan:<userId>:<planType>:<frequency>`
    *   - Legacy:      `<userId>|<planType>|<frequency>`
+   *
+   * VALIDACIÓN ESTRICTA: planType y frequency DEBEN ser valores válidos de
+   * sus respectivos enums (PlanType, PaymentFrequency). Retorna null si alguno
+   * es inválido, previniendo inyección de enums no reconocidos que podrían
+   * causar crashes o comportamientos inesperados aguas abajo.
    */
   parseExternalReference(ref: string): {
     userId: string;
@@ -692,19 +722,66 @@ export class MercadoPagoService {
         const parts = ref.split(':');
         // parts = ['pistis', 'plan', userId, planType, frequency]
         if (parts.length < 5) return null;
+
+        const planType = parts[3];
+        const frequency = parts[4];
+
+        // Validar que planType sea un valor conocido en el enum
+        if (!Object.values(PlanType).includes(planType as PlanType)) {
+          this.logger.warn(
+            `parseExternalReference: planType inválido "${planType}" en ref "${ref}"`,
+          );
+          return null;
+        }
+
+        // Validar que frequency sea un valor conocido en el enum
+        if (
+          !Object.values(PaymentFrequency).includes(
+            frequency as PaymentFrequency,
+          )
+        ) {
+          this.logger.warn(
+            `parseExternalReference: frequency inválida "${frequency}" en ref "${ref}"`,
+          );
+          return null;
+        }
+
         return {
           userId: parts[2],
-          planType: parts[3] as PlanType,
-          frequency: parts[4] as PaymentFrequency,
+          planType: planType as PlanType,
+          frequency: frequency as PaymentFrequency,
         };
       }
+
       // Formato legacy: userId|planType|frequency
       const parts = ref.split('|');
       if (parts.length < 3) return null;
+
+      const planType = parts[1];
+      const frequency = parts[2];
+
+      // Validar que planType sea un valor conocido en el enum
+      if (!Object.values(PlanType).includes(planType as PlanType)) {
+        this.logger.warn(
+          `parseExternalReference: planType inválido "${planType}" en ref "${ref}"`,
+        );
+        return null;
+      }
+
+      // Validar que frequency sea un valor conocido en el enum
+      if (
+        !Object.values(PaymentFrequency).includes(frequency as PaymentFrequency)
+      ) {
+        this.logger.warn(
+          `parseExternalReference: frequency inválida "${frequency}" en ref "${ref}"`,
+        );
+        return null;
+      }
+
       return {
         userId: parts[0],
-        planType: parts[1] as PlanType,
-        frequency: parts[2] as PaymentFrequency,
+        planType: planType as PlanType,
+        frequency: frequency as PaymentFrequency,
       };
     } catch {
       return null;
@@ -713,8 +790,15 @@ export class MercadoPagoService {
 
   /**
    * Verifica el estado de un pago por su ID.
+   *
+   * @param requesterUserId  ID del usuario autenticado. Si se provee, se valida
+   *   que el pago le pertenezca (vía external_reference); de lo contrario se
+   *   lanza ForbiddenException y NO se filtran planType/frequency de terceros.
    */
-  async getPaymentStatus(paymentId: string): Promise<{
+  async getPaymentStatus(
+    paymentId: string,
+    requesterUserId?: string,
+  ): Promise<{
     status: string;
     statusDetail: string;
     message: string;
@@ -733,6 +817,13 @@ export class MercadoPagoService {
         refData = this.parseExternalReference(paymentInfo.external_reference);
       }
 
+      // Ownership: el pago debe pertenecer al usuario que consulta.
+      if (requesterUserId && refData && refData.userId !== requesterUserId) {
+        throw new ForbiddenException(
+          'No tiene permiso para consultar este pago',
+        );
+      }
+
       return {
         status: paymentInfo.status as string,
         statusDetail: paymentInfo.status_detail,
@@ -743,6 +834,9 @@ export class MercadoPagoService {
         frequency: refData?.frequency,
       };
     } catch (error) {
+      if (error instanceof ForbiddenException) {
+        throw error;
+      }
       this.logger.error(
         `Error consultando estado del pago ${paymentId}:`,
         error.message,
@@ -756,13 +850,26 @@ export class MercadoPagoService {
 
   /**
    * Calcula la próxima fecha de cobro según la frecuencia.
+   *
+   * Las frecuencias desconocidas (p.ej. un external_reference manipulado o
+   * legacy mal formado) hacían que nextDate quedara en HOY → cobro inmediato.
+   * Ahora se hace fallback seguro a MONTHLY y se registra la anomalía.
    */
   private calculateNextChargeDate(frequency: string): Date {
     const nextDate = new Date();
-    if (frequency === 'MONTHLY') {
-      nextDate.setMonth(nextDate.getMonth() + 1);
-    } else if (frequency === 'ANNUALLY') {
-      nextDate.setFullYear(nextDate.getFullYear() + 1);
+    switch (frequency) {
+      case PaymentFrequency.ANNUALLY:
+        nextDate.setFullYear(nextDate.getFullYear() + 1);
+        break;
+      case PaymentFrequency.MONTHLY:
+        nextDate.setMonth(nextDate.getMonth() + 1);
+        break;
+      default:
+        this.logger.warn(
+          `Frecuencia desconocida "${frequency}" — usando MONTHLY por defecto`,
+        );
+        nextDate.setMonth(nextDate.getMonth() + 1);
+        break;
     }
     return nextDate;
   }

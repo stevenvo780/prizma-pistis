@@ -41,7 +41,7 @@ const ClientView: FC = () => {
 
   useEffect(() => {
     // Fetch initial data or when page/limit changes, but not search initially
-    fetchClient(page, limit, search);
+    fetchClient(page, limit, search, accountFilter, debtSort);
   }, [page, limit]); // Removed search dependency here to avoid fetching on every keystroke initially
 
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -113,7 +113,7 @@ const ClientView: FC = () => {
   };
 
   const handlePageChange = (current: number) => {
-    fetchClient(current, limit, search);
+    fetchClient(current, limit, search, accountFilter, debtSort);
   };
 
   const handleSearchChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -121,13 +121,14 @@ const ClientView: FC = () => {
     setSearch(searchValue);
     // Fetch only when search term is long enough or cleared
     if (searchValue.length >= 3 || searchValue.length === 0) {
-      fetchClient(1, limit, searchValue); // Reset to page 1 for new search
+      fetchClient(1, limit, searchValue, accountFilter, debtSort); // Reset to page 1 for new search
     }
   };
 
   const handleLimitChange = (e: ChangeEvent<HTMLSelectElement>) => {
-    setLimit(Number(e.target.value));
-    fetchClient(1, Number(e.target.value), search); // Reset to page 1 on limit change
+    const nextLimit = Number(e.target.value);
+    setLimit(nextLimit);
+    fetchClient(1, nextLimit, search, accountFilter, debtSort); // Reset to page 1 on limit change
   };
 
   const handleDeleteClient = async (id: number) => {
@@ -217,7 +218,12 @@ const ClientView: FC = () => {
                       <button
                         role="menuitem"
                         style={{ display: 'block', width: '100%', padding: '6px 16px', background: 'none', border: 'none', textAlign: 'left', cursor: 'pointer' }}
-                        onClick={() => { setAccountFilter(opt === 'Todos' ? '' : opt); setShowAccountMenu(false); fetchClient(1, limit, search); }}
+                        onClick={() => {
+                          const nextFilter = opt === 'Todos' ? '' : opt;
+                          setAccountFilter(nextFilter);
+                          setShowAccountMenu(false);
+                          fetchClient(1, limit, search, nextFilter, debtSort);
+                        }}
                       >
                         {opt}
                       </button>
@@ -246,7 +252,11 @@ const ClientView: FC = () => {
                       <button
                         role="menuitem"
                         style={{ display: 'block', width: '100%', padding: '6px 16px', background: 'none', border: 'none', textAlign: 'left', cursor: 'pointer' }}
-                        onClick={() => { setDebtSort(opt); setShowDebtMenu(false); }}
+                        onClick={() => {
+                          setDebtSort(opt);
+                          setShowDebtMenu(false);
+                          fetchClient(1, limit, search, accountFilter, opt);
+                        }}
                       >
                         {opt}
                       </button>

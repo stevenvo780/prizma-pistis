@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, Index } from 'typeorm';
 import { User } from '../../user/entities/user.entity';
 import { SharedProp } from './sharedProp.helper';
 import { PlanType } from '../../user/entities/subscription.entity';
@@ -14,6 +14,7 @@ export class PaymentSource extends SharedProp {
   id: number;
 
   @Column()
+  @Index({ unique: true })
   sourceId: string;
 
   @Column({ default: true })

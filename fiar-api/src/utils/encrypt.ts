@@ -18,6 +18,27 @@ export function encrypt(data: string, secret: string | undefined): string {
   return iv.toString('hex') + ':' + encrypted.toString('hex');
 }
 
+/**
+ * Hash determinista (HMAC-SHA256) de un valor. A diferencia de `encrypt`,
+ * que usa un IV aleatorio y produce un ciphertext distinto en cada llamada,
+ * esta función devuelve SIEMPRE el mismo resultado para la misma entrada.
+ *
+ * Se usa como clave de idempotencia / búsqueda indexable (p.ej. el paymentId
+ * de Mercado Pago): permite detectar duplicados con un único findOne.
+ */
+export function hashDeterministic(
+  data: string,
+  secret: string | undefined,
+): string {
+  if (!data) {
+    throw new Error('No data provided');
+  }
+  if (!secret) {
+    throw new Error('No secret provided');
+  }
+  return crypto.createHmac('sha256', secret).update(data).digest('hex');
+}
+
 export function decrypt(
   encryptedData: string,
   secret: string | undefined,

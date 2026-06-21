@@ -8,7 +8,7 @@ import {
 } from 'prizma-contracts';
 
 /**
- * Prizma HubCentral integration for Pistis (credit / cartera backend).
+ * Prizma Nous integration for Pistis (credit / cartera backend).
  *
  * Pistis is the SSOT of credit, debt and quota, so it is the OWNER (emitter) of
  * these events (see ARCHITECTURE.md §4 flow 4 and §5):
@@ -16,7 +16,7 @@ import {
  *   - CREDIT_APPROVED    (credit.approved)  — a credit line / quota was granted.
  *   - PAYMENT_RECEIVED   (payment.received) — a customer paid down their debt.
  *
- * Consumed downstream by EMW (WhatsApp notifications) and read by Graf / Sinergia.
+ * Consumed downstream by IRIS (WhatsApp notifications) and read by Hermes / Talanton.
  *
  * The underlying HubClient is fault-tolerant by design: a failed publish never
  * throws into business logic (connectors are optional, principle §2). Every
@@ -40,7 +40,7 @@ export class PrizmaHubService {
 
   /**
    * Low-level publish. Validates the payload against the contract schema
-   * (best-effort) and forwards to HubCentral. Returns true on success.
+   * (best-effort) and forwards to Nous. Returns true on success.
    */
   async publish(
     eventType: string,
@@ -95,7 +95,7 @@ export class PrizmaHubService {
 
   /**
    * Flow 4 — a credit line / quota was approved for a customer.
-   * Consumed by EMW (WhatsApp), read by Graf / Sinergia.
+   * Consumed by IRIS (WhatsApp), read by Hermes / Talanton.
    */
   creditApproved(data: {
     creditId: string;
@@ -107,7 +107,7 @@ export class PrizmaHubService {
 
   /**
    * Flow 4 — a payment was received against a customer's debt.
-   * Consumed by EMW (WhatsApp receipt/notification).
+   * Consumed by IRIS (WhatsApp receipt/notification).
    */
   paymentReceived(data: {
     paymentId: string;

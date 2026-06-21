@@ -57,8 +57,8 @@ docker compose up --build
 ```
 
 Servicios:
-- `fiar-api`: `8080:8080`
-- `fiar-front`: `3001:3000`
+- `pistis-api`: `8080:8080`
+- `pistis-front`: `3001:3000`
 - `postgres`: `5436:5432`
 
 ## Scripts utiles

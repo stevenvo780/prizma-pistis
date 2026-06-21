@@ -1,13 +1,13 @@
-# 🧪 Guía de Pruebas de Pagos — FIAR
+# 🧪 Guía de Pruebas de Pagos — PISTIS
 
-¡Hola! Esta guía te explica paso a paso cómo probar los pagos en FIAR. **No te preocupes**, el sistema está en modo de pruebas, así que **NO se va a cobrar dinero real**. Todo es simulado.
+¡Hola! Esta guía te explica paso a paso cómo probar los pagos en PISTIS. **No te preocupes**, el sistema está en modo de pruebas, así que **NO se va a cobrar dinero real**. Todo es simulado.
 
 ---
 
 ## 📦 Lo que necesitas antes de empezar
 
-### 1. Tu cuenta de FIAR
-Usa tu cuenta normal de FIAR para iniciar sesión.
+### 1. Tu cuenta de PISTIS
+Usa tu cuenta normal de PISTIS para iniciar sesión.
 
 ### 2. Cuenta de Mercado Pago de prueba
 Cuando te pida pagar, usa esta cuenta **de prueba** de Mercado Pago:
@@ -35,10 +35,10 @@ Cuando te pida una tarjeta, usa estos datos **ficticios**:
 
 ## 🧪 PRUEBA 1: Suscribirse a un plan
 
-### Paso 1 — Abrir FIAR
+### Paso 1 — Abrir PISTIS
 1. Abre **Google Chrome** (recomendado)
-2. Ve a: **https://fiar.humanizar.cloud**
-3. Inicia sesión con tu cuenta de FIAR
+2. Ve a: **https://pistis.prizma.cloud**
+3. Inicia sesión con tu cuenta de PISTIS
 
 ### Paso 2 — Ir a la página de Planes
 1. En el menú de la izquierda, haz clic en **"Planes"** 📋
@@ -85,7 +85,7 @@ Se abrirá la página de Mercado Pago. **Arriba vas a ver un banner que dice "Te
 ### Paso 7 — Verificar que todo salió bien
 1. Deberías ver el mensaje: **"¡Listo! Ya te suscribiste"** ✅
 2. Haz clic en **"Volver al sitio del vendedor"**
-3. FIAR te mostrará una pantalla que dice **"Activando tu plan..."** con un spinner
+3. PISTIS te mostrará una pantalla que dice **"Activando tu plan..."** con un spinner
 4. El sistema verificará automáticamente tu pago con MercadoPago (puede tomar 10-20 segundos)
 5. Cuando termine, verás: **"¡Pago exitoso!"** con un check verde ✅
 
@@ -161,7 +161,7 @@ Copia esta tabla y llénala con tus resultados:
 | 3 | Abrir Mercado Pago de pruebas | ⬜ Sí / ⬜ No | |
 | 4 | Pagar con tarjeta de prueba | ⬜ Sí / ⬜ No | |
 | 5 | Ver "¡Listo! Ya te suscribiste" | ⬜ Sí / ⬜ No | |
-| 6 | Ver "¡Pago exitoso!" en FIAR | ⬜ Sí / ⬜ No | |
+| 6 | Ver "¡Pago exitoso!" en PISTIS | ⬜ Sí / ⬜ No | |
 | 7 | Plan cambió a "Basic" en Dashboard | ⬜ Sí / ⬜ No | |
 | 8 | Cancelar suscripción funciona | ⬜ Sí / ⬜ No | |
 | 9 | Plan volvió a "Free" tras cancelar | ⬜ Sí / ⬜ No | |
@@ -220,9 +220,9 @@ Envíale esta información al desarrollador.
   CVV:        123
   Documento:  CC 12345678
 
-  URL DE FIAR
+  URL DE PISTIS
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-  https://fiar.humanizar.cloud
+  https://pistis.prizma.cloud
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
 

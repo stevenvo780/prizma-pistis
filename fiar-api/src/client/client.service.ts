@@ -6,10 +6,14 @@ import {
   BadRequestException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, FindManyOptions, ILike } from 'typeorm';
+import { Repository, FindManyOptions, ILike, QueryRunner } from 'typeorm';
 import { Client } from './entities/client.entity';
 import { User } from '../user/entities/user.entity';
-import { Subscription, PlanType, PLAN_DETAILS } from '../user/entities/subscription.entity';
+import {
+  Subscription,
+  PlanType,
+  PLAN_DETAILS,
+} from '../user/entities/subscription.entity';
 import { CreateClientDto } from './dto/create-client.dto';
 import { UpdateClientDto } from './dto/update-client.dto';
 import { PaginatedResponseDto } from '../dto/paginated-response.dto';
@@ -82,9 +86,11 @@ export class ClientService {
       city?: string;
       document?: string;
       search?: string;
+      accountFilter?: string;
+      debtSort?: string;
     },
   ): Promise<PaginatedResponseDto<Client>> {
-    const { page, limit, blocked, city, document, search } = options;
+    const { page, limit, blocked, city, document, search, accountFilter, debtSort } = options;
     const skip = (page - 1) * limit;
 
     const baseWhere: any = {
@@ -117,12 +123,68 @@ export class ClientService {
       where = baseWhere;
     }
 
-    const [data, total] = await this.clientRepository.findAndCount({
-      where,
-      take: limit,
-      skip: skip,
-      order: { createdAt: 'DESC' },
-    });
+    // Construir query builder para aplicar filtros y ordenamiento avanzados
+    const query = this.clientRepository.createQueryBuilder('client')
+      .where('client.owner_id = :userId', { userId });
+
+    // Aplicar filtros básicos
+    if (blocked !== undefined) {
+      query.andWhere('client.blocked = :blocked', { blocked });
+    }
+
+    if (city) {
+      query.andWhere('client.city = :city', { city });
+    }
+
+    if (document) {
+      query.andWhere('client.document = :document', { document });
+    }
+
+    // Aplicar búsqueda por múltiples campos
+    if (search && search.trim()) {
+      const searchPattern = `%${search.trim()}%`;
+      query.andWhere(
+        '(client.name ILIKE :search OR client.lastname ILIKE :search OR client.document ILIKE :search OR client.email ILIKE :search)',
+        { search: searchPattern },
+      );
+    }
+
+    // Aplicar filtro de estado de cuenta (accountFilter)
+    if (accountFilter && accountFilter.trim()) {
+      if (accountFilter === 'En deuda') {
+        // En deuda: current_balance < 0
+        query.andWhere('client.current_balance < 0');
+      } else if (accountFilter === 'Al día') {
+        // Al día: current_balance >= 0
+        query.andWhere('client.current_balance >= 0');
+      } else if (accountFilter === 'Suspendidos') {
+        // Suspendidos: blocked = true
+        query.andWhere('client.blocked = true');
+      }
+      // Si es 'Todos' o valor no reconocido, no aplicar filtro
+    }
+
+    // Aplicar ordenamiento por deudas (debtSort)
+    if (debtSort && debtSort.trim()) {
+      if (debtSort === 'Deuda (mayor → menor)') {
+        // Ordenar descendente por current_balance (valores negativos al inicio)
+        query.orderBy('client.current_balance', 'ASC');
+      } else if (debtSort === 'Deuda (menor → mayor)') {
+        // Ordenar ascendente por current_balance (valores negativos al final)
+        query.orderBy('client.current_balance', 'DESC');
+      } else {
+        // Default: ordenar por fecha de creación descendente
+        query.orderBy('client.createdAt', 'DESC');
+      }
+    } else {
+      // Default: ordenar por fecha de creación descendente
+      query.orderBy('client.createdAt', 'DESC');
+    }
+
+    // Aplicar paginación
+    query.skip(skip).take(limit);
+
+    const [data, total] = await query.getManyAndCount();
 
     const total_pages = Math.ceil(total / limit);
     const last_page = total_pages;
@@ -221,31 +283,49 @@ export class ClientService {
   }
 
   /**
-   * Actualizar el balance de créditos del cliente
+   * Actualizar el balance de créditos del cliente.
+   *
+   * La lectura, verificación de cupo y escritura ocurren dentro de UNA
+   * transacción con bloqueo pessimistic_write sobre la fila del cliente. Esto
+   * cierra la race condition de "lost update": dos transacciones `expense`
+   * concurrentes ya no pueden leer el mismo balance y sobregirar el cupo.
+   *
+   * El resultado de la verificación de cupo se RESPETA: si no hay saldo
+   * suficiente se lanza BadRequestException (antes el boolean se ignoraba).
    */
   async updateCredits(
     clientId: number,
     amount: number,
     operation: 'income' | 'expense',
   ): Promise<Client> {
-    const client = await this.clientRepository.findOne({
-      where: { id: clientId },
-    });
-    if (!client) {
-      throw new NotFoundException('Cliente no encontrado');
-    }
-    if (operation === 'expense') {
-      await this.checkSufficientCredits(clientId, amount);
-      client.current_balance = Number(client.current_balance) - Number(amount);
-    } else {
-      const newBalance = Number(client.current_balance) + Number(amount);
-      if (newBalance > client.credit_limit) {
-        client.credit_limit = newBalance;
+    return this.clientRepository.manager.transaction(async (manager) => {
+      const client = await manager.findOne(Client, {
+        where: { id: clientId },
+        lock: { mode: 'pessimistic_write' },
+      });
+      if (!client) {
+        throw new NotFoundException('Cliente no encontrado');
       }
-      client.current_balance = newBalance;
-    }
 
-    return await this.clientRepository.save(client);
+      const currentBalance = Number(client.current_balance);
+      const delta = Number(amount);
+
+      if (operation === 'expense') {
+        if (currentBalance < delta) {
+          throw new BadRequestException(
+            `Créditos insuficientes. Disponibles: ${currentBalance}, solicitado: ${delta}`,
+          );
+        }
+        client.current_balance = currentBalance - delta;
+      } else {
+        // income: no mutamos credit_limit aquí; el cupo solo cambia vía un
+        // update explícito de cupo (o flujo de scoring), nunca de forma
+        // silenciosa al recibir un abono.
+        client.current_balance = currentBalance + delta;
+      }
+
+      return manager.save(Client, client);
+    });
   }
 
   /**
@@ -260,5 +340,46 @@ export class ClientService {
       current_balance: Number(client.current_balance),
       credit_limit: Number(client.credit_limit),
     };
+  }
+
+  /**
+   * Actualizar créditos usando un QueryRunner existente (para transacciones externas).
+   *
+   * Variante de updateCredits() que usa un QueryRunner ya existente en lugar de
+   * crear uno nuevo. Permite envolver updateCredits + otros cambios en una
+   * transacción DB única (Atomicidad).
+   *
+   * Nota: El QueryRunner debe estar en una transacción activa (caller responsable).
+   * Usa el mismo bloqueo pessimistic_write para evitar lost updates.
+   */
+  async updateCreditsWithQueryRunner(
+    queryRunner: QueryRunner,
+    clientId: number,
+    amount: number,
+    operation: 'income' | 'expense',
+  ): Promise<Client> {
+    const client = await queryRunner.manager.findOne(Client, {
+      where: { id: clientId },
+      lock: { mode: 'pessimistic_write' },
+    });
+    if (!client) {
+      throw new NotFoundException('Cliente no encontrado');
+    }
+
+    const currentBalance = Number(client.current_balance);
+    const delta = Number(amount);
+
+    if (operation === 'expense') {
+      if (currentBalance < delta) {
+        throw new BadRequestException(
+          `Créditos insuficientes. Disponibles: ${currentBalance}, solicitado: ${delta}`,
+        );
+      }
+      client.current_balance = currentBalance - delta;
+    } else {
+      client.current_balance = currentBalance + delta;
+    }
+
+    return queryRunner.manager.save(Client, client);
   }
 }

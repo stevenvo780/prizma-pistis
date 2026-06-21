@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useMemo, useRef } from 'react';
+import React, { useEffect, useState, useMemo, useRef, useCallback } from 'react';
 import Head from 'next/head';
 import { Badge, Skeleton } from 'prizma-ui';
 import { withAuthSync } from '@utils/auth';
@@ -20,6 +20,7 @@ import { TbArrowsExchange, TbUserPlus } from 'react-icons/tb';
 import useUser from '@store/user';
 import useTransaction from '@store/transactions';
 import useClient from '@store/client';
+import useUI from '@store/ui';
 import { Transaction, Client } from '@utils/types';
 import styles from '@styles/Dashboard.module.css';
 
@@ -52,29 +53,29 @@ const Dashboard = () => {
   const { user } = useUser();
   const { transactions, total, fetchTransactions } = useTransaction();
   const { client, fetchClient } = useClient();
+  const { dataReady, setDataReady } = useUI();
   const [loading, setLoading] = useState(true);
-  const hasFetched = useRef(false);
+
+  const loadData = useCallback(async () => {
+    setLoading(true);
+    try {
+      await Promise.all([
+        fetchTransactions(1, 50, '', 'reciente'),
+        fetchClient(1, 50, ''),
+      ]);
+      setDataReady(true);
+    } catch (e) {
+      // silent
+    } finally {
+      setLoading(false);
+    }
+  }, [fetchTransactions, fetchClient, setDataReady]);
 
   useEffect(() => {
-    if (hasFetched.current) return;
-    hasFetched.current = true;
-
-    const loadData = async () => {
-      setLoading(true);
-      try {
-        await Promise.all([
-          fetchTransactions(1, 50, '', 'reciente'),
-          fetchClient(1, 50, ''),
-        ]);
-      } catch (e) {
-        // silent
-      } finally {
-        setLoading(false);
-      }
-    };
+    if (!user?.id) return;
+    if (dataReady) return;
     loadData();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [user?.id, dataReady]);
 
   // Computed metrics
   const metrics = useMemo(() => {
@@ -191,8 +192,49 @@ const Dashboard = () => {
       </div>
 
       {/* Metrics */}
-      <div className={styles.metricsGrid} data-tour="metrics-grid">
-        <div className={styles.metricCard}>
+      {metrics.totalTransactions === 0 && metrics.totalClients === 0 ? (
+        <div className={styles.metricsGrid}>
+          <div className={styles.sectionCard} style={{ gridColumn: '1 / -1', textAlign: 'center', padding: '2rem' }}>
+            <p style={{ color: 'var(--text-muted)', marginBottom: '1rem' }}>
+              No hay datos aún. Comienza registrando tu primer cliente y transacción.
+            </p>
+            <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center' }}>
+              <Link href="/client" style={{ color: 'var(--primary-color)', textDecoration: 'none', fontWeight: 600 }}>
+                Crear Cliente →
+              </Link>
+              <span style={{ color: 'var(--text-muted)' }}>o</span>
+              <Link href="/transacciones" style={{ color: 'var(--primary-color)', textDecoration: 'none', fontWeight: 600 }}>
+                Nueva Transacción →
+              </Link>
+            </div>
+          </div>
+        </div>
+      ) : metrics.totalTransactions === 0 || metrics.totalClients === 0 ? (
+        <div className={styles.metricsGrid}>
+          {metrics.totalTransactions === 0 && (
+            <div className={styles.sectionCard} style={{ gridColumn: '1 / -1', padding: '1.5rem' }}>
+              <p style={{ color: 'var(--text-muted)', marginBottom: '0.5rem' }}>
+                No hay transacciones registradas aún.
+              </p>
+              <Link href="/transacciones" style={{ color: 'var(--primary-color)', textDecoration: 'none', fontWeight: 600, fontSize: '0.9rem' }}>
+                Crear primera transacción →
+              </Link>
+            </div>
+          )}
+          {metrics.totalClients === 0 && (
+            <div className={styles.sectionCard} style={{ gridColumn: '1 / -1', padding: '1.5rem' }}>
+              <p style={{ color: 'var(--text-muted)', marginBottom: '0.5rem' }}>
+                No hay clientes registrados aún.
+              </p>
+              <Link href="/client" style={{ color: 'var(--primary-color)', textDecoration: 'none', fontWeight: 600, fontSize: '0.9rem' }}>
+                Crear primer cliente →
+              </Link>
+            </div>
+          )}
+        </div>
+      ) : (
+        <div className={styles.metricsGrid} data-tour="metrics-grid">
+          <div className={styles.metricCard}>
           <div className={`${styles.metricIconWrap} ${styles.teal}`}>
             <TbArrowsExchange size={20} />
           </div>
@@ -258,6 +300,7 @@ const Dashboard = () => {
           </div>
         </div>
       </div>
+      )}
 
       {/* Sections: Recent Transactions + Top Clients */}
       <div className={styles.sectionsRow}>

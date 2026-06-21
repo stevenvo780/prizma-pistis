@@ -3,27 +3,27 @@ version: '3.9'
 services:
   postgres:
     image: postgres:16-alpine
-    container_name: fiar-postgres
+    container_name: pistis-postgres
     restart: unless-stopped
     environment:
       POSTGRES_USER: ${DB_USERNAME:-postgres}
       POSTGRES_PASSWORD: ${DB_PASSWORD:-postgres}
-      POSTGRES_DB: ${DB_NAME:-totalpedidosv2}
+      POSTGRES_DB: ${DB_NAME:-pistis}
     volumes:
       - postgres_data:/var/lib/postgresql/data
     ports:
       - "5436:5432"
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${DB_USERNAME:-postgres} -d ${DB_NAME:-totalpedidosv2}"]
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USERNAME:-postgres} -d ${DB_NAME:-pistis}"]
       interval: 10s
       timeout: 5s
       retries: 5
 
-  fiar-api:
+  pistis-api:
     build:
-      context: ./fiar-api
+      context: ./pistis-api
       dockerfile: Dockerfile
-    container_name: fiar-api
+    container_name: pistis-api
     restart: unless-stopped
     depends_on:
       postgres:
@@ -35,17 +35,17 @@ services:
       DB_PORT: 5432
       DB_USERNAME: ${DB_USERNAME:-postgres}
       DB_PASSWORD: ${DB_PASSWORD:-postgres}
-      DB_NAME: ${DB_NAME:-totalpedidosv2}
+      DB_NAME: ${DB_NAME:-pistis}
       DB_SYNCHRONIZE: ${DB_SYNCHRONIZE:-true}
       JWT_SECRET: ${JWT_SECRET:-changeme}
       API_KEY: ${API_KEY:-}
       MERCADOPAGO_ACCESS_TOKEN: ${MERCADOPAGO_ACCESS_TOKEN:-}
-      FIREBASE_PROJECT_ID: ${FIREBASE_PROJECT_ID:-fiar-3a207}
+      FIREBASE_PROJECT_ID: ${FIREBASE_PROJECT_ID:-pistis-3a207}
       FIREBASE_CLIENT_EMAIL: ${FIREBASE_CLIENT_EMAIL:-}
       FIREBASE_PRIVATE_KEY: ${FIREBASE_PRIVATE_KEY:-}
       GOOGLE_APPLICATION_CREDENTIALS: /app/firebase-service-account.json
     volumes:
-      - ./fiar-api/firebase-service-account.json:/app/firebase-service-account.json:ro
+      - ./pistis-api/firebase-service-account.json:/app/firebase-service-account.json:ro
     ports:
       - "8080:8080"
     healthcheck:
@@ -55,14 +55,14 @@ services:
       start_period: 30s
       retries: 5
 
-  fiar-front:
+  pistis-front:
     build:
-      context: ./fiar-front
+      context: ./pistis-front
       dockerfile: Dockerfile
-    container_name: fiar-front
+    container_name: pistis-front
     restart: unless-stopped
     depends_on:
-      fiar-api:
+      pistis-api:
         condition: service_healthy
     environment:
       NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL:-http://localhost:8080}

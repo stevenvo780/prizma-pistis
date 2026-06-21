@@ -2,7 +2,8 @@ import {
   IsString,
   IsNumber,
   IsOptional,
-  IsUUID,
+  IsIn,
+  Min,
   ValidateNested,
 } from 'class-validator';
 import { Type } from 'class-transformer';
@@ -11,10 +12,10 @@ import { CreateClientDto } from '../../client/dto/create-client.dto';
 
 export class UpdateTransactionDto {
   @IsOptional()
-  @IsUUID()
+  @IsString()
   @ApiProperty({
-    description: 'ID del cliente asociado',
-    example: 'c0a8012e-1d93-11ee-be56-0242ac120002',
+    description: 'ID numérico del cliente asociado (PK de Client)',
+    example: '42',
     required: false,
   })
   clientId?: string;
@@ -31,6 +32,7 @@ export class UpdateTransactionDto {
 
   @IsOptional()
   @IsNumber()
+  @Min(0)
   @ApiProperty({
     description: 'Monto de la transacción',
     example: 100000.0,
@@ -49,7 +51,7 @@ export class UpdateTransactionDto {
   status?: string;
 
   @IsOptional()
-  @IsString()
+  @IsIn(['income', 'expense'])
   @ApiProperty({
     description: 'Tipo de operación de la transacción',
     example: 'expense',

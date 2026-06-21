@@ -17,7 +17,9 @@ const PaymentSuccess: React.FC = () => {
   const hasSynced = useRef(false);
 
   const MAX_SYNC_ATTEMPTS = 5;
-  const SYNC_INTERVAL_MS = 4000;
+  // Backoff exponencial: 2s, 4s, 8s, 16s, 32s
+  const SYNC_DELAYS_MS = [2000, 4000, 8000, 16000, 32000];
+  const [canRetry, setCanRetry] = useState(false);
 
   useEffect(() => {
     const refresh = async () => {
@@ -41,6 +43,7 @@ const PaymentSuccess: React.FC = () => {
     const doSync = async (attempt: number) => {
       if (attempt > MAX_SYNC_ATTEMPTS) {
         setSyncing(false);
+        setCanRetry(true);
         return;
       }
 
@@ -52,6 +55,7 @@ const PaymentSuccess: React.FC = () => {
       if (result?.synced && result.planType !== 'FREE') {
         setPlanActivated(true);
         setSyncing(false);
+        setCanRetry(false);
         // Refrescar usuario para obtener el plan actualizado
         try {
           await fetchUser();
@@ -61,12 +65,14 @@ const PaymentSuccess: React.FC = () => {
         return;
       }
 
-      // Si no se activó todavía, reintentar después de un delay
-      // (MercadoPago puede tardar unos segundos en cambiar el status a authorized)
+      // Si no se activó todavía, reintentar con backoff exponencial
       if (attempt < MAX_SYNC_ATTEMPTS) {
-        setTimeout(() => doSync(attempt + 1), SYNC_INTERVAL_MS);
+        const delayIndex = Math.min(attempt - 1, SYNC_DELAYS_MS.length - 1);
+        const nextDelay = SYNC_DELAYS_MS[delayIndex];
+        setTimeout(() => doSync(attempt + 1), nextDelay);
       } else {
         setSyncing(false);
+        setCanRetry(true);
       }
     };
 
@@ -74,6 +80,15 @@ const PaymentSuccess: React.FC = () => {
     setTimeout(() => doSync(1), 2000);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [loading]);
+
+  const handleManualRetry = () => {
+    hasSynced.current = false;
+    setCanRetry(false);
+    setSyncAttempts(0);
+    setPlanActivated(false);
+    // Dispara el effect nuevamente al cambiar el estado
+    setLoading(false);
+  };
 
   return (
     <div
@@ -118,6 +133,19 @@ const PaymentSuccess: React.FC = () => {
                 <p className="small text-muted mb-3">
                   ID de pago: <code>{router.query.payment_id}</code>
                 </p>
+              )}
+              {canRetry && !planActivated && (
+                <div style={{ marginBottom: '1rem' }}>
+                  <Button
+                    variant="secondary"
+                    size="lg"
+                    className="fw-bold px-5"
+                    onClick={handleManualRetry}
+                    style={{ marginRight: '0.5rem' }}
+                  >
+                    Reintentar Sincronización
+                  </Button>
+                </div>
               )}
               <Button
                 variant="primary"

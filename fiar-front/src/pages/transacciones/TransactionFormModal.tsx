@@ -37,15 +37,24 @@ const TransactionFormModal: React.FC<TransactionFormModalProps> = ({ show, onHid
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
+
+    // Validar cliente
+    if (!selectedClient || !selectedClient.id) {
+      setError('Debe seleccionar un cliente');
+      return;
+    }
+
+    // Validar monto antes de hacer setLoading
+    const parsedAmount = Number(amount);
+    if (!amount || Number.isNaN(parsedAmount) || parsedAmount <= 0 || !Number.isFinite(parsedAmount)) {
+      setError('El monto debe ser un número mayor a 0');
+      return;
+    }
+
     setLoading(true);
     try {
-      if (!selectedClient || !selectedClient.id) {
-        setError('Debe seleccionar un cliente');
-        setLoading(false);
-        return;
-      }
       const tx: any = {
-        amount: Number(amount),
+        amount: parsedAmount,
         operation,
         status,
         detail: {},
@@ -73,9 +82,27 @@ const TransactionFormModal: React.FC<TransactionFormModalProps> = ({ show, onHid
 
   const handleCreateClient = async () => {
     try {
+      // Call createClient and wait for it to complete
       await createClient(newClient);
+
+      // Fetch fresh client list to ensure we have the new client with correct ID
       await fetchClient(1, 100, '');
-      setSelectedClient({ ...newClient, id: client[client.length - 1]?.id });
+
+      // Find the newly created client in the fetched list by matching name/document
+      const createdClient = client.find(
+        (c: Client) => c.name === newClient.name && c.document === newClient.document
+      );
+
+      if (createdClient?.id) {
+        setSelectedClient(createdClient);
+      } else {
+        // Fallback: assume last client if exact match not found
+        const lastClient = client[client.length - 1];
+        if (lastClient) {
+          setSelectedClient(lastClient);
+        }
+      }
+
       setShowClientModal(false);
       setNewClient({} as Client);
       addAlert({ type: 'success', message: 'Cliente creado y seleccionado.' });

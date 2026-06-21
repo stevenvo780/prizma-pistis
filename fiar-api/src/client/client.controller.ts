@@ -83,6 +83,18 @@ export class ClientController {
     type: String,
     description: 'Buscar por nombre, apellido, documento, email o teléfono',
   })
+  @ApiQuery({
+    name: 'accountFilter',
+    required: false,
+    type: String,
+    description: 'Filtrar por estado de cuenta: "En deuda", "Al día", "Suspendidos", o "" para todos',
+  })
+  @ApiQuery({
+    name: 'debtSort',
+    required: false,
+    type: String,
+    description: 'Ordenar por deudas: "Deuda (mayor → menor)" o "Deuda (menor → mayor)"',
+  })
   @UseGuards(FirebaseAuthGuard)
   @Get()
   findAll(
@@ -93,6 +105,8 @@ export class ClientController {
     @Query('city') city?: string,
     @Query('document') document?: string,
     @Query('search') search?: string,
+    @Query('accountFilter') accountFilter?: string,
+    @Query('debtSort') debtSort?: string,
   ): Promise<PaginatedResponseDto<Client>> {
     limit = limit > 100 ? 100 : limit;
     return this.clientService.findAll(req.user.id, {
@@ -102,6 +116,8 @@ export class ClientController {
       city,
       document,
       search,
+      accountFilter,
+      debtSort,
     });
   }
 

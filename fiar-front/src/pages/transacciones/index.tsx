@@ -86,7 +86,20 @@ const Transactions: FC = () => {
   };
 
   const handleChangeTransactionStatus = async (id: string, status: 'pending' | 'approved' | 'rejected') => {
-    await updateTransaction(id, { status });
+    try {
+      setLoading(true);
+      await updateTransaction(id, { status });
+      const statusLabel = { approved: 'Aprobado', pending: 'Pendiente', rejected: 'Rechazado' };
+      addAlert({
+        type: 'success',
+        message: `Transacción marcada como ${statusLabel[status] || status}`
+      });
+    } catch (err: any) {
+      console.error('Error al actualizar estado:', err);
+      addAlert({ type: 'danger', message: err?.response?.data?.message || 'Error al actualizar estado de transacción' });
+    } finally {
+      setLoading(false);
+    }
   };
 
   const clearAllFilters = () => {

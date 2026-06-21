@@ -67,5 +67,5 @@ npm run lint
 
 ## Referencias
 
-- API: `../fiar-api/README.md`
+- API: `../pistis-api/README.md`
 - Stack completo: `../docker-compose.yml`
