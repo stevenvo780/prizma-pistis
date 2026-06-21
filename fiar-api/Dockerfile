@@ -9,8 +9,6 @@ WORKDIR /app
 # Copiar archivos necesarios para la instalación
 COPY package*.json ./
 COPY tsconfig*.json nest-cli.json ./
-# Copiar el vendor local ANTES de npm ci para que el file: dep resuelva correctamente
-COPY vendor-prizma-contracts ./vendor-prizma-contracts
 
 # Instalar dependencias con cache optimizado
 RUN npm ci
@@ -21,14 +19,8 @@ COPY . .
 # Construir la aplicación con nest build (webpack omitido: incompatibilidad node18/webpack-cli@7)
 RUN npm run build
 
-# Prune para producción (antes de copiar el vendor manualmente)
+# Prune para producción
 RUN npm prune --production
-
-# Reemplazar el symlink de prizma-contracts con una copia física para que
-# la copia multi-stage no pierda el módulo local (npm link = symlink absoluto).
-# Se hace DESPUÉS del prune para que npm no borre la copia manual.
-RUN rm -rf /app/node_modules/prizma-contracts && \
-    cp -r /app/vendor-prizma-contracts /app/node_modules/prizma-contracts
 
 # Production stage
 FROM node:18-alpine
