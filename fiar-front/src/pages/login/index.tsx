@@ -4,7 +4,6 @@ import { Card, CardBody, Button, Input, InputGroup, InputAddon } from 'prizma-ui
 import Image from 'next/image';
 import { FcGoogle } from 'react-icons/fc';
 import { HiOutlineEnvelope, HiOutlineLockClosed, HiOutlineArrowRightOnRectangle, HiOutlineUserPlus } from 'react-icons/hi2';
-import logo from '@public/img/Logo.png';
 import useUser from '@store/user';
 import styles from '@styles/Login.module.css';
 import { ProviderName } from '@utils/firebase.config';
@@ -45,7 +44,7 @@ const Login = () => {
       <div className={styles.loginContainer}>
         <Card className={styles.card}>
           <div className={`${styles.logoContainer} text-center`}>
-            <Image fetchPriority="high" src={logo} alt="Logo" width={120} height={120} style={{ objectFit: 'contain' }} />
+            <Image fetchPriority="high" src="/img/prizma-symbol.svg" alt="Pistis by Prizma" width={72} height={72} style={{ objectFit: 'contain' }} />
           </div>
           <h5 className="text-center fw-bold mb-1" style={{ color: '#095169' }}>Bienvenido a Pistis</h5>
           <p className="text-center text-muted mb-3" style={{ fontSize: '0.85rem' }}>Inicia sesión para continuar</p>
