@@ -27,7 +27,7 @@ const JSON_LD = {
     url: 'https://prisma-enterprise.cloud',
     logo: {
       '@type': 'ImageObject',
-      url: `${BASE_URL}/img/prizma-symbol.svg`,
+      url: `${BASE_URL}/img/pistis-icon.svg`,
     },
   },
 };

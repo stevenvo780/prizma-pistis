@@ -43,7 +43,7 @@ const Header = () => {
     <Topbar className={styles.navbar}>
       <Link href="/" className={styles.brand}>
         <Image
-          src="/img/prizma-symbol.svg"
+          src="/img/pistis-icon.svg"
           alt="Pistis by Prizma"
           width={36}
           height={36}
