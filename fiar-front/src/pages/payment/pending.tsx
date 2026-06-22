@@ -39,7 +39,7 @@ const PaymentPending: React.FC = () => {
             variant="accent"
             size="lg"
             className="fw-bold px-5"
-            onClick={() => router.push("/home")}
+            onClick={() => router.push("/")}
           >
             Ir al inicio
           </Button>

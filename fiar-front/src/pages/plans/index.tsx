@@ -18,7 +18,7 @@ const PlansPage: React.FC = () => {
 
   return (
     <div style={{ maxWidth: 1100, margin: '0 auto', padding: '40px 16px' }}>
-      <Head><title>Planes — Pistis</title></Head>
+      <Head><title>Planes — Iris</title></Head>
       {/* Hero/Promo Section */}
       <div
         style={{
@@ -33,8 +33,8 @@ const PlansPage: React.FC = () => {
           maxWidth: 680,
         }}
       >
-        <HiOutlineSparkles size={36} style={{ color: '#059669', marginBottom: 12 }} />
-        <h1 style={{ fontWeight: 700, marginBottom: 12, fontSize: 'clamp(1.6rem, 3vw, 2.2rem)', color: '#095169' }}>
+        <HiOutlineSparkles size={36} style={{ color: 'var(--c-success-500, #1FB57A)', marginBottom: 12 }} />
+        <h1 style={{ fontWeight: 700, marginBottom: 12, fontSize: 'clamp(1.6rem, 3vw, 2.2rem)', color: 'var(--c-primary-700, #0E6E73)' }}>
           Moderniza tu negocio con nuestro sistema
         </h1>
         <p style={{ color: '#6c757d', marginBottom: 24, maxWidth: 480, margin: '0 auto 24px auto' }}>
@@ -63,17 +63,17 @@ const PlansPage: React.FC = () => {
           <Card style={{ borderRadius: 16, boxShadow: '0 2px 20px rgba(0,0,0,0.06)', height: '100%' }}>
             <CardBody style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', padding: 32, textAlign: 'center' }}>
               <div style={{ fontWeight: 700, fontSize: '1.5rem', marginBottom: 12 }}>Plan Mensual</div>
-              <div style={{ fontWeight: 700, fontSize: '2.5rem', color: '#0a827f', marginBottom: 4 }}>$30.000</div>
+              <div style={{ fontWeight: 700, fontSize: '2.5rem', color: 'var(--c-accent-module, #0B8A8F)', marginBottom: 4 }}>$30.000</div>
               <div style={{ color: '#6c757d', fontSize: '0.9rem', marginBottom: 24 }}>COP / mes</div>
               <ul style={{ listStyle: 'none', padding: 0, marginBottom: 24, width: '100%', maxWidth: 260, textAlign: 'left' }}>
                 <li style={{ marginBottom: 8, display: 'flex', alignItems: 'center', gap: 8 }}>
-                  <HiOutlineCheckCircle size={18} style={{ color: '#059669', flexShrink: 0 }} /> Todas las funcionalidades
+                  <HiOutlineCheckCircle size={18} style={{ color: 'var(--c-success-500, #1FB57A)', flexShrink: 0 }} /> Todas las funcionalidades
                 </li>
                 <li style={{ marginBottom: 8, display: 'flex', alignItems: 'center', gap: 8 }}>
-                  <HiOutlineChatBubbleLeftRight size={18} style={{ color: '#059669', flexShrink: 0 }} /> Soporte prioritario
+                  <HiOutlineChatBubbleLeftRight size={18} style={{ color: 'var(--c-success-500, #1FB57A)', flexShrink: 0 }} /> Soporte prioritario
                 </li>
                 <li style={{ marginBottom: 8, display: 'flex', alignItems: 'center', gap: 8 }}>
-                  <HiOutlineRocketLaunch size={18} style={{ color: '#059669', flexShrink: 0 }} /> Actualizaciones incluidas
+                  <HiOutlineRocketLaunch size={18} style={{ color: 'var(--c-success-500, #1FB57A)', flexShrink: 0 }} /> Actualizaciones incluidas
                 </li>
               </ul>
               <Button
@@ -93,27 +93,27 @@ const PlansPage: React.FC = () => {
         <div style={{ width: '100%', maxWidth: 340, position: 'relative' }}>
           <div style={{ position: 'absolute', top: -14, left: '50%', transform: 'translateX(-50%)', zIndex: 1 }}>
             <Badge tone="warning" style={{ padding: '4px 12px', borderRadius: 20, fontSize: '0.8rem', fontWeight: 700 }}>
-              ⭐ Más popular
+              Mas popular
             </Badge>
           </div>
-          <Card style={{ borderRadius: 16, border: '2px solid #0a827f', boxShadow: '0 4px 32px rgba(10,130,127,0.12)', height: '100%' }}>
+          <Card style={{ borderRadius: 16, border: '2px solid var(--c-accent-module, #0B8A8F)', boxShadow: '0 4px 32px rgba(10,130,127,0.12)', height: '100%' }}>
             <CardBody style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', padding: 32, paddingTop: 48, textAlign: 'center' }}>
               <div style={{ fontWeight: 700, fontSize: '1.5rem', marginBottom: 12 }}>Plan Anual</div>
-              <div style={{ fontWeight: 700, fontSize: '2.5rem', color: '#0a827f', marginBottom: 4 }}>$288.000</div>
+              <div style={{ fontWeight: 700, fontSize: '2.5rem', color: 'var(--c-accent-module, #0B8A8F)', marginBottom: 4 }}>$288.000</div>
               <div style={{ color: '#6c757d', fontSize: '0.9rem', marginBottom: 4 }}>COP / año</div>
-              <div style={{ fontWeight: 600, fontSize: '0.85rem', color: '#059669', marginBottom: 24 }}>¡Ahorra $72.000!</div>
+              <div style={{ fontWeight: 600, fontSize: '0.85rem', color: 'var(--c-success-500, #1FB57A)', marginBottom: 24 }}>¡Ahorra $72.000!</div>
               <ul style={{ listStyle: 'none', padding: 0, marginBottom: 24, width: '100%', maxWidth: 260, textAlign: 'left' }}>
                 <li style={{ marginBottom: 8, display: 'flex', alignItems: 'center', gap: 8 }}>
-                  <HiOutlineCheckCircle size={18} style={{ color: '#059669', flexShrink: 0 }} /> Todas las funcionalidades
+                  <HiOutlineCheckCircle size={18} style={{ color: 'var(--c-success-500, #1FB57A)', flexShrink: 0 }} /> Todas las funcionalidades
                 </li>
                 <li style={{ marginBottom: 8, display: 'flex', alignItems: 'center', gap: 8 }}>
-                  <HiOutlineChatBubbleLeftRight size={18} style={{ color: '#059669', flexShrink: 0 }} /> Soporte prioritario
+                  <HiOutlineChatBubbleLeftRight size={18} style={{ color: 'var(--c-success-500, #1FB57A)', flexShrink: 0 }} /> Soporte prioritario
                 </li>
                 <li style={{ marginBottom: 8, display: 'flex', alignItems: 'center', gap: 8 }}>
-                  <HiOutlineRocketLaunch size={18} style={{ color: '#059669', flexShrink: 0 }} /> Actualizaciones incluidas
+                  <HiOutlineRocketLaunch size={18} style={{ color: 'var(--c-success-500, #1FB57A)', flexShrink: 0 }} /> Actualizaciones incluidas
                 </li>
                 <li style={{ marginBottom: 8, display: 'flex', alignItems: 'center', gap: 8 }}>
-                  <HiOutlineChartBarSquare size={18} style={{ color: '#059669', flexShrink: 0 }} /> 20% de descuento
+                  <HiOutlineChartBarSquare size={18} style={{ color: 'var(--c-success-500, #1FB57A)', flexShrink: 0 }} /> 20% de descuento
                 </li>
               </ul>
               <Button

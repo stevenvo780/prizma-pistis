@@ -6,7 +6,7 @@ import { TbBrandInstagram } from 'react-icons/tb';
 const Footer = () => (
   <footer
     style={{
-      background: 'linear-gradient(135deg, #095169, #0a827f)',
+      background: 'linear-gradient(135deg, var(--c-primary-800, #11585C), var(--c-primary-700, #0E6E73))',
       color: 'rgba(255,255,255,0.85)',
       padding: '2.5rem 0 1.5rem',
       marginTop: 'auto',
@@ -15,9 +15,9 @@ const Footer = () => (
     <Container>
       <Grid cols={3} gap="2rem" style={{ alignItems: 'start' }}>
         <div>
-          <h6 className="fw-bold text-white mb-2" style={{ letterSpacing: '0.03em' }}>Pistis</h6>
+          <h6 className="fw-bold text-white mb-2" style={{ letterSpacing: '0.03em' }}>Iris</h6>
           <p className="mb-0" style={{ fontSize: '0.85rem', lineHeight: 1.6 }}>
-            Sistema de créditos sin interés para comercios. Moderniza la forma de pistis a tus clientes de confianza.
+            Sistema de créditos sin interés para comercios. Moderniza la forma de prestar a tus clientes de confianza.
           </p>
         </div>
         <div>
@@ -45,7 +45,7 @@ const Footer = () => (
       </Grid>
       <hr style={{ borderColor: 'rgba(255,255,255,0.15)', margin: '1.5rem 0 1rem' }} />
       <p className="text-center mb-0" style={{ fontSize: '0.8rem', opacity: 0.7 }}>
-        Pistis es parte de Prizma · © {new Date().getFullYear()} Steven Vallejo. Todos los derechos reservados.
+        Iris es parte de Prizma · © {new Date().getFullYear()} Steven Vallejo. Todos los derechos reservados.
       </p>
     </Container>
   </footer>

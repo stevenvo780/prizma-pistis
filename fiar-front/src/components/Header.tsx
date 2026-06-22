@@ -41,16 +41,16 @@ const Header = () => {
 
   return (
     <Topbar className={styles.navbar}>
-      <Link href="/home" className={styles.brand}>
+      <Link href="/" className={styles.brand}>
         <Image
           src="/img/prizma-symbol.svg"
-          alt="Prizma"
+          alt="Iris by Prizma"
           width={36}
           height={36}
           className={styles.logo}
           fetchPriority="high"
         />
-        <span className={styles.brandName}>Pistis</span>
+        <span className={styles.brandName}>Iris</span>
         <span className={styles.brandUmbrella}>by Prizma</span>
       </Link>
 
@@ -71,9 +71,8 @@ const Header = () => {
           active={isActive('/pistis')}
           icon={<HiOutlineBolt size={19} />}
           className={`${styles.navItem} ${isActive('/pistis') ? styles.navItemActive : ''}`}
-          style={isActive('/pistis') ? {} : { color: '#FFC313', fontWeight: 700 }}
         >
-          <span>Pistis rapido</span>
+          <span>Crédito rápido</span>
         </NavItem>
 
         <NavItem

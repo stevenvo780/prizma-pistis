@@ -1,40 +1,18 @@
 /**
- * prizma-brand.css — bridges the existing Bootstrap 5 + Tailwind theme of pistis-front
- * to the Prizma brand tokens.
+ * prizma-brand.css — Bootstrap 5 theme bridge for pistis-front (Iris).
  *
- * Self-contained: prizma-ui is NOT a dependency of this app (it runs on npm with its
- * own node_modules, separate from the pnpm workspace), so the Prizma tokens used below
- * are declared locally instead of being imported from "prizma-ui/styles.css".
+ * prizma-tokens/prizma.css provides the canonical tokens for the whole
+ * Prizma ecosystem. This file ONLY overrides what's needed for Bootstrap
+ * compatibility and the pistis-module accent. No duplicate token
+ * definitions — prizma-tokens is the single source of truth.
  *
- * The module accent for "pistis" (#2FAE9B) is set by [data-module="pistis"] on the root
- * container (see _app.tsx). Goal: buttons, links and focus rings adopt the Prizma
- * "Corriente" teal / pistis accent without rewriting existing markup. Additive only —
- * does not touch component-level CSS Modules.
+ * Additive only — does not touch component-level CSS Modules.
  */
 
-/* --- Prizma brand tokens (subset, values from prizma-tokens) --- */
-:root {
-  --c-primary: #0B8A8F;          /* Corriente / primary-600 */
-  --c-primary-hover: #14AEB5;    /* primary-500 */
-  --c-accent: #FF5A2B;           /* Caudal / coral CTA */
-  --c-bg: #fafaf9;
-  --c-text: #1e293b;
-  --c-border: #e2e8f0;
-  --c-font-sans: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-  --c-font-display: 'Sora', var(--c-font-sans);
-  --c-radius-md: 10px;
-
-  /* pistis module accent (teal verdoso) */
-  --c-accent-module: #2FAE9B;
-  --c-accent-hover: #259182;
-  --c-accent-module-tint: rgba(47, 174, 155, 0.25);
-  --c-on-accent: #ffffff;
-}
-
-/* --- Bootstrap theme variables → Prizma tokens --- */
+/* Bootstrap theme variables → Prizma tokens */
 :root {
   --bs-primary: var(--c-accent-module);
-  --bs-primary-rgb: 47, 174, 155; /* #2FAE9B (pistis accent) */
+  --bs-primary-rgb: 47, 174, 155;
   --bs-link-color: var(--c-primary);
   --bs-link-hover-color: var(--c-primary-hover);
   --bs-body-bg: var(--c-bg);
@@ -44,7 +22,7 @@
   --bs-border-radius: var(--c-radius-md);
 }
 
-/* --- Typography --- */
+/* Typography */
 body {
   font-family: var(--c-font-sans);
 }
@@ -54,7 +32,7 @@ h1, h2, h3, h4, h5, h6 {
   color: var(--c-text);
 }
 
-/* --- Links --- */
+/* Links */
 a {
   color: var(--c-primary);
 }
@@ -62,14 +40,14 @@ a:hover {
   color: var(--c-primary-hover);
 }
 
-/* --- Bootstrap primary buttons → pistis accent --- */
+/* Bootstrap primary buttons → pistis accent (AA-safe dark fill for white text) */
 .btn-primary {
   --bs-btn-bg: var(--c-accent-module);
   --bs-btn-border-color: var(--c-accent-module);
-  --bs-btn-hover-bg: var(--c-accent-hover, var(--c-primary-hover));
-  --bs-btn-hover-border-color: var(--c-accent-hover, var(--c-primary-hover));
-  --bs-btn-active-bg: var(--c-accent-hover, var(--c-primary-hover));
-  --bs-btn-active-border-color: var(--c-accent-hover, var(--c-primary-hover));
+  --bs-btn-hover-bg: var(--c-primary-hover);
+  --bs-btn-hover-border-color: var(--c-primary-hover);
+  --bs-btn-active-bg: var(--c-primary-active);
+  --bs-btn-active-border-color: var(--c-primary-active);
   --bs-btn-disabled-bg: var(--c-accent-module);
   --bs-btn-disabled-border-color: var(--c-accent-module);
   --bs-btn-color: var(--c-on-accent, #fff);
@@ -91,7 +69,7 @@ a:hover {
   --bs-btn-hover-color: var(--c-primary-hover);
 }
 
-/* --- Form focus rings adopt the module accent --- */
+/* Form focus rings adopt the module accent */
 .form-control:focus,
 .form-select:focus,
 .form-check-input:focus {
@@ -103,7 +81,7 @@ a:hover {
   border-color: var(--c-accent-module);
 }
 
-/* --- Tailwind utility bridges (Tailwind 3.4 coexists with Bootstrap) --- */
+/* Tailwind utility bridges */
 .text-primary { color: var(--c-accent-module) !important; }
 .bg-primary { background-color: var(--c-accent-module) !important; }
 .border-primary { border-color: var(--c-accent-module) !important; }

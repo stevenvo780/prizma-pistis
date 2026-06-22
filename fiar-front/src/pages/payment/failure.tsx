@@ -35,7 +35,7 @@ const PaymentFailure: React.FC = () => {
             <Button
               variant="secondary"
               size="lg"
-              onClick={() => router.push("/home")}
+              onClick={() => router.push("/")}
             >
               Ir al inicio
             </Button>

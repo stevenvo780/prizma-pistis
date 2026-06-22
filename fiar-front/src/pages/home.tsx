@@ -1,5 +1,6 @@
 import React from 'react';
 import Link from 'next/link';
+import Head from 'next/head';
 import { Button, Badge } from 'prizma-ui';
 import {
   HiOutlineShieldCheck,
@@ -76,12 +77,67 @@ const Home = () => {
     { icon: <HiOutlineChartBarSquare size={28} />, title: 'Reportes claros', desc: 'Visualice su cartera, estado de créditos y tendencias.' },
   ];
 
+  const plans = [
+    {
+      title: 'Plan Básico',
+      price: '$0',
+      period: 'Siempre gratis',
+      badge: 'Gratuito',
+      badgeTone: 'neutral' as const,
+      features: [
+        'Hasta 50 clientes de confianza',
+        'Control de saldos básico',
+        'Notificaciones manuales',
+        'Soporte comunitario',
+      ],
+      cta: 'Comenzar Gratis',
+      variant: 'ghost' as const,
+    },
+    {
+      title: 'Plan Estándar',
+      price: '$30.000',
+      period: 'COP / mes',
+      badge: 'Recomendado',
+      badgeTone: 'success' as const,
+      features: [
+        'Clientes ilimitados',
+        'Control de saldos y abonos',
+        'Notificaciones automáticas (WhatsApp/SMS)',
+        'Reportes claros de cartera',
+        'Soporte prioritario',
+      ],
+      cta: 'Elegir Estándar',
+      variant: 'primary' as const,
+      popular: true,
+    },
+    {
+      title: 'Plan Premium',
+      price: '$288.000',
+      period: 'COP / año',
+      badge: 'Ahorra 20%',
+      badgeTone: 'warning' as const,
+      features: [
+        'Todo lo del Plan Estándar',
+        '20% de descuento equivalente',
+        'Integración con sistemas POS',
+        'Actualizaciones premium garantizadas',
+        'Soporte 24/7 y asesoría',
+      ],
+      cta: 'Elegir Premium',
+      variant: 'secondary' as const,
+    },
+  ];
+
   return (
     <div style={{ background: '#fafaf9' }}>
+      <Head>
+        <title>Iris — Crédito y Cartera | Prizma</title>
+      </Head>
+
       {/* Hero */}
       <section
         style={{
-          background: 'linear-gradient(135deg, #095169 0%, #0a827f 100%)',
+          background: 'linear-gradient(135deg, var(--c-primary-800, #11585C), var(--c-primary-700, #0E6E73))',
           padding: '4.5rem 0 3.5rem',
         }}
       >
@@ -89,13 +145,13 @@ const Home = () => {
           <div className="row align-items-center">
             <div className="col-lg-7 mb-4 mb-lg-0 text-white">
               <Badge tone="neutral" className="mb-3 px-3 py-2" style={{ fontSize: '0.8rem', borderRadius: 20, fontWeight: 600 }}>
-                🚀 Sistema innovador para comercios
+                Sistema innovador para comercios
               </Badge>
               <h1 className="fw-bold mb-3" style={{ fontSize: 'clamp(2rem, 4vw, 3rem)', lineHeight: 1.15 }}>
                 Sistema de Créditos<br />sin Interés
               </h1>
               <p className="lead mb-0" style={{ fontSize: '1.15rem', opacity: 0.9, maxWidth: 520 }}>
-                Permite a comercios &quot;pistis&quot; dinero a clientes de confianza, con control total y cero complicaciones.
+                Permite a comercios prestar dinero a clientes de confianza, con control total y cero complicaciones.
               </p>
               <HomeHeroButtons />
             </div>
@@ -133,7 +189,7 @@ const Home = () => {
                 integrar crédito sin intereses en su POS o software de e-commerce.
               </p>
               <p className="text-muted mb-0" style={{ lineHeight: 1.7 }}>
-                Un sistema moderno para &quot;pistis&quot; a clientes de confianza, con todas las
+                Un sistema moderno para prestar a clientes de confianza, con todas las
                 seguridades y controles que su negocio necesita.
               </p>
             </div>
@@ -159,7 +215,7 @@ const Home = () => {
                     background: '#fff',
                     borderRadius: 16,
                     boxShadow: '0 2px 16px rgba(10,130,127,0.06)',
-                    border: '1px solid #e0f2f1',
+                    border: '1px solid var(--c-accent-module-tint, #E3F6F2)',
                     transition: 'transform 0.2s, box-shadow 0.2s',
                   }}
                 >
@@ -169,8 +225,8 @@ const Home = () => {
                       width: 56,
                       height: 56,
                       borderRadius: 14,
-                      background: 'linear-gradient(135deg, #e0f7fa, #f0fdfa)',
-                      color: '#0a827f',
+                      background: 'linear-gradient(135deg, var(--c-primary-50, #ECFEFF), var(--c-accent-module-tint, #E3F6F2))',
+                      color: 'var(--c-accent-module, #0B8A8F)',
                     }}
                   >
                     {b.icon}
@@ -206,8 +262,8 @@ const Home = () => {
                       width: 48,
                       height: 48,
                       borderRadius: 12,
-                      background: '#f0fdfa',
-                      color: '#0a827f',
+                      background: 'var(--c-accent-module-tint, #E3F6F2)',
+                      color: 'var(--c-accent-module, #0B8A8F)',
                     }}
                   >
                     {f.icon}
@@ -223,10 +279,102 @@ const Home = () => {
         </div>
       </section>
 
+      {/* Planes Section */}
+      <section id="pricing" style={{ padding: '5rem 0', background: '#f5f5f4' }}>
+        <div className="container">
+          <div className="text-center mb-5">
+            <Badge tone="success" className="mb-3 px-3 py-2" style={{ borderRadius: 20, fontWeight: 600 }}>
+              Planes y Precios
+            </Badge>
+            <h2 className="fw-bold" style={{ fontSize: '2.2rem', color: 'var(--c-primary-700, #0E6E73)' }}>
+              Elige el plan ideal para tu comercio
+            </h2>
+            <p className="text-muted mx-auto mt-2" style={{ maxWidth: 600 }}>
+              Comienza gratis y escala a medida que tu negocio crezca. Sin costos ocultos.
+            </p>
+          </div>
+
+          <div className="row g-4 justify-content-center align-items-stretch">
+            {plans.map((p, i) => (
+              <div className="col-md-4" key={i} style={{ maxWidth: 360 }}>
+                <div
+                  className="card h-100 position-relative"
+                  style={{
+                    borderRadius: 20,
+                    border: p.popular ? '2px solid var(--c-accent-module, #0B8A8F)' : '1px solid #e7e5e4',
+                    boxShadow: p.popular ? '0 10px 30px rgba(10,130,127,0.15)' : '0 4px 20px rgba(0,0,0,0.04)',
+                    transition: 'transform 0.3s ease, box-shadow 0.3s ease',
+                    background: '#ffffff',
+                  }}
+                >
+                  {p.popular && (
+                    <div
+                      className="position-absolute"
+                      style={{
+                        top: -14,
+                        left: '50%',
+                        transform: 'translateX(-50%)',
+                        zIndex: 10,
+                      }}
+                    >
+                      <Badge tone="warning" className="px-3 py-1" style={{ borderRadius: 20, fontWeight: 700, fontSize: '0.85rem' }}>
+                        MAS POPULAR
+                      </Badge>
+                    </div>
+                  )}
+
+                  <div className="card-body p-4 d-flex flex-column h-100">
+                    <div className="mb-3">
+                      <Badge tone={p.badgeTone} className="px-2 py-1" style={{ borderRadius: 10, fontSize: '0.75rem', fontWeight: 600 }}>
+                        {p.badge}
+                      </Badge>
+                    </div>
+                    <h4 className="fw-bold mb-1" style={{ color: '#1c1917' }}>{p.title}</h4>
+                    <div className="d-flex align-items-baseline my-3">
+                      <span className="fw-bold" style={{ fontSize: '2.5rem', color: 'var(--c-accent-module, #0B8A8F)', lineHeight: 1 }}>
+                        {p.price}
+                      </span>
+                      <span className="text-muted ms-2" style={{ fontSize: '0.95rem' }}>
+                        {p.period}
+                      </span>
+                    </div>
+
+                    <hr className="my-3" style={{ borderTop: '1px solid #e7e5e4' }} />
+
+                    <ul className="list-unstyled mb-4 flex-grow-1">
+                      {p.features.map((feat, idx) => (
+                        <li key={idx} className="d-flex align-items-start gap-2 mb-2" style={{ fontSize: '0.9rem', color: '#44403c' }}>
+                          <span style={{ color: 'var(--c-accent-module, #0B8A8F)', fontWeight: 'bold', marginRight: '6px' }}>✓</span>
+                          <span>{feat}</span>
+                        </li>
+                      ))}
+                    </ul>
+
+                    <Link href={p.price === '$0' ? '/login' : '/plans'} passHref>
+                      <Button
+                        variant={p.variant}
+                        size="lg"
+                        className="w-100 fw-semibold"
+                        style={{
+                          borderRadius: 12,
+                          transition: 'all 0.2s',
+                        }}
+                      >
+                        {p.cta}
+                      </Button>
+                    </Link>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* CTA */}
       <section
         style={{
-          background: 'linear-gradient(135deg, #095169, #0a827f)',
+          background: 'linear-gradient(135deg, var(--c-primary-800, #11585C), var(--c-primary-700, #0E6E73))',
           padding: '4rem 0',
         }}
       >

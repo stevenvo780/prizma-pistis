@@ -51,7 +51,7 @@ service.interceptors.response.use(
         }
       } catch (renewError) {
         // Solo limpiar sesión si no estamos en una ruta pública
-        const publicRoutes = ['/login', '/home', '/plans'];
+        const publicRoutes = ['/', '/login', '/plans'];
         const currentPath = typeof window !== 'undefined' ? window.location.pathname : '';
         if (!publicRoutes.includes(currentPath)) {
           clearSession();
@@ -62,7 +62,7 @@ service.interceptors.response.use(
 
     if (originalRequest._retry && (status === 401 || status === 403)) {
       // Solo limpiar sesión si no estamos en una ruta pública
-      const publicRoutes = ['/login', '/home', '/plans'];
+      const publicRoutes = ['/', '/login', '/plans'];
       const currentPath = typeof window !== 'undefined' ? window.location.pathname : '';
       if (!publicRoutes.includes(currentPath)) {
         clearSession();

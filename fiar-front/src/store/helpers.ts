@@ -4,7 +4,7 @@ import { auth } from '@utils/firebase.config';
 import userActions from '../store/user/actions';
 import router from 'next/router';
 
-const PUBLIC_ROUTES = ['/login', '/home', '/plans'];
+const PUBLIC_ROUTES = ['/', '/login', '/plans'];
 
 export const getToken = (): string | undefined => {
   const state: RootState = store.getState();

@@ -197,7 +197,7 @@ const useClient = () => {
       const ws = XLSX.utils.json_to_sheet(clientWithLabelsAsString);
       const wb = XLSX.utils.book_new();
       XLSX.utils.book_append_sheet(wb, ws, "Clientes");
-      XLSX.writeFile(wb, "Clientes_EMW.xlsx");
+      XLSX.writeFile(wb, "Clientes_Iris.xlsx");
     } catch (error) {
       console.error(`Error: ${error}`);
       addAlert({ type: 'danger', message: 'Ocurrió un error al descargar el archivo, consulta a soporte' });

@@ -144,7 +144,7 @@ const PaymentForm: React.FC<PaymentFormProps> = ({
       <div className="shadow rounded-lg overflow-hidden">
         {hasSpecialPlan() ? (
           <div style={{
-            background: 'linear-gradient(135deg, #095169, #0a827f)',
+            background: 'linear-gradient(135deg, var(--c-primary-800, #11585C), var(--c-primary-700, #0E6E73))',
             color: 'white',
             padding: '3rem 2rem',
           }}>
@@ -192,7 +192,7 @@ const PaymentForm: React.FC<PaymentFormProps> = ({
             {/* Tarjeta del plan */}
             <div style={{
               flex: '0 0 41.666%',
-              background: 'linear-gradient(135deg, #095169, #0a827f)',
+              background: 'linear-gradient(135deg, var(--c-primary-800, #11585C), var(--c-primary-700, #0E6E73))',
               color: 'white',
               padding: '3rem 2rem',
             }}>

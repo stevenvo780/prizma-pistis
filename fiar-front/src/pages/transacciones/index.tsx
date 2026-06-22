@@ -134,9 +134,9 @@ const Transactions: FC = () => {
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          background: '#FFC313',
+          background: 'var(--c-accent-module, #0B8A8F)',
           border: 'none',
-          color: '#111',
+          color: '#fff',
           boxShadow: '0 4px 16px rgba(0,0,0,0.15)'
         }}
         aria-label="Nueva transacción"

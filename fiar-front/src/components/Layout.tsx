@@ -12,7 +12,7 @@ interface LayoutProps {
   children: ReactNode;
 }
 
-const PUBLIC_ROUTES = ['/', '/login', '/home', '/plans'];
+const PUBLIC_ROUTES = ['/', '/login', '/plans'];
 
 const Layout: React.FC<LayoutProps> = ({ children }) => {
   const { token, renewToken, user, logout } = useUser();
