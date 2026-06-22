@@ -14,12 +14,27 @@ function HomeHeroButtons() {
   return (
     <div className="d-flex flex-wrap gap-3 mt-4">
       <Link href="/login" passHref>
-        <Button variant="secondary" size="lg" className="fw-semibold px-4" style={{ borderRadius: 12 }}>
+        <Button
+          variant="secondary"
+          size="lg"
+          className="fw-semibold px-4"
+          style={{
+            borderRadius: 12,
+            color: '#FFFFFF',
+            backgroundColor: 'rgba(255, 255, 255, 0.2)',
+            border: '1px solid rgba(255, 255, 255, 0.4)',
+          }}
+        >
           Iniciar Sesión
         </Button>
       </Link>
       <Link href="/plans" passHref>
-        <Button variant="ghost" size="lg" className="fw-semibold px-4" style={{ borderRadius: 12 }}>
+        <Button
+          variant="ghost"
+          size="lg"
+          className="fw-semibold px-4"
+          style={{ borderRadius: 12, color: '#FFFFFF' }}
+        >
           Ver Planes
         </Button>
       </Link>
@@ -27,7 +42,7 @@ function HomeHeroButtons() {
         variant="ghost"
         size="lg"
         className="fw-semibold px-4"
-        style={{ borderRadius: 12 }}
+        style={{ borderRadius: 12, color: '#FFFFFF' }}
         onClick={() => window.open('https://prisma-enterprise.cloud', '_blank')}
       >
         Saber Más
@@ -224,7 +239,17 @@ const Home = () => {
           </p>
           <div className="d-flex justify-content-center gap-3">
             <Link href="/login" passHref>
-              <Button variant="secondary" size="lg" className="fw-semibold px-4" style={{ borderRadius: 12 }}>
+              <Button
+                variant="secondary"
+                size="lg"
+                className="fw-semibold px-4"
+                style={{
+                  borderRadius: 12,
+                  color: '#FFFFFF',
+                  backgroundColor: 'rgba(255, 255, 255, 0.2)',
+                  border: '1px solid rgba(255, 255, 255, 0.4)',
+                }}
+              >
                 Iniciar Sesión
               </Button>
             </Link>
@@ -232,7 +257,7 @@ const Home = () => {
               variant="ghost"
               size="lg"
               className="fw-semibold px-4"
-              style={{ borderRadius: 12 }}
+              style={{ borderRadius: 12, color: '#FFFFFF' }}
               onClick={() => window.open('https://prisma-enterprise.cloud', '_blank')}
             >
               Contactar Ventas
