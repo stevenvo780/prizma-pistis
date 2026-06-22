@@ -148,8 +148,10 @@ const useUser = () => {
       const status = error?.response?.status;
       if (status === 404) {
         // Usuario recién registrado — el perfil aún no existe en el backend.
-        // No mostrar alerta de error; el dashboard funciona con datos en blanco.
+        // Despachar clearUser para limpiar Redux de datos stale persitidos.
+        // El dashboard funciona con datos en blanco.
         console.warn('fetchUser: perfil de usuario no encontrado (404). Usuario nuevo.');
+        userActions.clearUser(dispatch);
         return null;
       }
       console.error('Error fetching user:', error);

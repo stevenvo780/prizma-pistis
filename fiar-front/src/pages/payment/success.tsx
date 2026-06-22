@@ -81,13 +81,47 @@ const PaymentSuccess: React.FC = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [loading]);
 
-  const handleManualRetry = () => {
+  const handleManualRetry = async () => {
     hasSynced.current = false;
     setCanRetry(false);
     setSyncAttempts(0);
     setPlanActivated(false);
-    // Dispara el effect nuevamente al cambiar el estado
-    setLoading(false);
+    setSyncing(true);
+
+    // Reintentar sincronización inmediatamente
+    const doSync = async (attempt: number) => {
+      if (attempt > MAX_SYNC_ATTEMPTS) {
+        setSyncing(false);
+        setCanRetry(true);
+        return;
+      }
+
+      setSyncAttempts(attempt);
+      const result = await syncSubscription();
+
+      if (result?.synced && result.planType !== 'FREE') {
+        setPlanActivated(true);
+        setSyncing(false);
+        setCanRetry(false);
+        try {
+          await fetchUser();
+        } catch (e) {
+          console.error("Error refrescando usuario post-sync:", e);
+        }
+        return;
+      }
+
+      if (attempt < MAX_SYNC_ATTEMPTS) {
+        const delayIndex = Math.min(attempt - 1, SYNC_DELAYS_MS.length - 1);
+        const nextDelay = SYNC_DELAYS_MS[delayIndex];
+        setTimeout(() => doSync(attempt + 1), nextDelay);
+      } else {
+        setSyncing(false);
+        setCanRetry(true);
+      }
+    };
+
+    await doSync(1);
   };
 
   return (

@@ -104,12 +104,13 @@ const ClientView: FC = () => {
   };
 
   const handleSelectChange = (event: any) => {
-    const labelsData: string[] = [];
-    for (let index = 0; index < event.length; index++) {
-      const labelValue = event[index].value;
-      labelsData.push(labelValue);
-    }
-    setSelectedClient(clientSelected);
+    const labelData: string[] = event && Array.isArray(event)
+      ? event.map((item: any) => item.value)
+      : [];
+    setClientSelected(prev => ({
+      ...prev,
+      label: labelData
+    }));
   };
 
   const handlePageChange = (current: number) => {

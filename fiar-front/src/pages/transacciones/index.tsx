@@ -1,4 +1,4 @@
-import { useState, ChangeEvent, FC, useEffect } from 'react';
+import { useState, ChangeEvent, FC, useEffect, useRef } from 'react';
 import Head from 'next/head';
 import { Button, Input, Select, Badge, Field, Pagination } from 'prizma-ui';
 import { FaPlus, FaSearch, FaSortAmountDown, FaFilter, FaFileExcel, FaTimes } from 'react-icons/fa';
@@ -21,6 +21,7 @@ const Transactions: FC = () => {
   } = useTransaction();
 
   const [search, setSearch] = useState('');
+  const [debouncedSearch, setDebouncedSearch] = useState('');
   const [limit, setLimit] = useState(50);
   const [currentPage, setCurrentPage] = useState(page);
   const [order, setOrder] = useState<'reciente' | 'antiguo'>('reciente');
@@ -32,12 +33,31 @@ const Transactions: FC = () => {
   const [showAdvancedFilters, setShowAdvancedFilters] = useState<boolean>(false);
   const [showTransactionModal, setShowTransactionModal] = useState(false);
   const [selectedClient, setSelectedClient] = useState<{id?: string, name?: string}>({});
+  const searchTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
+  // Debounce search: espera 300ms sin cambios antes de actualizar debouncedSearch
+  useEffect(() => {
+    if (searchTimeoutRef.current) {
+      clearTimeout(searchTimeoutRef.current);
+    }
+    searchTimeoutRef.current = setTimeout(() => {
+      setDebouncedSearch(search);
+      setCurrentPage(1);
+    }, 300);
+
+    return () => {
+      if (searchTimeoutRef.current) {
+        clearTimeout(searchTimeoutRef.current);
+      }
+    };
+  }, [search]);
+
+  // Fetch cuando cambian los filtros o debouncedSearch
   useEffect(() => {
     fetchTransactions(
       currentPage,
       limit,
-      search,
+      debouncedSearch,
       order,
       statusFilter,
       minAmount ? Number(minAmount) : undefined,
@@ -45,12 +65,11 @@ const Transactions: FC = () => {
       startDate || undefined,
       endDate || undefined
     );
-  }, [currentPage, limit, search, order, statusFilter, minAmount, maxAmount, startDate, endDate, fetchTransactions]);
+  }, [currentPage, limit, debouncedSearch, order, statusFilter, minAmount, maxAmount, startDate, endDate, fetchTransactions]);
 
   const handleSearchChange = (e: ChangeEvent<HTMLInputElement>) => {
     const searchValue = e.target.value;
     setSearch(searchValue);
-    setCurrentPage(1);
   };
 
   const handleLimitChange = (e: ChangeEvent<HTMLSelectElement>) => {

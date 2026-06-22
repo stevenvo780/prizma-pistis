@@ -137,6 +137,31 @@ const ClientForm: FC<ClientFormProps> = ({ client, labels, handleInputChange, ha
           </Field>
         </div>
       </fieldset>
+
+      {/* Sección: Etiquetas */}
+      {labels && labels.length > 0 && (
+        <fieldset style={{ marginBottom: '20px', padding: '15px', border: '1px solid #ccc', borderRadius: '10px' }}>
+          <legend style={{ fontSize: '1.2rem', fontWeight: 'bold' }}>Etiquetas</legend>
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '10px', marginTop: 10 }}>
+            {labels.map((label) => (
+              <Checkbox
+                key={label.value}
+                name={`label-${label.value}`}
+                checked={client.label?.includes(label.value) || false}
+                onChange={(e) => {
+                  const isChecked = e.target.checked;
+                  const currentLabels = client.label || [];
+                  const newLabels = isChecked
+                    ? [...currentLabels, label.value]
+                    : currentLabels.filter(l => l !== label.value);
+                  handleSelectChange(newLabels.map(v => ({ value: v, label: v })));
+                }}
+                label={label.label}
+              />
+            ))}
+          </div>
+        </fieldset>
+      )}
     </form>
   );
 };
