@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { PrizmaTour, TourStep } from 'prizma-ui';
 
-const RUN_KEY = 'pistis-front-v1';
-export const TOUR_EVENT = 'pistis:start-tour';
+const RUN_KEY = 'hermes-frontend-v1';
+export const TOUR_EVENT = 'hermes:start-tour';
 
 const STEPS: TourStep[] = [
   {

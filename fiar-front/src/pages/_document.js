@@ -1,9 +1,9 @@
 import Document, { Html, Head, Main, NextScript } from 'next/document';
 
-const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://fiar.humanizar.cloud';
-const TITLE = 'Iris — Sistema de Crédito sin Interés | Prizma';
+const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://hermes.prisma-enterprise.cloud';
+const TITLE = 'Hermes — Plataforma de Crédito Empresarial | Prizma';
 const DESCRIPTION =
-  'Gestiona tu cartera de crédito, cobros y financiamiento empresarial con Iris, el módulo de crédito sin interés de la suite Prizma.';
+  'Gestiona tu cartera de crédito, cobros y financiamiento empresarial con Hermes, el módulo de crédito sin interés de la suite Prizma.';
 const OG_IMAGE = `${BASE_URL}/og-image.png`;
 
 class MyDocument extends Document {
@@ -13,14 +13,13 @@ class MyDocument extends Document {
         <Head>
           <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-          {/* Favicon multi-size */}
-          <link rel="icon" type="image/x-icon" href="/favicon.ico" />
-          <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
-          <link rel="icon" type="image/png" sizes="180x180" href="/favicon-180.png" />
-          <link rel="icon" type="image/png" sizes="512x512" href="/favicon-512.png" />
-          <link rel="apple-touch-icon" sizes="180x180" href="/favicon-180.png" />
+          {/* Favicon multi-size — Hermes brand */}
+          <link rel="icon" href="/favicon.ico" sizes="any" />
+          <link rel="icon" type="image/png" sizes="32x32" href="/favicon/v1_32.png" />
+          <link rel="icon" type="image/png" sizes="180x180" href="/favicon/v2_180.png" />
+          <link rel="apple-touch-icon" sizes="512x512" href="/favicon/v3_512.png" />
 
-          {/* Theme color — Iris brand */}
+          {/* Theme color — Prizma teal */}
           <meta name="theme-color" content="#43b5a6" />
 
           {/* SEO básico */}
@@ -44,7 +43,7 @@ class MyDocument extends Document {
           <meta name="twitter:description" content={DESCRIPTION} />
           <meta name="twitter:image" content={OG_IMAGE} />
         </Head>
-        <body data-module="iris">
+        <body>
           <Main />
           <NextScript />
         </body>

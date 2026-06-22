@@ -44,13 +44,13 @@ const Header = () => {
       <Link href="/" className={styles.brand}>
         <Image
           src="/img/prizma-symbol.svg"
-          alt="Iris by Prizma"
+          alt="Hermes by Prizma"
           width={36}
           height={36}
           className={styles.logo}
           fetchPriority="high"
         />
-        <span className={styles.brandName}>Iris</span>
+        <span className={styles.brandName}>Hermes</span>
         <span className={styles.brandUmbrella}>by Prizma</span>
       </Link>
 

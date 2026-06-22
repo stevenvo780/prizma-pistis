@@ -1,5 +1,6 @@
 import React from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import Head from 'next/head';
 import { Button, Badge } from 'prizma-ui';
 import {
@@ -131,7 +132,7 @@ const Home = () => {
   return (
     <div style={{ background: '#fafaf9' }}>
       <Head>
-        <title>Iris — Crédito y Cartera | Prizma</title>
+        <title>Hermes — Crédito y Cartera | Prizma</title>
       </Head>
 
       {/* Hero */}
@@ -155,12 +156,14 @@ const Home = () => {
               </p>
               <HomeHeroButtons />
             </div>
-            <div className="col-lg-5 text-center">
-              <img
-                src="/img/girlcart.png"
-                alt="Persona con carrito de compras"
-                className="img-fluid"
-                style={{ maxHeight: 350, filter: 'drop-shadow(0 16px 40px rgba(0,0,0,0.2))' }}
+            <div className="col-lg-5 text-center d-flex align-items-center justify-content-center">
+              <Image
+                src="/img/isotipo_light.png"
+                alt="Hermes by Prizma"
+                width={240}
+                height={240}
+                style={{ maxHeight: 320, height: 'auto', filter: 'drop-shadow(0 16px 40px rgba(0,0,0,0.2))' }}
+                priority
               />
             </div>
           </div>
@@ -171,12 +174,13 @@ const Home = () => {
       <section style={{ padding: '5rem 0' }}>
         <div className="container">
           <div className="row align-items-center g-5">
-            <div className="col-lg-6">
-              <img
+            <div className="col-lg-6 d-flex align-items-center justify-content-center">
+              <Image
                 src="/img/student.png"
                 alt="Persona estudiando"
-                className="img-fluid"
-                style={{ borderRadius: 20, maxHeight: 420, boxShadow: '0 20px 60px rgba(10,130,127,0.12)' }}
+                width={500}
+                height={420}
+                style={{ borderRadius: 20, maxHeight: 420, height: 'auto', boxShadow: '0 20px 60px rgba(10,130,127,0.12)' }}
               />
             </div>
             <div className="col-lg-6">
@@ -244,12 +248,13 @@ const Home = () => {
       <section style={{ padding: '4rem 0' }}>
         <div className="container">
           <div className="row g-4 align-items-center">
-            <div className="col-lg-5 mb-4 mb-lg-0">
-              <img
+            <div className="col-lg-5 mb-4 mb-lg-0 d-flex align-items-center justify-content-center">
+              <Image
                 src="/img/dollar.png"
                 alt="Moneda en aumento"
-                className="img-fluid"
-                style={{ maxWidth: 400, filter: 'drop-shadow(0 12px 32px rgba(0,0,0,0.1))' }}
+                width={400}
+                height={400}
+                style={{ maxWidth: 400, height: 'auto', filter: 'drop-shadow(0 12px 32px rgba(0,0,0,0.1))' }}
               />
             </div>
             <div className="col-lg-7">

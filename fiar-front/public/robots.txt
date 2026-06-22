@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://hermes.prisma-enterprise.cloud/sitemap.xml

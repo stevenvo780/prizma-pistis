@@ -18,7 +18,7 @@ const PlansPage: React.FC = () => {
 
   return (
     <div style={{ maxWidth: 1100, margin: '0 auto', padding: '40px 16px' }}>
-      <Head><title>Planes — Iris</title></Head>
+      <Head><title>Planes — Hermes</title></Head>
       {/* Hero/Promo Section */}
       <div
         style={{
