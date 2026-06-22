@@ -3,6 +3,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import Head from 'next/head';
 import { Button, Badge } from 'prizma-ui';
+import { SITE_URL } from '../config/site';
 import {
   HiOutlineShieldCheck,
   HiOutlineRocketLaunch,
@@ -45,7 +46,7 @@ function HomeHeroButtons() {
         size="lg"
         className="fw-semibold px-4"
         style={{ borderRadius: 12, color: '#FFFFFF' }}
-        onClick={() => window.open('https://pistis.prisma-enterprice.cloud', '_blank')}
+        onClick={() => window.open(SITE_URL, '_blank')}
       >
         Saber Más
       </Button>
@@ -411,7 +412,7 @@ const Home = () => {
               size="lg"
               className="fw-semibold px-4"
               style={{ borderRadius: 12, color: '#FFFFFF' }}
-              onClick={() => window.open('https://pistis.prisma-enterprice.cloud', '_blank')}
+              onClick={() => window.open(SITE_URL, '_blank')}
             >
               Contactar Ventas
             </Button>

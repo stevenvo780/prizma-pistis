@@ -1,6 +1,5 @@
 import Document, { Html, Head, Main, NextScript } from 'next/document';
-
-const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://pistis.prisma-enterprice.cloud';
+import { SITE_URL as BASE_URL } from '../config/site';
 const TITLE = 'Pistis — Plataforma de Crédito Empresarial | Prizma';
 const DESCRIPTION =
   'Gestiona tu cartera de crédito, cobros y financiamiento empresarial con Pistis, el módulo de crédito sin interés de la suite Prizma.';

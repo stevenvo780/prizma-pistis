@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import Head from 'next/head';
 import { Button, Card, CardBody, Badge, Modal } from 'prizma-ui';
+import { SITE_URL } from '../../config/site';
 import {
   HiOutlineShieldCheck,
   HiOutlineRocketLaunch,
@@ -45,7 +46,7 @@ const PlansPage: React.FC = () => {
           size="lg"
           leftIcon={<HiOutlinePlayCircle size={24} />}
           style={{ borderRadius: 12, boxShadow: '0 2px 12px rgba(10,130,127,0.2)', fontWeight: 700 }}
-          onClick={() => window.open('https://pistis.prisma-enterprice.cloud', '_blank')}
+          onClick={() => window.open(SITE_URL, '_blank')}
         >
           Solicita una Demo
         </Button>
