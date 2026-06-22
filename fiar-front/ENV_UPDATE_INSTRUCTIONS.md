@@ -14,7 +14,7 @@ NEXT_PUBLIC_API=http://localhost:8080/api/v1
 **DESPUÉS:**
 ```
 NEXT_PUBLIC_API=<API_BACKEND_URL>/api/v1
-NEXT_PUBLIC_SITE_URL=https://pistis.prisma-enterprice.cloud
+NEXT_PUBLIC_SITE_URL=https://pistis.prisma-enterprise.cloud
 ```
 
 ## Explicación
@@ -24,7 +24,7 @@ NEXT_PUBLIC_SITE_URL=https://pistis.prisma-enterprice.cloud
   - Usado en: `src/utils/axios.ts` (baseURL para todas las llamadas API)
 
 - **`NEXT_PUBLIC_SITE_URL`**: URL del sitio frontend (para SEO/Open Graph)
-  - Default: `https://pistis.prisma-enterprice.cloud`
+  - Default: `https://pistis.prisma-enterprise.cloud`
   - Usado en: `src/pages/_document.js` (metadatos HTML, og:url, canonical)
 
 ## Cambios Realizados
@@ -39,7 +39,7 @@ En la sección de **Settings → Environment Variables** del proyecto Vercel, co
 
 ```
 NEXT_PUBLIC_API=<API_BACKEND_URL>/api/v1
-NEXT_PUBLIC_SITE_URL=https://pistis.prisma-enterprice.cloud
+NEXT_PUBLIC_SITE_URL=https://pistis.prisma-enterprise.cloud
 NEXT_PUBLIC_FIREBASE_API_KEY=...
 NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=...
 [resto de vars Firebase...]
