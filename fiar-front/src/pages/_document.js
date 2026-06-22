@@ -41,9 +41,11 @@ class MyDocument extends Document {
 
           {/* Favicon multi-size — Prizma Pistis brand */}
           <link rel="icon" href="/favicon.ico" sizes="any" />
-          <link rel="icon" type="image/png" sizes="32x32" href="/favicon/v1_32.png" />
-          <link rel="icon" type="image/png" sizes="180x180" href="/favicon/v2_180.png" />
-          <link rel="apple-touch-icon" sizes="512x512" href="/favicon/v3_512.png" />
+          <link rel="icon" type="image/svg+xml" href="/icon.svg" />
+          <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16.png" />
+          <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
+          <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+          <link rel="shortcut icon" href="/favicon.ico" />
 
           {/* Web App Manifest */}
           <link rel="manifest" href="/manifest.json" />
