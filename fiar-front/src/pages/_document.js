@@ -1,9 +1,9 @@
 import Document, { Html, Head, Main, NextScript } from 'next/document';
 
-const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://hermes.prisma-enterprise.cloud';
-const TITLE = 'Hermes — Plataforma de Crédito Empresarial | Prizma';
+const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://pistis.prisma-enterprice.cloud';
+const TITLE = 'Pistis — Plataforma de Crédito Empresarial | Prizma';
 const DESCRIPTION =
-  'Gestiona tu cartera de crédito, cobros y financiamiento empresarial con Hermes, el módulo de crédito sin interés de la suite Prizma.';
+  'Gestiona tu cartera de crédito, cobros y financiamiento empresarial con Pistis, el módulo de crédito sin interés de la suite Prizma.';
 const OG_IMAGE = `${BASE_URL}/og-image.png`;
 
 class MyDocument extends Document {
@@ -13,7 +13,7 @@ class MyDocument extends Document {
         <Head>
           <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-          {/* Favicon multi-size — Hermes brand */}
+          {/* Favicon multi-size — Prizma Pistis brand */}
           <link rel="icon" href="/favicon.ico" sizes="any" />
           <link rel="icon" type="image/png" sizes="32x32" href="/favicon/v1_32.png" />
           <link rel="icon" type="image/png" sizes="180x180" href="/favicon/v2_180.png" />
@@ -36,6 +36,7 @@ class MyDocument extends Document {
           <meta property="og:image:width" content="1200" />
           <meta property="og:image:height" content="630" />
           <meta property="og:type" content="website" />
+          <meta property="og:site_name" content="Prizma Pistis" />
 
           {/* Twitter Card */}
           <meta name="twitter:card" content="summary_large_image" />

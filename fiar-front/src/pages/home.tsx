@@ -45,7 +45,7 @@ function HomeHeroButtons() {
         size="lg"
         className="fw-semibold px-4"
         style={{ borderRadius: 12, color: '#FFFFFF' }}
-        onClick={() => window.open('https://prisma-enterprise.cloud', '_blank')}
+        onClick={() => window.open('https://pistis.prisma-enterprice.cloud', '_blank')}
       >
         Saber Más
       </Button>
@@ -132,13 +132,13 @@ const Home = () => {
   return (
     <div style={{ background: '#fafaf9' }}>
       <Head>
-        <title>Hermes — Crédito y Cartera | Prizma</title>
+        <title>Pistis — Crédito y Cartera | Prizma</title>
       </Head>
 
       {/* Hero */}
       <section
         style={{
-          background: 'linear-gradient(135deg, var(--c-primary-800, #11585C), var(--c-primary-700, #0E6E73))',
+          background: 'linear-gradient(135deg, var(--c-primary-800, #1f6b60), var(--c-primary-700, #2d8a7d))',
           padding: '4.5rem 0 3.5rem',
         }}
       >
@@ -159,7 +159,7 @@ const Home = () => {
             <div className="col-lg-5 text-center d-flex align-items-center justify-content-center">
               <Image
                 src="/img/isotipo_light.png"
-                alt="Hermes by Prizma"
+                alt="Pistis by Prizma"
                 width={240}
                 height={240}
                 style={{ maxHeight: 320, height: 'auto', filter: 'drop-shadow(0 16px 40px rgba(0,0,0,0.2))' }}
@@ -219,7 +219,7 @@ const Home = () => {
                     background: '#fff',
                     borderRadius: 16,
                     boxShadow: '0 2px 16px rgba(10,130,127,0.06)',
-                    border: '1px solid var(--c-accent-module-tint, #E3F6F2)',
+                    border: '1px solid var(--c-accent-module-tint, #d4f2ed)',
                     transition: 'transform 0.2s, box-shadow 0.2s',
                   }}
                 >
@@ -229,8 +229,8 @@ const Home = () => {
                       width: 56,
                       height: 56,
                       borderRadius: 14,
-                      background: 'linear-gradient(135deg, var(--c-primary-50, #ECFEFF), var(--c-accent-module-tint, #E3F6F2))',
-                      color: 'var(--c-accent-module, #0B8A8F)',
+                      background: 'linear-gradient(135deg, var(--c-primary-50, #e8f7f4), var(--c-accent-module-tint, #d4f2ed))',
+                      color: 'var(--c-accent-module, #43b5a6)',
                     }}
                   >
                     {b.icon}
@@ -267,8 +267,8 @@ const Home = () => {
                       width: 48,
                       height: 48,
                       borderRadius: 12,
-                      background: 'var(--c-accent-module-tint, #E3F6F2)',
-                      color: 'var(--c-accent-module, #0B8A8F)',
+                      background: 'var(--c-accent-module-tint, #d4f2ed)',
+                      color: 'var(--c-accent-module, #43b5a6)',
                     }}
                   >
                     {f.icon}
@@ -291,7 +291,7 @@ const Home = () => {
             <Badge tone="success" className="mb-3 px-3 py-2" style={{ borderRadius: 20, fontWeight: 600 }}>
               Planes y Precios
             </Badge>
-            <h2 className="fw-bold" style={{ fontSize: '2.2rem', color: 'var(--c-primary-700, #0E6E73)' }}>
+            <h2 className="fw-bold" style={{ fontSize: '2.2rem', color: 'var(--c-primary-700, #2d8a7d)' }}>
               Elige el plan ideal para tu comercio
             </h2>
             <p className="text-muted mx-auto mt-2" style={{ maxWidth: 600 }}>
@@ -306,7 +306,7 @@ const Home = () => {
                   className="card h-100 position-relative"
                   style={{
                     borderRadius: 20,
-                    border: p.popular ? '2px solid var(--c-accent-module, #0B8A8F)' : '1px solid #e7e5e4',
+                    border: p.popular ? '2px solid var(--c-accent-module, #43b5a6)' : '1px solid #e7e5e4',
                     boxShadow: p.popular ? '0 10px 30px rgba(10,130,127,0.15)' : '0 4px 20px rgba(0,0,0,0.04)',
                     transition: 'transform 0.3s ease, box-shadow 0.3s ease',
                     background: '#ffffff',
@@ -336,7 +336,7 @@ const Home = () => {
                     </div>
                     <h4 className="fw-bold mb-1" style={{ color: '#1c1917' }}>{p.title}</h4>
                     <div className="d-flex align-items-baseline my-3">
-                      <span className="fw-bold" style={{ fontSize: '2.5rem', color: 'var(--c-accent-module, #0B8A8F)', lineHeight: 1 }}>
+                      <span className="fw-bold" style={{ fontSize: '2.5rem', color: 'var(--c-accent-module, #43b5a6)', lineHeight: 1 }}>
                         {p.price}
                       </span>
                       <span className="text-muted ms-2" style={{ fontSize: '0.95rem' }}>
@@ -349,7 +349,7 @@ const Home = () => {
                     <ul className="list-unstyled mb-4 flex-grow-1">
                       {p.features.map((feat, idx) => (
                         <li key={idx} className="d-flex align-items-start gap-2 mb-2" style={{ fontSize: '0.9rem', color: '#44403c' }}>
-                          <span style={{ color: 'var(--c-accent-module, #0B8A8F)', fontWeight: 'bold', marginRight: '6px' }}>✓</span>
+                          <span style={{ color: 'var(--c-accent-module, #43b5a6)', fontWeight: 'bold', marginRight: '6px' }}>✓</span>
                           <span>{feat}</span>
                         </li>
                       ))}
@@ -379,7 +379,7 @@ const Home = () => {
       {/* CTA */}
       <section
         style={{
-          background: 'linear-gradient(135deg, var(--c-primary-800, #11585C), var(--c-primary-700, #0E6E73))',
+          background: 'linear-gradient(135deg, var(--c-primary-800, #1f6b60), var(--c-primary-700, #2d8a7d))',
           padding: '4rem 0',
         }}
       >
@@ -411,7 +411,7 @@ const Home = () => {
               size="lg"
               className="fw-semibold px-4"
               style={{ borderRadius: 12, color: '#FFFFFF' }}
-              onClick={() => window.open('https://prisma-enterprise.cloud', '_blank')}
+              onClick={() => window.open('https://pistis.prisma-enterprice.cloud', '_blank')}
             >
               Contactar Ventas
             </Button>

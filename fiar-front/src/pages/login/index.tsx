@@ -40,13 +40,13 @@ const Login = () => {
 
   return (
     <>
-      <Head><title>Iniciar sesión — Hermes</title></Head>
+      <Head><title>Iniciar sesión — Pistis</title></Head>
       <div className={styles.loginContainer}>
         <Card className={styles.card}>
           <div className={`${styles.logoContainer} text-center`}>
-            <Image fetchPriority="high" src="/img/prizma-symbol.svg" alt="Hermes by Prizma" width={72} height={72} style={{ objectFit: 'contain' }} />
+            <Image fetchPriority="high" src="/img/prizma-symbol.svg" alt="Pistis by Prizma" width={72} height={72} style={{ objectFit: 'contain' }} />
           </div>
-          <h5 className="text-center fw-bold mb-1" style={{ color: 'var(--c-primary-700, #0E6E73)' }}>Bienvenido a Hermes</h5>
+          <h5 className="text-center fw-bold mb-1" style={{ color: 'var(--c-primary-700, #2d8a7d)' }}>Bienvenido a Pistis</h5>
           <p className="text-center text-muted mb-3" style={{ fontSize: '0.85rem' }}>Inicia sesión para continuar</p>
           <CardBody style={{ paddingTop: 0 }}>
             <form onSubmit={handleSubmit}>

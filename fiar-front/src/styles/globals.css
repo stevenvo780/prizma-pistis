@@ -6,9 +6,9 @@
   --border-color: var(--c-border, #e2e8f0);
 
   /* Main brand colors — Prizma "Corriente" teal (from prizma-tokens) */
-  --primary-color: var(--c-primary, #0B8A8F);
-  --primary-hover: var(--c-primary-hover, #14AEB5);
-  --primary-border: var(--c-primary, #0B8A8F);
+  --primary-color: var(--c-primary, #43b5a6);
+  --primary-hover: var(--c-primary-hover, #369b8e);
+  --primary-border: var(--c-primary, #43b5a6);
   --primary-text: #FFFFFF;
 
   --warning-color: #f59e0b;
@@ -38,9 +38,9 @@
   --danger-text: #FFFFFF;
 
   /* Links and outline — aliased to prizma-tokens */
-  --link-color: var(--c-accent-module, #0B8A8F);
-  --link-hover: var(--c-primary-hover, #14AEB5);
-  --link-border: var(--c-accent-module, #0B8A8F);
+  --link-color: var(--c-accent-module, #43b5a6);
+  --link-hover: var(--c-primary-hover, #369b5a);
+  --link-border: var(--c-accent-module, #43b5a6);
   --link-text: #FFFFFF;
 
   --outline-color: #e2e8f0;
@@ -51,7 +51,7 @@
   --navbar-color: #FFFFFF;
   --text-secondary: #64748b;
   --text-muted: #94a3b8;
-  --card-title-color: var(--c-accent-module, #0B8A8F);
+  --card-title-color: var(--c-accent-module, #43b5a6);
 }
 
 /* Global Styles */

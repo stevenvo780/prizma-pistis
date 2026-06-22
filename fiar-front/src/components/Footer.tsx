@@ -6,7 +6,7 @@ import { TbBrandInstagram } from 'react-icons/tb';
 const Footer = () => (
   <footer
     style={{
-      background: 'linear-gradient(135deg, var(--c-primary-800, #11585C), var(--c-primary-700, #0E6E73))',
+      background: 'linear-gradient(135deg, var(--c-primary-800, #1f6b60), var(--c-primary-700, #2d8a7d))',
       color: 'rgba(255,255,255,0.85)',
       padding: '2.5rem 0 1.5rem',
       marginTop: 'auto',
@@ -15,7 +15,7 @@ const Footer = () => (
     <Container>
       <Grid cols={3} gap="2rem" style={{ alignItems: 'start' }}>
         <div>
-          <h6 className="fw-bold text-white mb-2" style={{ letterSpacing: '0.03em' }}>Hermes</h6>
+          <h6 className="fw-bold text-white mb-2" style={{ letterSpacing: '0.03em' }}>Pistis</h6>
           <p className="mb-0" style={{ fontSize: '0.85rem', lineHeight: 1.6 }}>
             Sistema de créditos sin interés para comercios. Moderniza la forma de prestar a tus clientes de confianza.
           </p>
@@ -45,7 +45,7 @@ const Footer = () => (
       </Grid>
       <hr style={{ borderColor: 'rgba(255,255,255,0.15)', margin: '1.5rem 0 1rem' }} />
       <p className="text-center mb-0" style={{ fontSize: '0.8rem', opacity: 0.7 }}>
-        Hermes es parte de Prizma · © {new Date().getFullYear()} Steven Vallejo. Todos los derechos reservados.
+        Pistis es parte de Prizma · © {new Date().getFullYear()} Steven Vallejo. Todos los derechos reservados.
       </p>
     </Container>
   </footer>

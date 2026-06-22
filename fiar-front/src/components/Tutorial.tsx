@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { PrizmaTour, TourStep } from 'prizma-ui';
 
-const RUN_KEY = 'hermes-frontend-v1';
-export const TOUR_EVENT = 'hermes:start-tour';
+const RUN_KEY = 'pistis-frontend-v1';
+export const TOUR_EVENT = 'pistis:start-tour';
 
 const STEPS: TourStep[] = [
   {
     // Sin target: pantalla de bienvenida centrada
     title: 'Bienvenido a Pistis',
-    body: 'Pistis es tu sistema de fiado digital. En este tour de 5 pasos aprenderás a registrar préstamos, gestionar clientes y controlar tu cartera. ¡Empecemos!',
+    body: 'Pistis es tu sistema de fiado digital. En este tour de 6 pasos aprenderás a registrar préstamos, gestionar clientes y controlar tu cartera. ¡Empecemos!',
     placement: 'center',
   },
   {

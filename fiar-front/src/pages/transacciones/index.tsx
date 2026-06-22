@@ -134,7 +134,7 @@ const Transactions: FC = () => {
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          background: 'var(--c-accent-module, #0B8A8F)',
+          background: 'var(--c-accent-module, #43b5a6)',
           border: 'none',
           color: '#fff',
           boxShadow: '0 4px 16px rgba(0,0,0,0.15)'

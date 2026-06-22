@@ -15,11 +15,11 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  color: var(--c-accent-module, #0B8A8F);
+  color: var(--c-accent-module, #43b5a6);
   text-decoration: none;
   margin: 10px 0;
   padding: 10px;
-  border: 1px solid var(--c-accent-module, #0B8A8F);
+  border: 1px solid var(--c-accent-module, #43b5a6);
   border-radius: 5px;
   background-color: white;
   width: 100%;
@@ -27,7 +27,7 @@
 }
 
 .contactButton:hover {
-  background-color: var(--c-accent-module, #0B8A8F);
+  background-color: var(--c-accent-module, #43b5a6);
   color: white;
   text-decoration: none;
 }

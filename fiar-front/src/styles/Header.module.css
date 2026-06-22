@@ -1,4 +1,4 @@
-/* Header.module.css — Minimal modern navbar (Hermes brand) */
+/* Header.module.css — Minimal modern navbar (Pistis brand) */
 
 .navbar {
   background-color: #ffffff;
@@ -29,14 +29,14 @@
 .brandName {
   font-size: 1.25rem;
   font-weight: 700;
-  color: var(--c-primary, #0B8A8F);
+  color: var(--c-primary, #43b5a6);
   letter-spacing: -0.02em;
 }
 
 .brandUmbrella {
   font-size: 0.7rem;
   font-weight: 600;
-  color: var(--c-primary, #0B8A8F);
+  color: var(--c-primary, #43b5a6);
   letter-spacing: 0.02em;
   text-transform: lowercase;
   align-self: flex-end;
@@ -79,12 +79,12 @@
 }
 
 .navItem:hover {
-  color: var(--c-accent-module, #0B8A8F) !important;
+  color: var(--c-accent-module, #43b5a6) !important;
   background-color: #f0fdfa;
 }
 
 .navItemActive {
-  color: var(--c-accent-module, #0B8A8F) !important;
+  color: var(--c-accent-module, #43b5a6) !important;
   background-color: #f0fdfa;
   font-weight: 600;
 }
@@ -100,7 +100,7 @@
 }
 
 .avatarBtn:hover {
-  color: var(--c-accent-module, #0B8A8F);
+  color: var(--c-accent-module, #43b5a6);
 }
 
 /* prizma-ui DropdownMenu popover */
@@ -127,7 +127,7 @@
 
 .dropItem:hover {
   background-color: #f8fafc !important;
-  color: var(--c-accent-module, #0B8A8F) !important;
+  color: var(--c-accent-module, #43b5a6) !important;
 }
 
 .dropItemDanger {
