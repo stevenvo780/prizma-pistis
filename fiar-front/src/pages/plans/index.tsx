@@ -163,3 +163,8 @@ const PlansPage: React.FC = () => {
 };
 
 export default PlansPage;
+
+// Enables SSR so crawlers receive rendered HTML
+export function getServerSideProps() {
+  return { props: {} };
+}

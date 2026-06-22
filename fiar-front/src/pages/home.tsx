@@ -424,3 +424,8 @@ const Home = () => {
 };
 
 export default Home;
+
+// Enables SSR so crawlers receive rendered HTML instead of an empty shell
+export function getServerSideProps() {
+  return { props: {} };
+}

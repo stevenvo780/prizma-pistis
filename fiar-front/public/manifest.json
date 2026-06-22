@@ -1,0 +1,27 @@
+{
+  "name": "Pistis — Crédito Empresarial",
+  "short_name": "Pistis",
+  "description": "Gestiona tu cartera de crédito sin interés con Pistis by Prizma.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#43b5a6",
+  "icons": [
+    {
+      "src": "/favicon/v1_32.png",
+      "sizes": "32x32",
+      "type": "image/png"
+    },
+    {
+      "src": "/favicon/v2_180.png",
+      "sizes": "180x180",
+      "type": "image/png"
+    },
+    {
+      "src": "/favicon/v3_512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

@@ -148,3 +148,8 @@ const Login = () => {
 };
 
 export default Login;
+
+// Enables SSR so crawlers receive the login page HTML
+export function getServerSideProps() {
+  return { props: {} };
+}

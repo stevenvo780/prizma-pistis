@@ -23,3 +23,8 @@ const IndexPage: React.FC = () => {
 };
 
 export default IndexPage;
+
+// Enables SSR so crawlers (no JS) receive the landing page HTML
+export function getServerSideProps() {
+  return { props: {} };
+}
