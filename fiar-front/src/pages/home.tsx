@@ -1,6 +1,5 @@
 import React from 'react';
 import Link from 'next/link';
-import Image from 'next/image';
 import Head from 'next/head';
 import { Button, Badge } from 'prizma-ui';
 import { SITE_URL } from '../config/site';
@@ -149,22 +148,22 @@ const Home = () => {
               <Badge tone="neutral" className="mb-3 px-3 py-2" style={{ fontSize: '0.8rem', borderRadius: 20, fontWeight: 600 }}>
                 Sistema innovador para comercios
               </Badge>
-              <h1 className="fw-bold mb-3" style={{ fontSize: 'clamp(2rem, 4vw, 3rem)', lineHeight: 1.15 }}>
+              <h1 className="fw-bold mb-3" style={{ fontSize: 'clamp(2rem, 4vw, 3rem)', lineHeight: 1.15, color: '#FFFFFF' }}>
                 Sistema de Créditos<br />sin Interés
               </h1>
-              <p className="lead mb-0" style={{ fontSize: '1.15rem', opacity: 0.9, maxWidth: 520 }}>
+              <p className="lead mb-0" style={{ fontSize: '1.15rem', opacity: 0.9, maxWidth: 520, color: '#FFFFFF' }}>
                 Permite a comercios prestar dinero a clientes de confianza, con control total y cero complicaciones.
               </p>
               <HomeHeroButtons />
             </div>
             <div className="col-lg-5 text-center d-flex align-items-center justify-content-center">
-              <Image
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
                 src="/img/isotipo_light.png"
                 alt="Pistis by Prizma"
                 width={240}
                 height={240}
-                style={{ maxHeight: 320, height: 'auto', filter: 'drop-shadow(0 16px 40px rgba(0,0,0,0.2))' }}
-                priority
+                style={{ maxWidth: 240, maxHeight: 320, height: 'auto', filter: 'drop-shadow(0 16px 40px rgba(0,0,0,0.2))' }}
               />
             </div>
           </div>
@@ -176,12 +175,13 @@ const Home = () => {
         <div className="container">
           <div className="row align-items-center g-5">
             <div className="col-lg-6 d-flex align-items-center justify-content-center">
-              <Image
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
                 src="/img/student.png"
                 alt="Persona estudiando"
                 width={500}
                 height={420}
-                style={{ borderRadius: 20, maxHeight: 420, height: 'auto', boxShadow: '0 20px 60px rgba(10,130,127,0.12)' }}
+                style={{ borderRadius: 20, maxHeight: 420, height: 'auto', boxShadow: '0 20px 60px rgba(10,130,127,0.12)', maxWidth: '100%' }}
               />
             </div>
             <div className="col-lg-6">
@@ -250,7 +250,8 @@ const Home = () => {
         <div className="container">
           <div className="row g-4 align-items-center">
             <div className="col-lg-5 mb-4 mb-lg-0 d-flex align-items-center justify-content-center">
-              <Image
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
                 src="/img/dollar.png"
                 alt="Moneda en aumento"
                 width={400}
